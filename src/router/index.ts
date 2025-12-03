@@ -1,9 +1,16 @@
 import { createRouter, createWebHistory } from "vue-router";
-import Home from "../pages/Home.vue";
-import Auth from "../pages/Auth.vue";
+import ChatPage from "../pages/ChatPage.vue";
+import LoginPage from "../pages/LoginPage.vue";
 
 const routes = [
-  { path: "/", component: Auth },
+  {
+    path: "/",
+    component: ChatPage,
+  },
+  {
+    path: "/login",
+    component: LoginPage,
+  },
 ];
 
 export const router = createRouter({

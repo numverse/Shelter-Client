@@ -3,6 +3,7 @@ import tsPlugin from "@typescript-eslint/eslint-plugin";
 import tsParser from "@typescript-eslint/parser";
 import stylistic from "@stylistic/eslint-plugin";
 import vuePlugin from "eslint-plugin-vue";
+import vueParser from "vue-eslint-parser";
 import globals from "globals";
 
 export default [
@@ -16,6 +17,7 @@ export default [
     },
     files: ["eslint.config.mjs", "**/*.{ts,vue}"],
     languageOptions: {
+      parser: vueParser,
       parserOptions: {
         parser: tsParser,
         ecmaVersion: "latest",

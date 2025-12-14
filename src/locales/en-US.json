@@ -1,0 +1,13 @@
+{
+  "login": "Login",
+  "register": "Register",
+  "email": "Email",
+  "password": "Password",
+  "username": "Username",
+
+  "need_an_account": "Need an account?",
+  "have_an_account": "Already have an account?",
+
+  "login_failed": "Login failed",
+  "registration_failed": "Registration failed"
+}

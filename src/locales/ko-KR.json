@@ -1,0 +1,13 @@
+{
+  "login": "로그인",
+  "register": "계정 생성",
+  "email": "이메일",
+  "password": "비밀번호",
+  "username": "유저명",
+
+  "need_an_account": "계정이 필요하신가요?",
+  "have_an_account": "이미 계정이 있으신가요?",
+
+  "login_failed": "로그인 실패",
+  "registration_failed": "계정 생성 실패"
+}

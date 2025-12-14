@@ -1,1 +1,26 @@
+@import url("https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css");
 @import "tailwindcss";
+
+@layer base {
+  html, body {
+    user-select: none;
+    -webkit-user-select: none;
+    color: var(--color-text-primary);
+    font-family: var(--font-base);
+  }
+  *:focus {
+    @apply outline-none shadow-none;
+  }
+}
+@theme {
+  --color-bg-primary: #121214;
+  --color-bg-secondary: #1e1e22;
+  --color-bg-tertiary: #393942;
+  --color-text-primary: #ffffff;
+  --color-text-secondary: #a1a1aa;
+  --color-accent: #ff4655;
+  --font-base: "Pretendard", sans-serif;
+}
+body {
+  background-color: var(--color-bg-primary);
+}

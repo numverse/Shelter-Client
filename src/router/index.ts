@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ChatPage from "../pages/ChatPage.vue";
-import LoginPage from "../pages/LoginPage.vue";
+import AuthPage from "../pages/AuthPage.vue";
+import { isAuthed } from "../utils/auth/store";
 
 const routes = [
   {
@@ -8,12 +9,20 @@ const routes = [
     component: ChatPage,
   },
   {
-    path: "/login",
-    component: LoginPage,
+    path: "/auth",
+    component: AuthPage,
   },
 ];
 
-export const router = createRouter({
+const router = createRouter({
   history: createWebHistory(),
   routes,
 });
+
+router.beforeEach((to) => {
+  if (to.path !== "/auth" && !isAuthed) {
+    return "/auth";
+  }
+});
+
+export { router };

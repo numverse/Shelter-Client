@@ -1,24 +1,35 @@
-type ResponseData = {
-  userId: string;
-} | {
-  error: string;
-};
+import ky from "ky";
+import baseURL from "./baseURL";
 
-interface RequestData {
+interface registerData {
   username: string;
-  password: string;
   email: string;
+  password: string;
 }
 
-import { request } from "../request";
-
-function register(requestData: RequestData): Promise<ResponseData> {
-  return request<ResponseData>("/api/auth/register", {
+async function register(data: registerData) {
+  const res = await ky(`${baseURL}/api/auth/register`, {
     method: "POST",
-    data: {
-      ...requestData,
+    timeout: 5000,
+    throwHttpErrors: false,
+    headers: {
+      "Content-Type": "application/json",
     },
+    json: data,
   });
+  if (!res.ok) {
+    const body = await res.json<{ error: string }>();
+    return {
+      ok: false,
+      error: body.error,
+    };
+  } else {
+    const body = await res.json<{ userId: string }>();
+    return {
+      ok: true,
+      userId: body.userId,
+    };
+  }
 }
 
 export { register };

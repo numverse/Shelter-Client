@@ -5,9 +5,15 @@
   "password": "비밀번호",
   "username": "유저명",
 
+  "login_loading": "로그인 중...",
+  "register_loading": "계정 생성 중...",
+
+  "username_placeholder": "2~32자",
+  "email_placeholder": "이메일@내도메인.한국",
+  "password_placeholder": "6~64자",
+
   "need_an_account": "계정이 필요하신가요?",
   "have_an_account": "이미 계정이 있으신가요?",
 
-  "login_failed": "로그인 실패",
-  "registration_failed": "계정 생성 실패"
+  "unknown_error": "알 수 없는 오류가 발생했습니다. 다시 시도해주세요."
 }

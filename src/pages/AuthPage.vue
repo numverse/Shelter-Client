@@ -1,165 +1,152 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, nextTick } from "vue";
+import TextInputBox from "../components/TextInputBox.vue";
+import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/login";
 import { register } from "../utils/api/register";
 import { i18n } from "../utils/i18n";
 
+const authForm = ref<HTMLFormElement | null>(null);
+
 const isLogin = ref(true);
+const isLoading = ref(false);
+const authFormIsValid = ref(false);
+
+const checkAuthFormValidity = async () => {
+  await nextTick();
+  authFormIsValid.value = authForm.value?.checkValidity() ?? false;
+};
 
 const username = ref("");
 const email = ref("");
 const password = ref("");
 
-const loading = ref(false);
-const error = ref<string | null>(null);
+const errorMessage = ref<string | null>(null);
 
-const title = computed(() => (isLogin.value ? i18n("login") : i18n("register")));
-const buttonText = computed(() =>
-  isLogin.value ? i18n("login") : i18n("register"),
-);
-
-const isSubmitDisabled = computed(() => {
-  if (loading.value) return true;
-
-  if (isLogin.value) {
-    return !email.value || !password.value;
-  }
-
-  return !username.value || !email.value || !password.value;
+const canSubmit = computed(() => {
+  return !isLoading.value && authFormIsValid.value;
 });
 
 async function onSubmit() {
-  loading.value = true;
-  error.value = null;
-
+  isLoading.value = true;
+  errorMessage.value = null;
+  let currentRequest;
   try {
     if (isLogin.value) {
-      await login({
+      currentRequest = await login({
         email: email.value,
         password: password.value,
       });
     } else {
-      await register({
+      currentRequest = await register({
         username: username.value,
         email: email.value,
         password: password.value,
       });
     }
   } catch {
-    error.value = isLogin.value
-      ? i18n("login_failed")
-      : i18n("registration_failed");
+    errorMessage.value = i18n("unknown_error");
   } finally {
-    loading.value = false;
+    if (currentRequest?.ok) {
+      errorMessage.value = null;
+    } else {
+      errorMessage.value = currentRequest?.error || i18n("unknown_error");
+    }
+    isLoading.value = false;
   }
-}
-
-function resetForm() {
-  username.value = "";
-  email.value = "";
-  password.value = "";
 }
 
 function toggleMode() {
   isLogin.value = !isLogin.value;
-  error.value = null;
-  resetForm();
+  errorMessage.value = null;
+  username.value = "";
+  email.value = "";
+  password.value = "";
 }
 </script>
 
 <template>
-  <div class="flex flex-col items-center justify-center">
-    <h1 class="text-2xl font-bold mb-4">
-      {{ title }}
-    </h1>
-
-    <form
-      class="space-y-4 w-1/6"
-      @submit.prevent="onSubmit"
-    >
-      <div v-if="!isLogin">
-        <label
-          for="username"
-          class="block text-sm font-medium text-text-primary"
-        >
-          {{ i18n("username") }}
-        </label>
-        <input
+  <div class="flex flex-col justify-center items-center h-full bg-bg-tertiary">
+    <ShelterLogo />
+    <div class="relative bg-bg-secondary rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12">
+      <h1 class="text-4xl font-bold mb-6">
+        {{ isLogin ? i18n("login") : i18n("register") }}
+      </h1>
+      <form
+        ref="authForm"
+        class="space-y-4 w-md"
+        @submit.prevent="onSubmit"
+        @input="checkAuthFormValidity"
+        @change="checkAuthFormValidity"
+      >
+        <TextInputBox
+          v-if="!isLogin"
           id="username"
           v-model="username"
+          :label="i18n('username')"
           type="text"
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-        >
-      </div>
-
-      <div>
-        <label
-          for="email"
-          class="block text-sm font-medium text-text-primary"
-        >
-          {{ i18n("email") }}
-        </label>
-        <input
+          :placeholder="i18n('username_placeholder')"
+          :minlength="2"
+          :maxlength="32"
+          :required="true"
+        />
+        <TextInputBox
           id="email"
           v-model="email"
+          :label="i18n('email')"
           type="email"
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
-        >
-      </div>
-
-      <div>
-        <label
-          for="password"
-          class="block text-sm font-medium text-text-primary"
-        >
-          {{ i18n("password") }}
-        </label>
-        <input
+          :placeholder="i18n('email_placeholder')"
+          :required="true"
+        />
+        <TextInputBox
           id="password"
           v-model="password"
+          :label="i18n('password')"
           type="password"
-          class="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2"
+          :placeholder="i18n('password_placeholder')"
+          :minlength="6"
+          :maxlength="64"
+          :required="true"
+        />
+        <button
+          type="submit"
+          :disabled="!canSubmit"
+          class="w-full bg-accent text-text-primary text-xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
         >
-      </div>
+          {{ isLogin ? isLoading ? i18n("login_loading") : i18n("login") : isLoading ? i18n("register_loading") : i18n("register") }}
+        </button>
 
-      <button
-        type="submit"
-        :disabled="isSubmitDisabled"
-        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 disabled:opacity-50 hover:cursor-pointer"
-      >
-        {{ loading ? 'Working…' : buttonText }}
-      </button>
+        <p
+          v-if="errorMessage"
+          class="text-red-500 -mt-2 text-sm"
+        >
+          {{ errorMessage }}
+        </p>
+      </form>
 
-      <p
-        v-if="error"
-        class="text-red-600 text-sm"
-      >
-        {{ error }}
+      <p class="mt-4 text-sm text-text-secondary">
+        <span v-if="isLogin">
+          {{ i18n("need_an_account") }}
+          <button
+            class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
+            type="button"
+            @click="toggleMode"
+          >
+            {{ i18n("register") }}
+          </button>
+        </span>
+
+        <span v-else>
+          {{ i18n("have_an_account") }}
+          <button
+            class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
+            type="button"
+            @click="toggleMode"
+          >
+            {{ i18n("login") }}
+          </button>
+        </span>
       </p>
-    </form>
-
-    <p class="mt-4 text-sm text-gray-600">
-      <span v-if="isLogin">
-        {{ i18n("need_an_account") }}
-        <button
-          class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
-          type="button"
-          @click="toggleMode"
-        >
-          {{ i18n("register") }}
-        </button>
-      </span>
-
-      <span v-else>
-        {{ i18n("have_an_account") }}
-        <button
-          class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
-          type="button"
-          @click="toggleMode"
-        >
-          {{ i18n("login") }}
-        </button>
-      </span>
-    </p>
+    </div>
   </div>
 </template>

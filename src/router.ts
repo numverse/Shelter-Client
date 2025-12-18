@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
-import ChatPage from "../pages/ChatPage.vue";
-import AuthPage from "../pages/AuthPage.vue";
-import { isAuthed } from "../utils/auth/store";
+import ChatPage from "./pages/ChatPage.vue";
+import AuthPage from "./pages/AuthPage.vue";
+import { isAuthed } from "./utils/auth/store";
 
 const routes = [
   {

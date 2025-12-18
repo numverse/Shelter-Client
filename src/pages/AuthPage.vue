@@ -5,6 +5,7 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/login";
 import { register } from "../utils/api/register";
 import { i18n } from "../utils/i18n";
+import enUS from "../locales/en-US.json";
 
 const authForm = ref<HTMLFormElement | null>(null);
 
@@ -50,7 +51,7 @@ async function onSubmit() {
     if (currentRequest?.ok) {
       errorMessage.value = null;
     } else {
-      errorMessage.value = currentRequest?.error || i18n("unknown_error");
+      errorMessage.value = i18n((currentRequest?.code ?? "unknown_error").toLowerCase() as keyof typeof enUS);
     }
     isLoading.value = false;
   }

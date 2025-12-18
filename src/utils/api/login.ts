@@ -1,34 +1,20 @@
-import ky from "ky";
-import baseURL from "./baseURL";
+import { request } from "./base";
 
 interface loginData {
   email: string;
   password: string;
 }
 
-async function login(data: loginData) {
-  const res = await ky(`${baseURL}/api/auth/login`, {
+interface loginResponse {
+  userId: string;
+}
+
+function login(data: loginData) {
+  return request<loginResponse>({
     method: "POST",
-    timeout: 5000,
-    throwHttpErrors: false,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    json: data,
+    url: "/api/auth/login",
+    data: data,
   });
-  if (!res.ok) {
-    const body = await res.json<{ error: string }>();
-    return {
-      ok: false,
-      error: body.error,
-    };
-  } else {
-    const body = await res.json<{ userId: string }>();
-    return {
-      ok: true,
-      userId: body.userId,
-    };
-  }
 }
 
 export { login };

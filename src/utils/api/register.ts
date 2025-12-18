@@ -1,5 +1,4 @@
-import ky from "ky";
-import baseURL from "./baseURL";
+import { request } from "./base";
 
 interface registerData {
   username: string;
@@ -7,29 +6,16 @@ interface registerData {
   password: string;
 }
 
-async function register(data: registerData) {
-  const res = await ky(`${baseURL}/api/auth/register`, {
+interface registerResponse {
+  userId: string;
+}
+
+function register(data: registerData) {
+  return request<registerResponse>({
     method: "POST",
-    timeout: 5000,
-    throwHttpErrors: false,
-    headers: {
-      "Content-Type": "application/json",
-    },
-    json: data,
+    url: "/api/auth/register",
+    data: data,
   });
-  if (!res.ok) {
-    const body = await res.json<{ error: string }>();
-    return {
-      ok: false,
-      error: body.error,
-    };
-  } else {
-    const body = await res.json<{ userId: string }>();
-    return {
-      ok: true,
-      userId: body.userId,
-    };
-  }
 }
 
 export { register };

@@ -2,8 +2,8 @@
 import { ref, computed, nextTick } from "vue";
 import TextInputBox from "../components/TextInputBox.vue";
 import ShelterLogo from "../components/ShelterLogo.vue";
-import { login } from "../utils/api/login";
-import { register } from "../utils/api/register";
+import { login } from "../utils/api/auth/login";
+import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n";
 import enUS from "../locales/en-US.json";
 

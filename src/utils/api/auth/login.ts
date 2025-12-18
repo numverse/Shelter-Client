@@ -1,4 +1,4 @@
-import { request } from "./base";
+import { request } from "../base";
 
 interface loginData {
   email: string;

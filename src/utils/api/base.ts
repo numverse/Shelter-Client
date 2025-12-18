@@ -3,7 +3,7 @@ import ky from "ky";
 const baseURL = "https://shelter.zero624.dev";
 
 interface requestData {
-  method: string;
+  method: "GET" | "POST" | "PUT" | "DELETE" | "PATCH";
   url: string;
   timeout?: number;
   headers?: Record<string, string>;
@@ -49,4 +49,33 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
   }
 }
 
-export { request };
+interface EmojiPack {
+  id: string;
+  name: string;
+  creatorId: string;
+  createdAt: string;
+  updatedAt: string;
+  emojis: [
+    {
+      id: string;
+      name: string;
+    },
+  ];
+}
+
+interface Channel {
+  id: string;
+  name: string;
+  description: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+interface User {
+  id: string;
+  username: string;
+  avatarId: string;
+  createdAt: string;
+}
+
+export { request, EmojiPack, Channel, User };

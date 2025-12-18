@@ -1,16 +1,16 @@
 import { request } from "../base";
 
-interface loginData {
+interface LoginRequestData {
   email: string;
   password: string;
 }
 
-interface loginResponse {
+interface LoginResponse {
   userId: string;
 }
 
-function login(data: loginData) {
-  return request<loginResponse>({
+function login(data: LoginRequestData) {
+  return request<LoginResponse>({
     method: "POST",
     url: "/api/auth/login",
     data: data,

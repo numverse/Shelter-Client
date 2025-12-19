@@ -1,12 +1,12 @@
 {
   "login": "로그인",
-  "register": "계정 생성",
+  "register": "가입",
   "email": "이메일",
   "password": "비밀번호",
   "username": "유저명",
 
   "login_loading": "로그인 중...",
-  "register_loading": "계정 생성 중...",
+  "register_loading": "가입 중...",
 
   "username_placeholder": "2~32자",
   "email_placeholder": "이메일@내도메인.한국",

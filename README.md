@@ -3,7 +3,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/numverse/Shelter-Client">
-    <img src="src/assets/shelter_logo.png" alt="Logo" width="80" height="80">
+    <img src="src/public/shelter_logo.png" alt="Logo" width="80" height="80">
   </a>
   <h3 align="center">Shelter-Client</h3>
   <p align="center">

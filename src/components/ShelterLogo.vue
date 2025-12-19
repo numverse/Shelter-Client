@@ -1,7 +1,7 @@
 <template>
   <div class="flex flex-row items-start">
     <img
-      src="../assets/shelter_logo.png"
+      src="/shelter_logo.png"
       alt="Shelter Logo"
       class="w-15 h-15"
     >

@@ -6,6 +6,9 @@ import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n";
 import enUS from "../locales/en-US.json";
+import { setAuthed } from "../utils/auth/store";
+import { useRouter } from "vue-router";
+const router = useRouter();
 
 const authForm = ref<HTMLFormElement | null>(null);
 
@@ -54,6 +57,8 @@ async function onSubmit() {
       errorMessage.value = i18n((currentRequest?.code ?? "unknown_error").toLowerCase() as keyof typeof enUS);
     }
     isLoading.value = false;
+    setAuthed(true);
+    router.push("/chat");
   }
 }
 

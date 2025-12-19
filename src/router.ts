@@ -5,7 +5,7 @@ import { isAuthed } from "./utils/auth/store";
 
 const routes = [
   {
-    path: "/",
+    path: "/chat",
     component: ChatPage,
   },
   {

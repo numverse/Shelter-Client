@@ -1,3 +1,7 @@
 let isAuthed = false;
 
-export { isAuthed };
+function setAuthed(value: boolean) {
+  isAuthed = value;
+}
+
+export { isAuthed, setAuthed };

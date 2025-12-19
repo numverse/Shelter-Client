@@ -1,5 +1,5 @@
 <template>
-  <div class="flex flex-row items-start mb-12 -mt-12">
+  <div class="flex flex-row items-start">
     <img
       src="../assets/shelter_logo.png"
       alt="Shelter Logo"

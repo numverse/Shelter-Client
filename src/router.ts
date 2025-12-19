@@ -24,6 +24,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to) => {
+  if (to.matched.length === 0) return;
   if (to.path !== "/auth" && !isAuthed) {
     return "/auth";
   }

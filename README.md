@@ -13,10 +13,10 @@
 
 ### Built With
 
-[![Typescript](https://img.shields.io/badge/typescript-35495E?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)<br />
-[![Bun](https://img.shields.io/badge/bun-35495E?style=for-the-badge&logo=bun)](https://bun.sh)<br />
-[![Vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs)](https://vuejs.org)<br />
-[![Lucide](https://img.shields.io/badge/lucide-35495E?style=for-the-badge&logo=lucide)](https://lucide.dev)<br />
+[![Typescript](https://img.shields.io/badge/typescript-35495E?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)
+[![Bun](https://img.shields.io/badge/bun-35495E?style=for-the-badge&logo=bun)](https://bun.sh)
+[![Vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs)](https://vuejs.org)
+[![Lucide](https://img.shields.io/badge/lucide-35495E?style=for-the-badge&logo=lucide)](https://lucide.dev)
 [![Tailwind](https://img.shields.io/badge/TailwindCSS-35495E?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
 
 ## Contributing

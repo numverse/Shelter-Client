@@ -4,8 +4,7 @@ import TextInputBox from "../components/TextInputBox.vue";
 import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
-import { i18n } from "../utils/i18n";
-import enUS from "../locales/en-US.json";
+import { i18n } from "../utils/i18n/i18n";
 import { checkAuthed, setAuthed } from "../utils/auth/store";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
@@ -62,12 +61,12 @@ async function onSubmit() {
       });
     }
   } catch {
-    errorMessage.value = i18n("unknown_error");
+    errorMessage.value = i18n("errors", "unknown");
   } finally {
     if (currentRequest?.ok) {
       errorMessage.value = null;
     } else {
-      errorMessage.value = i18n((currentRequest?.code ?? "unknown_error").toLowerCase() as keyof typeof enUS);
+      errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }
     isLoading.value = false;
     setAuthed(true);
@@ -105,7 +104,7 @@ function toggleMode() {
           class="relative bg-bg-secondary rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
         >
           <h1 class="text-4xl font-bold mb-6">
-            {{ isLogin ? i18n("login") : i18n("register") }}
+            {{ isLogin ? i18n("ui", "login") : i18n("ui", "register") }}
           </h1>
           <form
             ref="authForm"
@@ -118,9 +117,9 @@ function toggleMode() {
               v-if="!isLogin"
               id="username"
               v-model="username"
-              :label="i18n('username')"
+              :label="i18n('ui', 'username')"
               type="text"
-              :placeholder="i18n('username_placeholder')"
+              :placeholder="i18n('placeholders', 'username')"
               :minlength="2"
               :maxlength="32"
               :required="true"
@@ -128,18 +127,18 @@ function toggleMode() {
             <TextInputBox
               id="email"
               v-model="email"
-              :label="i18n('email')"
+              :label="i18n('ui', 'email')"
               type="email"
-              :placeholder="i18n('email_placeholder')"
+              :placeholder="i18n('placeholders', 'email')"
               :required="true"
               :autofocus="true"
             />
             <TextInputBox
               id="password"
               v-model="password"
-              :label="i18n('password')"
+              :label="i18n('ui', 'password')"
               type="password"
-              :placeholder="i18n('password_placeholder')"
+              :placeholder="i18n('placeholders', 'password')"
               :minlength="6"
               :maxlength="64"
               :required="true"
@@ -149,7 +148,7 @@ function toggleMode() {
               :disabled="!canSubmit"
               class="w-full bg-accent text-text-primary text-xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
-              {{ isLogin ? isLoading ? i18n("login_loading") : i18n("login") : isLoading ? i18n("register_loading") : i18n("register") }}
+              {{ i18n(isLoading ? "loading" : "ui", isLogin ? "login" : "register") }}
             </button>
 
             <p
@@ -162,24 +161,24 @@ function toggleMode() {
 
           <p class="mt-4 text-sm text-text-secondary">
             <span v-if="isLogin">
-              {{ i18n("need_an_account") }}
+              {{ i18n("help", "need_an_account") }}
               <button
                 class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
                 type="button"
                 @click="toggleMode"
               >
-                {{ i18n("register") }}
+                {{ i18n("ui", "register") }}
               </button>
             </span>
 
             <span v-else>
-              {{ i18n("have_an_account") }}
+              {{ i18n("help", "have_an_account") }}
               <button
                 class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
                 type="button"
                 @click="toggleMode"
               >
-                {{ i18n("login") }}
+                {{ i18n("ui", "login") }}
               </button>
             </span>
           </p>

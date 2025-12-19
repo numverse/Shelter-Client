@@ -1,4 +1,5 @@
 import ky from "ky";
+import { strings } from "../i18n/localeStrings";
 
 const baseURL = "https://shelter.zero624.dev";
 
@@ -11,7 +12,7 @@ interface requestData {
 }
 
 interface errorResponse {
-  code: string;
+  code: keyof typeof strings["errors"];
   message: string;
   error: string;
   statusCode: number;

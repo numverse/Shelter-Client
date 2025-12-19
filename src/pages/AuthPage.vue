@@ -146,7 +146,7 @@ function toggleMode() {
             <button
               type="submit"
               :disabled="!canSubmit"
-              class="w-full bg-accent text-text-primary text-xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
+              class="w-full bg-accent text-text-primary text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
               {{ i18n(isLoading ? "loading" : "ui", isLogin ? "login" : "register") }}
             </button>
@@ -159,26 +159,15 @@ function toggleMode() {
             </p>
           </form>
 
-          <p class="mt-4 text-sm text-text-secondary">
-            <span v-if="isLogin">
-              {{ i18n("help", "need_an_account") }}
+          <p class="mt-3 text-base text-text-secondary">
+            <span>
+              {{ i18n("help", isLogin ? "need_an_account" : "have_an_account") }}
               <button
                 class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
                 type="button"
                 @click="toggleMode"
               >
-                {{ i18n("ui", "register") }}
-              </button>
-            </span>
-
-            <span v-else>
-              {{ i18n("help", "have_an_account") }}
-              <button
-                class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
-                type="button"
-                @click="toggleMode"
-              >
-                {{ i18n("ui", "login") }}
+                {{ i18n("ui", isLogin ? "register" : "login") }}
               </button>
             </span>
           </p>

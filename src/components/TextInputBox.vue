@@ -10,6 +10,7 @@ defineProps<{
   maxlength?: number;
   required?: boolean;
   classes?: string;
+  autofocus?: boolean;
 }>();
 </script>
 
@@ -32,6 +33,7 @@ defineProps<{
       :minlength="minlength"
       :maxlength="maxlength"
       :required="required"
+      :autofocus="autofocus"
     >
   </div>
 </template>

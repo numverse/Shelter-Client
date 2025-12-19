@@ -63,14 +63,14 @@ async function onSubmit() {
   } catch {
     errorMessage.value = i18n("errors", "unknown");
   } finally {
+    isLoading.value = false;
     if (currentRequest?.ok) {
       errorMessage.value = null;
+      setAuthed(true);
+      router.push("/chat");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }
-    isLoading.value = false;
-    setAuthed(true);
-    router.push("/chat");
   }
 }
 

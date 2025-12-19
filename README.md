@@ -13,11 +13,11 @@
 
 ### Built With
 
-* [![Typescript][Typescript]](https://img.shields.io/badge/typescript-35495E?style=for-the-badge&logo=typescript)
-* [![Bun][bun]](https://img.shields.io/badge/bun-35495E?style=for-the-badge&logo=bun)
-* [![Vue][Vue.js]](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs)
-* [![Lucide][lucide]](https://img.shields.io/badge/lucide-35495E?style=for-the-badge&logo=lucide)
-* [![Tailwind][TailwindCSS]](https://img.shields.io/badge/TailwindCSS-35495E?style=for-the-badge&logo=tailwindcss)
+[![Typescript](https://img.shields.io/badge/typescript-35495E?style=for-the-badge&logo=typescript)](https://www.typescriptlang.org)<br />
+[![Bun](https://img.shields.io/badge/bun-35495E?style=for-the-badge&logo=bun)](https://bun.sh)<br />
+[![Vue](https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs)](https://vuejs.org)<br />
+[![Lucide](https://img.shields.io/badge/lucide-35495E?style=for-the-badge&logo=lucide)](https://lucide.dev)<br />
+[![Tailwind](https://img.shields.io/badge/TailwindCSS-35495E?style=for-the-badge&logo=tailwindcss)](https://tailwindcss.com)
 
 ## Contributing
 

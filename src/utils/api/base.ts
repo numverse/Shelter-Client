@@ -28,6 +28,7 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
     method: data.method,
     timeout: data.timeout ?? 5000,
     throwHttpErrors: false,
+    credentials: "include",
     headers: {
       "Content-Type": "application/json",
       ...data.headers,

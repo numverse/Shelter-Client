@@ -7,5 +7,4 @@ function getMessages(channelId: string, limit: string, before: string) {
   });
 }
 
-
 export { getMessages };

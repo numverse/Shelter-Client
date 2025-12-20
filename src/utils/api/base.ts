@@ -52,12 +52,12 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
 }
 
 interface FileMeta {
-  id: string,
-  filename: string,
-  mimeType: string,
-  size: number,
-  createdAt: string,
-  uploaderId: string,
+  id: string;
+  filename: string;
+  mimeType: string;
+  size: number;
+  createdAt: string;
+  uploaderId: string;
 }
 
 interface Message {

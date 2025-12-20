@@ -1,9 +1,5 @@
 import { request } from "../base";
 
-interface AddReactionToMessageRequestData {
-  emoji: string;
-}
-
 function addReactionToMessage(messageId: string, emojiId: string) {
   return request({
     method: "PUT",

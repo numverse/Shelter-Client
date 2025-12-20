@@ -5,7 +5,7 @@ let isAuthed = false;
 async function checkAuthed(): Promise<boolean> {
   const res = await getCurrentUser();
   if (!res.ok) {
-    if (res.code === "401") {
+    if (res.statusCode === 401) {
       isAuthed = false;
     }
   } else {

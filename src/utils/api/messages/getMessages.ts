@@ -7,11 +7,5 @@ function getMessages(channelId: string, limit: string, before: string) {
   });
 }
 
-function getMessageAround(messageId: string, beforeCount: string, afterCount: string) {
-  return request({
-    method: "GET",
-    url: `/api/messages/around/${messageId}?beforeCount=${beforeCount}&afterCount=${afterCount}`,
-  });
-}
 
-export { getMessages, getMessageAround };
+export { getMessages };

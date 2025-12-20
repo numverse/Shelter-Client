@@ -1,9 +1,9 @@
 import { request } from "../base";
 
-function removeReactionFromMessage(messageId: string, emoji: string) {
+function removeReactionFromMessage(messageId: string, emojiId: string) {
   return request({
     method: "DELETE",
-    url: `/api/messages/${messageId}/reactions/${emoji}`,
+    url: `/api/messages/${messageId}/reactions/${emojiId}`,
   });
 }
 

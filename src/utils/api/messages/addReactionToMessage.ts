@@ -4,11 +4,10 @@ interface AddReactionToMessageRequestData {
   emoji: string;
 }
 
-function addReactionToMessage(messageId: string, data: AddReactionToMessageRequestData) {
+function addReactionToMessage(messageId: string, emojiId: string) {
   return request({
-    method: "POST",
-    url: `/api/messages/${messageId}/reactions`,
-    data: data,
+    method: "PUT",
+    url: `/api/messages/${messageId}/reactions/${emojiId}`,
   });
 }
 

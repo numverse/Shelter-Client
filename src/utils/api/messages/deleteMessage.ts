@@ -2,7 +2,6 @@ import { request } from "../base";
 
 interface DeleteMessageResponse {
   success: boolean;
-  messageId: string;
 }
 
 function deleteMessage(messageId: string) {

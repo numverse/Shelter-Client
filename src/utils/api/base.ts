@@ -51,6 +51,32 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
   }
 }
 
+interface FileMeta {
+  id: string,
+  filename: string,
+  mimeType: string,
+  size: number,
+  createdAt: string,
+  uploaderId: string,
+}
+
+interface Message {
+  id: string;
+  channelId: string;
+  authorId: string;
+  content: string;
+  replyTo?: string;
+  createdAt: string;
+  updatedAt: string;
+  attachments: FileMeta[];
+  reactions: [
+    {
+      emojiId: string;
+      userIds: string[];
+    },
+  ];
+}
+
 interface EmojiPack {
   id: string;
   name: string;
@@ -80,4 +106,4 @@ interface User {
   createdAt: string;
 }
 
-export { request, EmojiPack, Channel, User };
+export { request, EmojiPack, Channel, User, Message };

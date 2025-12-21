@@ -9,11 +9,6 @@ interface VerifyEmailResponse {
   success: boolean;
 }
 
-/**
- * Verify a user's email with the provided code.
- * @param data - The verification request data containing email and code.
- * @returns The verification response indicating success status.
- */
 function verifyEmail(data: VerifyEmailRequestData) {
   return request<VerifyEmailResponse>({
     method: "POST",

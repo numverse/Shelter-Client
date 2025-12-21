@@ -104,4 +104,10 @@ interface User {
   createdAt: string;
 }
 
-export { request, EmojiPack, Channel, User, Message };
+interface CurrentUser extends User {
+  email: string;
+  emojiPacks: string[];
+  updatedAt: string;
+}
+
+export { request, EmojiPack, Channel, User, CurrentUser, Message };

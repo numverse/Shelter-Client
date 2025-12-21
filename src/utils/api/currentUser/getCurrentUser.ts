@@ -6,10 +6,6 @@ interface GetCurrentUserResponse extends User {
   updatedAt: string;
 }
 
-/**
- * Fetch the current user's details.
- * @returns The current user's details.
- */
 function getCurrentUser() {
   return request<GetCurrentUserResponse>({
     method: "GET",

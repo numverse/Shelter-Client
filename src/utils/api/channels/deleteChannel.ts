@@ -1,7 +1,7 @@
 import { request } from "../base";
 
 function deleteChannel(channelId: string) {
-  return request({
+  return request<void>({
     method: "DELETE",
     url: `/api/channels/${channelId}`,
   });

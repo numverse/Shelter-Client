@@ -1,7 +1,7 @@
 import { request } from "../base";
 
 function deleteEmojiPack(emojiPackId: string) {
-  return request({
+  return request<void>({
     method: "DELETE",
     url: `/api/emoji-packs/${emojiPackId}`,
   });

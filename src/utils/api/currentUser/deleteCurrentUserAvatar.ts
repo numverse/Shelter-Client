@@ -1,7 +1,7 @@
 import { request } from "../base";
 
 function deleteCurrentUserAvatar() {
-  return request({
+  return request<void>({
     method: "DELETE",
     url: "/api/users/@me/avatar",
   });

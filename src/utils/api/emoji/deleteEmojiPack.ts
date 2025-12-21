@@ -1,13 +1,9 @@
 import { request } from "../base";
 
-interface DeleteEmojiPackResponse {
-  success: boolean;
-}
-
 function deleteEmojiPack(emojiPackId: string) {
-  return request<DeleteEmojiPackResponse>({
+  return request({
     method: "DELETE",
-    url: `/api/emoji/${emojiPackId}`,
+    url: `/api/emoji-packs/${emojiPackId}`,
   });
 }
 

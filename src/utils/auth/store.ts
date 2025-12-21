@@ -1,4 +1,4 @@
-import { getCurrentUser } from "../api/users/getCurrentUser";
+import { getCurrentUser } from "../api/currentUser/getCurrentUser";
 
 let isAuthed = false;
 

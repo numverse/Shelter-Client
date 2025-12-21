@@ -7,7 +7,7 @@ interface AddEmojiPackToUserResponse {
 function addEmojiPackToUser(emojiPackId: string) {
   return request<AddEmojiPackToUserResponse>({
     method: "POST",
-    url: `/api/emoji/${emojiPackId}/add`,
+    url: `/api/users/@me/emoji-packs/${emojiPackId}`,
   });
 }
 

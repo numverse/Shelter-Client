@@ -1,10 +1,9 @@
-import { request } from "../base";
-import type { GetCurrentUserResponse } from "./getCurrentUser";
+import { request, CurrentUser } from "../base";
 
 function updateCurrentUserAvatar(avatar: File) {
   const formData = new FormData();
   formData.append("file", avatar);
-  return request<GetCurrentUserResponse>({
+  return request<CurrentUser>({
     method: "PUT",
     url: "/api/users/@me/avatar",
     data: formData,

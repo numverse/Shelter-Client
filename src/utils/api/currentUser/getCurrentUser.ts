@@ -1,16 +1,10 @@
-import { request, User } from "../base";
-
-interface GetCurrentUserResponse extends User {
-  email: string;
-  emojiPacks: string[];
-  updatedAt: string;
-}
+import { request, CurrentUser } from "../base";
 
 function getCurrentUser() {
-  return request<GetCurrentUserResponse>({
+  return request<CurrentUser>({
     method: "GET",
     url: "/api/users/@me",
   });
 }
 
-export { getCurrentUser, type GetCurrentUserResponse };
+export { getCurrentUser };

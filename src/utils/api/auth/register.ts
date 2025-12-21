@@ -7,9 +7,14 @@ interface RegisterRequestData {
 }
 
 interface RegisterResponse {
-  userId: string;
+  success: boolean;
 }
 
+/**
+ * Register a new user with the provided details.
+ * @param data - The registration request data containing username, email, and password.
+ * @returns The registration response indicating success status.
+ */
 function register(data: RegisterRequestData) {
   return request<RegisterResponse>({
     method: "POST",

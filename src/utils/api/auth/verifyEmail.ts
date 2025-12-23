@@ -1,7 +1,6 @@
 import { request } from "../base";
 
 interface VerifyEmailRequestData {
-  email: string;
   code: string;
 }
 

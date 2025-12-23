@@ -1,12 +1,12 @@
-import { request } from "../base";
-import type { GetCurrentUserResponse } from "./getCurrentUser";
+import { CurrentUser, request } from "../base";
 
 interface UpdateCurrentUserRequestData {
-  username: string;
+  username?: string;
+  displayName?: string;
 }
 
 function updateCurrentUserProfile(data: UpdateCurrentUserRequestData) {
-  return request<GetCurrentUserResponse>({
+  return request<CurrentUser>({
     method: "PATCH",
     url: "/api/users/@me/profile",
     data: data,

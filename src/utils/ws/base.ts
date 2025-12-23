@@ -103,8 +103,3 @@ class BaseWebSocket {
 }
 
 export { BaseWebSocket };
-
-const client = new BaseWebSocket("ws://localhost:8080/ws", undefined, 5000);
-client.on("channel_create", (channel) => {
-  console.log("New channel created:", channel);
-});

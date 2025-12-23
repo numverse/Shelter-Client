@@ -11,23 +11,38 @@ export interface PresenceUpdatePayload {
   status: "online" | "offline" | "away" | "dnd";
 }
 
+export enum GatewayOpCode {
+  DISPATCH = 0,
+  HEARTBEAT = 1,
+  HEARTBEAT_ACK = 2,
+  MESSAGE_CREATE = 3,
+  MESSAGE_UPDATE = 4,
+  MESSAGE_DELETE = 5,
+  REACTION_ADD = 6,
+  REACTION_REMOVE = 7,
+  PRESENCE_UPDATE = 8,
+  CHANNEL_CREATE = 9,
+  CHANNEL_UPDATE = 10,
+  CHANNEL_DELETE = 11,
+}
+
 type EventMap = {
   open: Event;
   error: Event;
   close: CloseEvent;
 
-  message_create: Message;
-  message_update: Message;
-  message_delete: string; // messageId
+  MESSAGE_CREATE: Message;
+  MESSAGE_UPDATE: Message;
+  MESSAGE_DELETE: string; // messageId
 
-  reaction_add: ReactionPayload;
-  reaction_remove: ReactionPayload;
+  REACTION_ADD: ReactionPayload;
+  REACTION_REMOVE: ReactionPayload;
 
-  channel_create: Channel;
-  channel_update: Channel;
-  channel_delete: string; // channelId
+  PRESENCE_UPDATE: PresenceUpdatePayload;
 
-  presence_update: PresenceUpdatePayload;
+  CHANNEL_CREATE: Channel;
+  CHANNEL_UPDATE: Channel;
+  CHANNEL_DELETE: string; // channelId
 };
 
 type EventType = keyof EventMap;
@@ -53,9 +68,14 @@ class BaseWebSocket {
     this.socket = new WebSocket(this.url, this.protocols);
     this.socket.onopen = (event) => this.handleEvent("open", event);
     this.socket.onmessage = (ev) => {
-      const { type, payload } = JSON.parse(ev.data);
-      if (type) {
-        this.handleEvent(type, payload);
+      const { op, d } = JSON.parse(ev.data);
+      if (op === GatewayOpCode.HEARTBEAT) {
+        return this.send(JSON.stringify({
+          op: GatewayOpCode.HEARTBEAT_ACK,
+        }));
+      }
+      if (op) {
+        this.handleEvent(GatewayOpCode[op] as EventType, d);
       }
     };
     this.socket.onerror = (event) => this.handleEvent("error", event);

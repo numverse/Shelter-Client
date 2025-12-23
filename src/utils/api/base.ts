@@ -100,7 +100,9 @@ interface Channel {
 interface User {
   id: string;
   username: string;
-  avatarId: string;
+  displayName?: string;
+  flags: number;
+  avatarId?: string;
   createdAt: string;
 }
 

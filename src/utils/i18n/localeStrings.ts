@@ -60,6 +60,16 @@ const strings = {
       "ko-KR": "이미 계정이 있으신가요? ",
     },
   },
+  verify: {
+    link_expired: {
+      "en-US": "Email verification link has expired or is invalid",
+      "ko-KR": "이메일 인증 링크가 만료되었거나 유효하지 않습니다",
+    },
+    login_resend: {
+      "en-US": "please log in and resend the link",
+      "ko-KR": "로그인 후 링크를 재전송해주세요",
+    },
+  },
   errors: {
     unknown: {
       "en-US": "An unknown error occurred.",

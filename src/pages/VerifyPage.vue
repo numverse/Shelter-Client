@@ -64,17 +64,17 @@ async function onSubmit() {
         >
           <ul class="text-center text-text-primary space-y-1">
             <li class="text-lg font-medium">
-              Email verification link has expired or is invalid.
+              {{ i18n("verify", "link_expired") }}
             </li>
             <li class="text-sm text-text-secondary">
-              please log in and resend the link
+              {{ i18n("verify", "login_resend") }}
             </li>
           </ul>
           <button
             class="px-4 py-2 bg-accent text-white rounded hover:bg-accent-hover transition"
             @click="router.replace('/login')"
           >
-            Log In
+            {{ i18n("ui", "login") }}
           </button>
         </div>
       </div>

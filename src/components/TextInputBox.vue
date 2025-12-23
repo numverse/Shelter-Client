@@ -34,6 +34,7 @@ defineProps<{
       :maxlength="maxlength"
       :required="required"
       :autofocus="autofocus"
+      autocomplete="off"
     >
   </div>
 </template>

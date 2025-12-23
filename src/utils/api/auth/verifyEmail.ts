@@ -1,7 +1,7 @@
 import { request } from "../base";
 
 interface VerifyEmailRequestData {
-  code: string;
+  token: string;
 }
 
 interface VerifyEmailResponse {

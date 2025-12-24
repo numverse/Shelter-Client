@@ -1,4 +1,4 @@
-import { Channel, Message } from "../api/base";
+import { Channel, Message } from "../api/types";
 
 export interface ReactionPayload {
   messageId: string;

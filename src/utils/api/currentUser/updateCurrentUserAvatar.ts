@@ -1,4 +1,5 @@
-import { request, CurrentUser } from "../base";
+import { request } from "../base";
+import { CurrentUser } from "../types";
 
 function updateCurrentUserAvatar(avatar: File) {
   const formData = new FormData();

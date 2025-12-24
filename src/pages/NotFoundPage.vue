@@ -1,40 +1,16 @@
 <template>
-  <div class="notfound">
-    <h1>404</h1>
-    <p>Page not found</p>
+  <div class="bg-bg-primary h-full flex flex-col items-center justify-center p-4">
+    <p class="text-9xl font-medium -mb-2">
+      404
+    </p>
+    <p class="text-2xl mb-6">
+      Page not found
+    </p>
     <router-link
       to="/"
-      class="home-btn"
+      class="px-4 py-2 bg-accent text-text-primary rounded-md decoration-0 hover:bg-accent/80 transition-colors duration-200"
     >
       Go to Home
     </router-link>
   </div>
 </template>
-
-<style scoped>
-.notfound {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 12px;
-    padding: 16px;
-}
-h1 {
-    font-size: 4rem;
-    margin: 0;
-}
-.home-btn {
-    display: inline-block;
-    padding: 8px 16px;
-    background: #3b82f6;
-    color: #fff;
-    border-radius: 6px;
-    text-decoration: none;
-}
-.home-btn:hover {
-    opacity: 0.9;
-}
-</style>

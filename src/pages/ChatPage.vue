@@ -3,6 +3,7 @@ import { ref } from "vue";
 import ChannelList from "../components/ChannelList.vue";
 import MessageList from "../components/MessageList.vue";
 import MessageInput from "../components/MessageInput.vue";
+import WidgetList from "../components/WidgetList.vue";
 import type { Channel } from "../utils/api/types";
 
 const selectedChannel = ref<Channel | null>(null);
@@ -15,6 +16,7 @@ function onSelectChannel(ch: Channel) {
 
 <template>
   <div class="h-full flex">
+    <WidgetList />
     <ChannelList @select="onSelectChannel" />
 
     <div class="flex-1 flex flex-col">

@@ -19,7 +19,7 @@ function selectChannel(ch: Channel) {
 </script>
 
 <template>
-  <aside class="w-64 bg-bg-primary p-3 border-r border-bg-tertiary h-full">
+  <aside class="w-64 bg-bg-primary p-3 h-full">
     <h3 class="text-sm font-semibold mb-2">
       Channels
     </h3>

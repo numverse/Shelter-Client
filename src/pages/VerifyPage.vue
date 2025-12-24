@@ -16,7 +16,6 @@ onMounted(() => {
   if (hash) {
     const hashParams = new URLSearchParams(hash.slice(1));
     const token = hashParams.get("token");
-    // history.replaceState(null, "", window.location.pathname);
     if (token) {
       verificationToken.value = token;
       onSubmit();
@@ -63,16 +62,16 @@ async function onSubmit() {
           class="flex flex-col gap-4 items-center"
         >
           <ul class="text-center text-text-primary space-y-1">
-            <li class="text-lg font-medium">
+            <li class="text-2xl font-medium">
               {{ i18n("verify", "link_expired") }}
             </li>
-            <li class="text-sm text-text-secondary">
+            <li class="text-lg text-text-secondary">
               {{ i18n("verify", "login_resend") }}
             </li>
           </ul>
           <button
-            class="px-4 py-2 bg-accent text-white rounded hover:bg-accent-hover transition"
-            @click="router.replace('/login')"
+            class="px-4 py-2 text-lg bg-accent text-text-primary cursor-pointer rounded-md hover:bg-accent/80  transition-colors duration-200"
+            @click="router.replace('/auth')"
           >
             {{ i18n("verify", "login") }}
           </button>

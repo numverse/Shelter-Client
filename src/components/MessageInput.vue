@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
+import { ref } from "vue";
 import { createMessage } from "../utils/api/messages/createMessage";
 
 const props = defineProps<{ channelId: string | null }>();
@@ -29,7 +29,7 @@ function onKey(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="p-3 border-t border-bg-border bg-bg-secondary">
+  <div class="p-3 border-t border-bg-tertiary bg-bg-secondary">
     <textarea
       v-model="text"
       :placeholder="props.channelId ? 'Message #' + props.channelId : 'Select a channel'"

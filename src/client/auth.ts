@@ -1,4 +1,4 @@
-import { refreshTokens } from "../api/auth/refreshTokens";
+import { refreshTokens } from "../utils/api/auth/refreshTokens";
 
 let isAuthed = false;
 

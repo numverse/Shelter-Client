@@ -1,5 +1,5 @@
-import { refreshTokens } from "../api/auth/refreshTokens";
-import { createWebSocket } from "../ws/base";
+import { refreshTokens } from "../utils/api/auth/refreshTokens";
+import { createWebSocket } from "../utils/ws/base";
 import { setAuthed } from "./auth";
 
 const client = createWebSocket("wss://shelter.zero624.dev/gateway");

@@ -3,7 +3,7 @@ import { ref } from "vue";
 import ChannelList from "../components/ChannelList.vue";
 import MessageList from "../components/MessageList.vue";
 import MessageInput from "../components/MessageInput.vue";
-import type { Channel } from "../utils/api/base";
+import type { Channel } from "../utils/api/types";
 
 const selectedChannel = ref<Channel | null>(null);
 

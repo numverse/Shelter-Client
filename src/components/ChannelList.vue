@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { getAllChannels } from "../utils/api/channels/getAllChannels";
-import type { Channel } from "../utils/api/base";
+import type { Channel } from "../utils/api/types";
 
 const channels = ref<Channel[]>([]);
 const loading = ref(true);

@@ -21,7 +21,7 @@ onMounted(async () => {
   const authed = await checkAuthed();
   setTimeout(() => {
     if (authed) {
-      return router.replace("/chat");
+      return router.replace("/channels");
     } else {
       isCheckingAuth.value = false;
     }
@@ -66,7 +66,7 @@ async function onSubmit() {
     isLoading.value = false;
     if (currentRequest?.ok) {
       errorMessage.value = null;
-      router.push("/chat");
+      router.push("/channels");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }

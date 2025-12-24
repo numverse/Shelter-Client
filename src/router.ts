@@ -3,15 +3,19 @@ import ChatPage from "./pages/ChatPage.vue";
 import AuthPage from "./pages/AuthPage.vue";
 import VerifyPage from "./pages/VerifyPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
+import { isAuthed } from "./client/auth";
 
 const routes = [
   {
     path: "/",
-    redirect: "/chat",
+    redirect: "/auth",
   },
   {
-    path: "/chat",
+    path: "/channels/:channelId?",
     component: ChatPage,
+    meta: {
+      requiresAuth: true,
+    },
   },
   {
     path: "/auth",
@@ -32,11 +36,10 @@ const router = createRouter({
   routes: routes,
 });
 
-// router.beforeEach((to) => {
-//   if (to.matched.length === 0) return;
-//   if (to.path !== "/auth" && !isAuthed) {
-//     return "/auth";
-//   }
-// });
+router.beforeEach(async (to) => {
+  if (to.matched.length === 0) return;
+  const needsAuth = to.matched.some((r) => (r.meta).requiresAuth);
+  if (!needsAuth || isAuthed) return;
+});
 
 export { router };

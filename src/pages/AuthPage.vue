@@ -21,24 +21,19 @@ onMounted(async () => {
   if (client.readyState === WebSocket.OPEN) {
     router.push("/chat");
   } else if (client.readyState === WebSocket.CONNECTING) {
-    client.once("open", () => {
-      let closed = false;
-      const onClose = () => {
-        closed = true;
-      };
-      client.once("close", onClose);
-      setTimeout(() => {
-        client.off("close", onClose);
-        if (!closed && client.readyState === WebSocket.OPEN) {
-          router.push("/chat");
-        } else {
-          isCheckingAuth.value = false;
-        }
-      }, 200);
-    });
-    client.once("close", () => {
-      isCheckingAuth.value = false;
-    });
+    let closed = false;
+    const onClose = () => {
+      closed = true;
+    };
+    client.once("close", onClose);
+    setTimeout(() => {
+      client.off("close", onClose);
+      if (!closed && client.readyState === WebSocket.OPEN) {
+        router.push("/chat");
+      } else {
+        isCheckingAuth.value = false;
+      }
+    }, 500);
   } else {
     isCheckingAuth.value = false;
   }

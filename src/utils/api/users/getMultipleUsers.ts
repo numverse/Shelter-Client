@@ -4,8 +4,12 @@ interface GetMultipleUsersRequestData {
   userIds: string[];
 }
 
+interface GetMultipleUsersResponse {
+  users: User[];
+}
+
 function getMultipleUsers(data: GetMultipleUsersRequestData) {
-  return request<User[]>({
+  return request<GetMultipleUsersResponse>({
     method: "POST",
     url: "/api/users/batch",
     data: data,

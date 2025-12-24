@@ -1,7 +1,11 @@
 import { request, User } from "../base";
 
+interface GetAllUsersResponse {
+  users: User[];
+}
+
 function getAllUsers() {
-  return request<User[]>({
+  return request<GetAllUsersResponse>({
     method: "GET",
     url: "/api/users",
   });

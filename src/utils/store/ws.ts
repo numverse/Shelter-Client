@@ -1,8 +1,8 @@
 import { refreshTokens } from "../api/auth/refreshTokens";
-import { BaseWebSocket } from "../ws/base";
+import { createWebSocket } from "../ws/base";
 import { setAuthed } from "./auth";
 
-const client = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
+const client = createWebSocket("wss://shelter.zero624.dev/gateway");
 
 client.on("open", () => {
   setAuthed(true);

@@ -25,15 +25,18 @@ type requestResponse<T> = {
 } & T;
 
 async function request<T>(data: requestData): Promise<requestResponse<T>> {
+  const headers = {
+    ...(data.headers ?? {}),
+  };
+  if (!data.data || !(data.data instanceof FormData)) {
+    headers["Content-Type"] = "application/json";
+  }
   const res = await ky(`${baseURL}${data.url}`, {
     method: data.method,
     timeout: data.timeout ?? 5000,
     throwHttpErrors: false,
     credentials: "include",
-    headers: {
-      "Content-Type": "application/json",
-      ...data.headers,
-    },
+    headers: headers,
     json: data.data,
   });
   if (!res.ok) {

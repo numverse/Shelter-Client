@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ChatPage from "./pages/ChatPage.vue";
 import AuthPage from "./pages/AuthPage.vue";
-// import { isAuthed } from "./utils/auth/store";
+import { isAuthed } from "./utils/auth/store";
 import VerifyPage from "./pages/VerifyPage.vue";
 
 const routes = [
@@ -30,9 +30,9 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   if (to.matched.length === 0) return;
-  // if (to.path !== "/auth" && !isAuthed) {
-  //   return "/auth";
-  // }
+  if (to.path !== "/auth" && !isAuthed) {
+    return "/auth";
+  }
 });
 
 export { router };

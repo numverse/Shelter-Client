@@ -1,21 +1,23 @@
-import { getCurrentUser } from "../api/currentUser/getCurrentUser";
+import { refreshTokens } from "../api/auth/refreshTokens";
+import { BaseWebSocket } from "../ws/base";
 
 let isAuthed = false;
 
-async function checkAuthed(): Promise<boolean> {
-  const res = await getCurrentUser();
-  if (!res.ok) {
-    if (res.statusCode === 401) {
+const client = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
+
+client.on("open", () => {
+  isAuthed = true;
+});
+
+client.on("close", async (evt) => {
+  if (evt.reason === "AUTHENTICATION_REQUIRED") {
+    const res = await refreshTokens();
+    if (res.ok) {
+      client.reconnect();
+    } else {
       isAuthed = false;
     }
-  } else {
-    isAuthed = true;
   }
-  return isAuthed;
-}
+});
 
-function setAuthed(value: boolean) {
-  isAuthed = value;
-}
-
-export { isAuthed, checkAuthed, setAuthed };
+export { isAuthed, client };

@@ -5,7 +5,7 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
-import { checkAuthed, setAuthed } from "../utils/auth/store";
+import { client } from "../utils/auth/store";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
 const router = useRouter();
@@ -18,14 +18,30 @@ const isCheckingAuth = ref(true);
 const authFormIsValid = ref(false);
 
 onMounted(async () => {
-  const authed = await checkAuthed();
-  setTimeout(() => {
-    if (authed) {
-      return router.replace("/chat");
-    } else {
+  if (client.readyState === WebSocket.OPEN) {
+    router.push("/chat");
+  } else if (client.readyState === WebSocket.CONNECTING) {
+    client.once("open", () => {
+      let closed = false;
+      const onClose = () => {
+        closed = true;
+      };
+      client.once("close", onClose);
+      setTimeout(() => {
+        client.off("close", onClose);
+        if (!closed && client.readyState === WebSocket.OPEN) {
+          router.push("/chat");
+        } else {
+          isCheckingAuth.value = false;
+        }
+      }, 200);
+    });
+    client.once("close", () => {
       isCheckingAuth.value = false;
-    }
-  }, 300);
+    });
+  } else {
+    isCheckingAuth.value = false;
+  }
 });
 
 const checkAuthFormValidity = async () => {
@@ -66,8 +82,10 @@ async function onSubmit() {
     isLoading.value = false;
     if (currentRequest?.ok) {
       errorMessage.value = null;
-      setAuthed(true);
-      router.push("/chat");
+      client.reconnect();
+      client.once("open", () => {
+        router.push("/chat");
+      });
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }

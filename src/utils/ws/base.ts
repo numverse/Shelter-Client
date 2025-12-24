@@ -53,14 +53,12 @@ class BaseWebSocket {
   private socket: WebSocket | null = null;
   private url: string;
   private protocols?: string | string[];
-  private reconnectInterval?: number;
   private eventListeners: Listeners = {};
   private latency: number | null = null;
 
-  constructor(url: string, protocols?: string | string[], reconnectInterval?: number) {
+  constructor(url: string, protocols?: string | string[]) {
     this.url = url;
     this.protocols = protocols;
-    this.reconnectInterval = reconnectInterval;
     this.connect();
   }
 
@@ -74,17 +72,20 @@ class BaseWebSocket {
           op: GatewayOpCode.HEARTBEAT_ACK,
         }));
       }
-      if (op) {
-        this.handleEvent(GatewayOpCode[op] as EventType, d);
-      }
+      this.handleEvent(GatewayOpCode[op] as EventType, d);
     };
     this.socket.onerror = (event) => this.handleEvent("error", event);
     this.socket.onclose = (event) => {
       this.handleEvent("close", event);
-      if (this.reconnectInterval !== undefined) {
-        setTimeout(() => this.connect(), this.reconnectInterval);
-      }
+      this.latency = null;
     };
+  }
+
+  public reconnect() {
+    if (this.socket?.readyState !== WebSocket.CLOSED) {
+      this.close();
+    }
+    this.connect();
   }
 
   private handleEvent<K extends EventType>(eventType: K, payload: EventMap[K]) {
@@ -101,10 +102,22 @@ class BaseWebSocket {
   }
 
   public close() {
-    this.reconnectInterval = undefined;
     if (this.socket) {
-      this.socket.close();
+      try {
+        this.socket.close();
+      } catch {
+        /* ignore */
+      }
+      this.socket = null;
     }
+  }
+
+  public once<K extends EventType>(eventType: K, listener: (payload: EventMap[K]) => void) {
+    const onceListener = (payload: EventMap[K]) => {
+      listener(payload);
+      this.off(eventType, onceListener);
+    };
+    this.on(eventType, onceListener);
   }
 
   public on<K extends EventType>(eventType: K, listener: (payload: EventMap[K]) => void) {
@@ -119,6 +132,10 @@ class BaseWebSocket {
 
   get ping() {
     return this.latency;
+  }
+
+  get readyState() {
+    return this.socket?.readyState;
   }
 }
 

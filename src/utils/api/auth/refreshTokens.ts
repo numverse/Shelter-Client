@@ -4,11 +4,12 @@ interface RefreshResponse {
   success: boolean;
 }
 
-function refresh() {
+function refreshTokens() {
   return request<RefreshResponse>({
     method: "POST",
     url: "/api/auth/refresh",
+    data: {},
   });
 }
 
-export { refresh };
+export { refreshTokens };

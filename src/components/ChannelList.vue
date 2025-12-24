@@ -19,13 +19,13 @@ function selectChannel(ch: Channel) {
 </script>
 
 <template>
-  <aside class="w-64 bg-bg-primary p-3 h-full">
+  <aside class="w-64 bg-bg1 p-3 h-full">
     <h3 class="text-sm font-semibold mb-2">
       Channels
     </h3>
     <div
       v-if="loading"
-      class="text-sm text-text-secondary"
+      class="text-sm text-text2"
     >
       Loading...
     </div>

@@ -29,12 +29,12 @@ function onKey(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="p-3 border-t border-bg-tertiary bg-bg-secondary">
+  <div class="p-3 border-t border-bg3 bg-bg2">
     <textarea
       v-model="text"
       :placeholder="props.channelId ? 'Message #' + props.channelId : 'Select a channel'"
       :disabled="!props.channelId"
-      class="w-full p-2 rounded bg-bg-input text-text-primary resize-none h-20"
+      class="w-full p-2 rounded bg-bg-input text-text1 resize-none h-20"
       @keydown="onKey"
     />
     <div class="flex justify-end mt-2">

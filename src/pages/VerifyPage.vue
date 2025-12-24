@@ -42,7 +42,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg-tertiary">
+  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg3">
     <ShelterLogo />
     <Transition
       name="fade"
@@ -61,16 +61,16 @@ async function onSubmit() {
           v-if="!isVerifying"
           class="flex flex-col gap-4 items-center"
         >
-          <ul class="text-center text-text-primary space-y-1">
+          <ul class="text-center text-text1 space-y-1">
             <li class="text-2xl font-medium">
               {{ i18n("verify", "link_expired") }}
             </li>
-            <li class="text-lg text-text-secondary">
+            <li class="text-lg text-text2">
               {{ i18n("verify", "login_resend") }}
             </li>
           </ul>
           <button
-            class="px-4 py-2 text-lg bg-accent text-text-primary cursor-pointer rounded-md hover:bg-accent/80  transition-colors duration-200"
+            class="px-4 py-2 text-lg bg-accent text-text1 cursor-pointer rounded-md hover:bg-accent/80  transition-colors duration-200"
             @click="router.replace('/auth')"
           >
             {{ i18n("verify", "login") }}

@@ -18,7 +18,7 @@ defineProps<{
   <div>
     <label
       :for="id"
-      class="font-semibold text-text-primary"
+      class="font-semibold text-text1"
     >
       {{ label }}
     </label>
@@ -27,7 +27,7 @@ defineProps<{
       :id="id"
       v-model="model"
       :type="type ?? 'text'"
-      class="mt-1 text-xl w-full border border-text-secondary/50 bg-bg-primary rounded-sm p-2 focus:border-text-primary transition-all duration-200 not-placeholder-shown:valid:border-accent not-placeholder-shown:invalid:border-red-500"
+      class="mt-1 text-xl w-full border border-text2/50 bg-bg1 rounded-sm p-2 focus:border-text1 transition-all duration-200 not-placeholder-shown:valid:border-accent not-placeholder-shown:invalid:border-red-500"
       :class="classes"
       :placeholder="placeholder"
       :minlength="minlength"

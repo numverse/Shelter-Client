@@ -18,7 +18,7 @@ function onSelectChannel(ch: Channel) {
     <ChannelList @select="onSelectChannel" />
 
     <div class="flex-1 flex flex-col">
-      <header class="px-4 py-3 border-b border-bg-tertiary bg-bg-secondary flex items-center justify-between">
+      <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">
         <div class="text-lg font-semibold">
           {{ selectedChannel?.name ?? 'No channel selected' }}
         </div>
@@ -32,11 +32,11 @@ function onSelectChannel(ch: Channel) {
       <MessageInput :channel-id="selectedChannel?.id ?? null" />
     </div>
 
-    <aside class="w-64 bg-bg-secondary p-3 border-l border-bg-tertiary">
+    <aside class="w-64 bg-bg2 p-3 border-l border-bg3">
       <h4 class="text-sm font-semibold">
         Members
       </h4>
-      <div class="text-sm text-text-secondary mt-2">
+      <div class="text-sm text-text2 mt-2">
         (Not implemented)
       </div>
     </aside>

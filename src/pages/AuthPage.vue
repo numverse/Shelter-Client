@@ -5,7 +5,7 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
-import { client } from "../utils/auth/store";
+import { checkAuthed } from "../utils/store/auth";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
 const router = useRouter();
@@ -18,31 +18,14 @@ const isCheckingAuth = ref(true);
 const authFormIsValid = ref(false);
 
 onMounted(async () => {
-  if (client.readyState === WebSocket.OPEN) {
-    router.push("/chat");
-  } else if (client.readyState === WebSocket.CONNECTING) {
-    let closed = false;
-    const onClose = () => {
-      closed = true;
-    };
-    client.once("close", onClose);
-    setTimeout(() => {
-      client.off("close", onClose);
-      if (!closed && client.readyState === WebSocket.OPEN) {
-        router.push("/chat");
-      } else {
-        isCheckingAuth.value = false;
-      }
-    }, 500);
-  } else {
-    setTimeout(() => {
-      if (client.readyState === WebSocket.OPEN) {
-        router.push("/chat");
-      } else {
-        isCheckingAuth.value = false;
-      }
-    }, 500);
-  }
+  const authed = await checkAuthed();
+  setTimeout(() => {
+    if (authed) {
+      return router.replace("/chat");
+    } else {
+      isCheckingAuth.value = false;
+    }
+  }, 300);
 });
 
 const checkAuthFormValidity = async () => {
@@ -83,10 +66,7 @@ async function onSubmit() {
     isLoading.value = false;
     if (currentRequest?.ok) {
       errorMessage.value = null;
-      client.reconnect();
-      client.once("open", () => {
-        router.push("/chat");
-      });
+      router.push("/chat");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }
@@ -99,6 +79,13 @@ function toggleMode() {
   username.value = "";
   email.value = "";
   password.value = "";
+}
+
+function sendResetPasswordInstructions() {
+  if (email.value === "" || !/\S+@\S+\.\S+/.test(email.value)) {
+    const input = document.getElementById("email");
+    (input as HTMLInputElement | null)?.focus();
+  }
 }
 </script>
 
@@ -162,6 +149,20 @@ function toggleMode() {
               :maxlength="64"
               :required="true"
             />
+            <p
+              v-if="isLogin"
+              class="mt-3 text-base text-text-secondary"
+            >
+              <span>
+                <button
+                  class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
+                  type="button"
+                  @click="sendResetPasswordInstructions"
+                >
+                  {{ i18n("help", "forgot_password") }}
+                </button>
+              </span>
+            </p>
             <button
               type="submit"
               :disabled="!canSubmit"

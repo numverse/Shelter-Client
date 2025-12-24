@@ -51,6 +51,10 @@ const strings = {
     },
   },
   help: {
+    forgot_password: {
+      "en-US": "Forgot your password?",
+      "ko-KR": "비밀번호를 잊으셨나요?",
+    },
     need_an_account: {
       "en-US": "Need an account? ",
       "ko-KR": "계정이 없으신가요? ",
@@ -61,6 +65,10 @@ const strings = {
     },
   },
   verify: {
+    login: {
+      "en-US": "Log In",
+      "ko-KR": "로그인",
+    },
     link_expired: {
       "en-US": "Email verification link has expired or is invalid",
       "ko-KR": "이메일 인증 링크가 만료되었거나 유효하지 않습니다",

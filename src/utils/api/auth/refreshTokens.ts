@@ -8,7 +8,6 @@ function refreshTokens() {
   return request<RefreshResponse>({
     method: "POST",
     url: "/api/auth/refresh",
-    data: {},
   });
 }
 

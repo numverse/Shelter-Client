@@ -2,7 +2,7 @@
 import { ref, watch, onMounted, onUnmounted, nextTick } from "vue";
 import type { Message } from "../utils/api/base";
 import { getMessages } from "../utils/api/messages/getMessages";
-import { client } from "../utils/auth/store";
+// import { client } from "../utils/store/auth";
 
 const props = defineProps<{ channelId: string | null }>();
 
@@ -31,18 +31,18 @@ watch(() => props.channelId, (cid) => {
   if (cid) load(cid);
 });
 
-onMounted(() => {
-  wsListener = (m: Message) => {
-    if (m.channelId === props.channelId) {
-      messages.value.push(m);
-    }
-  };
-  client.on("MESSAGE_CREATE", wsListener);
-});
+// onMounted(() => {
+//   wsListener = (m: Message) => {
+//     if (m.channelId === props.channelId) {
+//       messages.value.push(m);
+//     }
+//   };
+//   client.on("MESSAGE_CREATE", wsListener);
+// });
 
-onUnmounted(() => {
-  if (wsListener) client.off("MESSAGE_CREATE", wsListener);
-});
+// onUnmounted(() => {
+//   if (wsListener) client.off("MESSAGE_CREATE", wsListener);
+// });
 </script>
 
 <template>

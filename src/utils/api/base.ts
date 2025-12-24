@@ -28,7 +28,7 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
   const headers = {
     ...(data.headers ?? {}),
   };
-  if (!data.data || !(data.data instanceof FormData)) {
+  if (!(data.data instanceof FormData) && data.data) {
     headers["Content-Type"] = "application/json";
   }
   const res = await ky(`${baseURL}${data.url}`, {

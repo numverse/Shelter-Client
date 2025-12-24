@@ -1,24 +1,23 @@
 import { refreshTokens } from "../api/auth/refreshTokens";
 import { BaseWebSocket } from "../ws/base";
-
-let isAuthed = false;
+import { setAuthed } from "./auth";
 
 const client = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
 
 client.on("open", () => {
-  isAuthed = true;
+  setAuthed(true);
 });
 
 client.on("close", async (evt) => {
   if (evt.reason === "AUTHENTICATION_REQUIRED") {
     const res = await refreshTokens();
     if (res.ok) {
-      isAuthed = true;
+      setAuthed(true);
       client.reconnect();
     } else {
-      isAuthed = false;
+      setAuthed(false);
     }
   }
 });
 
-export { isAuthed, client };
+export { client };

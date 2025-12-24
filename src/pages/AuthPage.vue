@@ -35,7 +35,13 @@ onMounted(async () => {
       }
     }, 500);
   } else {
-    isCheckingAuth.value = false;
+    setTimeout(() => {
+      if (client.readyState === WebSocket.OPEN) {
+        router.push("/chat");
+      } else {
+        isCheckingAuth.value = false;
+      }
+    }, 500);
   }
 });
 

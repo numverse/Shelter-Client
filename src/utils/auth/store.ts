@@ -13,6 +13,7 @@ client.on("close", async (evt) => {
   if (evt.reason === "AUTHENTICATION_REQUIRED") {
     const res = await refreshTokens();
     if (res.ok) {
+      isAuthed = true;
       client.reconnect();
     } else {
       isAuthed = false;

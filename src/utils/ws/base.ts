@@ -82,9 +82,7 @@ class BaseWebSocket {
   }
 
   public reconnect() {
-    if (this.socket?.readyState !== WebSocket.CLOSED) {
-      this.close();
-    }
+    this.close();
     this.connect();
   }
 

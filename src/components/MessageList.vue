@@ -48,7 +48,7 @@ watch(() => props.channelId, (cid) => {
 <template>
   <div
     ref="containerRef"
-    class="flex-1 p-4 overflow-auto h-full bg-bg-primary"
+    class="flex-1 p-4 overflow-auto h-full bg-bg-secondary"
   >
     <div
       v-if="loading"

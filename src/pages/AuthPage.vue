@@ -77,9 +77,9 @@ async function onSubmit() {
 function toggleMode() {
   isLogin.value = !isLogin.value;
   errorMessage.value = null;
-  username.value = "";
-  email.value = "";
-  password.value = "";
+  // username.value = "";
+  // email.value = "";
+  // password.value = "";
 }
 
 async function sendResetPasswordInstructions() {

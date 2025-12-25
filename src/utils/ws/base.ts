@@ -1,97 +1,96 @@
-import { GatewayOpCode, EventMap } from "./types";
+import { GatewayOpCode, EventMap, WS } from "./types";
 
-type EventKeys = keyof EventMap;
+type EventType = keyof EventMap;
 
-type Listeners = { [K in EventKeys]?: Array<(payload: EventMap[K]) => void> };
+type Listeners = { [K in EventType]?: Array<(payload: EventMap[K]) => void> };
 
-function createWebSocket(url: string, protocols?: string | string[]) {
-  let socket: WebSocket | null = null;
-  const eventListeners: Listeners = {};
-  let latency: number | null = null;
+class BaseWebSocket implements WS {
+  private socket: WebSocket | null = null;
+  private url: string;
+  private protocols?: string | string[];
+  private eventListeners: Listeners = {};
+  private latency: number | null = null;
 
-  function connect() {
-    socket = new WebSocket(url, protocols);
-    socket.onopen = (event) => handleEvent("open", event);
-    socket.onmessage = (ev) => {
+  constructor(url: string, protocols?: string | string[]) {
+    this.url = url;
+    this.protocols = protocols;
+    this.connect();
+  }
+
+  private connect() {
+    this.socket = new WebSocket(this.url, this.protocols);
+    this.socket.onopen = (event) => this.handleEvent("open", event);
+    this.socket.onmessage = (ev) => {
       const { op, d } = JSON.parse(ev.data);
       if (op === GatewayOpCode.HEARTBEAT) {
-        latency = latency === null ? Date.now() - d.ts : (latency * 7 + (Date.now() - d.ts)) / 8;
-        return send(JSON.stringify({
+        this.latency = this.latency === null ? Date.now() - d.ts : (this.latency * 7 + (Date.now() - d.ts)) / 8;
+        return this.send(JSON.stringify({
           op: GatewayOpCode.HEARTBEAT_ACK,
         }));
       }
-      handleEvent(GatewayOpCode[op] as EventKeys, d);
+      this.handleEvent(GatewayOpCode[op] as EventType, d);
     };
-    socket.onerror = (event) => handleEvent("error", event);
-    socket.onclose = (event) => {
-      handleEvent("close", event);
-      latency = null;
+    this.socket.onerror = (event) => this.handleEvent("error", event);
+    this.socket.onclose = (event) => {
+      this.handleEvent("close", event);
+      this.latency = null;
     };
   }
 
-  function handleEvent<K extends EventKeys>(eventType: K, payload: EventMap[K]) {
-    const list = eventListeners[eventType] as Array<(p: EventMap[K]) => void> | undefined;
+  public reconnect() {
+    this.close();
+    this.connect();
+  }
+
+  private handleEvent<K extends EventType>(eventType: K, payload: EventMap[K]) {
+    const list = this.eventListeners[eventType] as Array<(p: EventMap[K]) => void> | undefined;
     if (list) list.forEach((l) => l(payload));
   }
 
-  function send(data: string | ArrayBuffer | Blob | ArrayBufferView) {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-      socket.send(data);
+  public send(data: string | ArrayBuffer | Blob | ArrayBufferView) {
+    if (this.socket && this.socket.readyState === WebSocket.OPEN) {
+      this.socket.send(data);
     } else {
       throw new Error("WebSocket is not open. Unable to send message.");
     }
   }
 
-  function close() {
-    if (socket) {
+  public close() {
+    if (this.socket) {
       try {
-        socket.close();
+        this.socket.close();
       } catch {
-        // ignore
+        /* ignore */
       }
-      socket = null;
+      this.socket = null;
     }
   }
 
-  function reconnect() {
-    close();
-    connect();
+  public once<K extends EventType>(eventType: K, listener: (payload: EventMap[K]) => void) {
+    const onceListener = (payload: EventMap[K]) => {
+      listener(payload);
+      this.off(eventType, onceListener);
+    };
+    this.on(eventType, onceListener);
   }
 
-  function on<K extends EventKeys>(eventType: K, listener: (payload: EventMap[K]) => void) {
-    const list = (eventListeners[eventType] ??= []) as Array<(p: EventMap[K]) => void>;
+  public on<K extends EventType>(eventType: K, listener: (payload: EventMap[K]) => void) {
+    const list = (this.eventListeners[eventType] ??= []) as Array<(p: EventMap[K]) => void>;
     list.push(listener);
   }
 
-  function off<K extends EventKeys>(eventType: K, listener: (payload: EventMap[K]) => void) {
-    const list = eventListeners[eventType] as Array<(p: EventMap[K]) => void> | undefined;
-    if (list) eventListeners[eventType] = list.filter((l) => l !== listener) as Listeners[K];
+  public off<K extends EventType>(eventType: K, listener: (payload: EventMap[K]) => void) {
+    const list = this.eventListeners[eventType] as Array<(p: EventMap[K]) => void> | undefined;
+    if (list) this.eventListeners[eventType] = list.filter((l) => l !== listener) as Listeners[K];
   }
 
-  function once<K extends EventKeys>(eventType: K, listener: (payload: EventMap[K]) => void) {
-    const onceListener = (payload: EventMap[K]) => {
-      listener(payload);
-      off(eventType, onceListener);
-    };
-    on(eventType, onceListener);
+  get ping() {
+    return this.latency;
   }
 
-  connect();
-
-  return {
-    send,
-    close,
-    reconnect,
-    on,
-    off,
-    once,
-    get ping() {
-      return latency;
-    },
-    get readyState() {
-      return socket?.readyState;
-    },
-  };
+  get readyState() {
+    return this.socket?.readyState;
+  }
 }
 
-export { createWebSocket };
+export { BaseWebSocket };

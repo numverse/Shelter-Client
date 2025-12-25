@@ -5,10 +5,11 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
-import { checkAuthed } from "../stores/auth";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
 import { forgotPassword } from "../utils/api/auth/forgotPassword";
+
+import { authStore } from "../stores/auth";
 const router = useRouter();
 
 const authForm = ref<HTMLFormElement | null>(null);
@@ -19,7 +20,7 @@ const isCheckingAuth = ref(true);
 const authFormIsValid = ref(false);
 
 onMounted(async () => {
-  const authed = await checkAuthed();
+  const authed = await authStore.checkAuthed();
   setTimeout(() => {
     if (authed) {
       return router.replace("/channels");

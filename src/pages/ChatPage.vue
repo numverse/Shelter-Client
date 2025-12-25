@@ -5,11 +5,16 @@ import MessageList from "../components/MessageList.vue";
 import MessageInput from "../components/MessageInput.vue";
 import WidgetList from "../components/WidgetList.vue";
 
+import { authStore } from "../stores/auth";
 import { channelsStore } from "../stores/channels";
 
 onMounted(async () => {
   await channelsStore.refresh();
   channelsStore.setChannel(channelsStore.channels.value[0]);
+
+  setInterval(async () => {
+    await authStore.refreshTokens();
+  }, 240000);
 });
 </script>
 

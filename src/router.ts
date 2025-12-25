@@ -4,7 +4,7 @@ import AuthPage from "./pages/AuthPage.vue";
 import VerifyPage from "./pages/VerifyPage.vue";
 import ResetPage from "./pages/ResetPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
-import { isAuthed } from "./stores/auth";
+import { authStore } from "./stores/auth";
 
 const routes = [
   {
@@ -44,7 +44,7 @@ const router = createRouter({
 router.beforeEach(async (to) => {
   if (to.matched.length === 0) return;
   const needsAuth = to.matched.some((r) => (r.meta).requiresAuth);
-  if (!needsAuth || isAuthed) return;
+  if (!needsAuth || authStore.authed) return;
 });
 
 export { router };

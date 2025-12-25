@@ -4,7 +4,6 @@ import { router } from "../router";
 import { Channel } from "../utils/api/types";
 
 const channelsStore = {
-  mode: ref<"dm" | "chat">("chat"),
   channels: ref<Channel[]>([]),
   currentChannel: ref<Channel | null>(null),
   getChannel: function (id: string) {
@@ -15,9 +14,6 @@ const channelsStore = {
     if (channel) {
       router.push(`/channels/${channel.id}`);
     }
-  },
-  setMode: function (mode: "dm" | "chat") {
-    this.mode.value = mode;
   },
   refresh: async function () {
     const allChannels = await getAllChannels();

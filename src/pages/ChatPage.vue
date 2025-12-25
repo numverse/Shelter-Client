@@ -21,7 +21,7 @@ onMounted(async () => {
 <template>
   <div class="h-full flex">
     <WidgetList />
-    <ChannelList v-if="channelsStore.mode.value === 'chat'" />
+    <ChannelList />
 
     <div class="flex-1 flex flex-col">
       <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">

@@ -15,6 +15,7 @@ function createWebSocket(url: string, protocols?: string | string[]) {
     socket.onmessage = (ev) => {
       const { op, d } = JSON.parse(ev.data);
       if (op === GatewayOpCode.HEARTBEAT) {
+        latency = latency === null ? Date.now() - d.ts : (latency * 7 + (Date.now() - d.ts)) / 8;
         return send(JSON.stringify({
           op: GatewayOpCode.HEARTBEAT_ACK,
         }));

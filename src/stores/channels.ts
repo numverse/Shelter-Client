@@ -2,7 +2,7 @@ import { getAllChannels } from "../utils/api/channels/getAllChannels";
 import { ref } from "vue";
 import { Channel } from "../utils/api/types";
 
-const channelStore = {
+const channelsStore = {
   channels: ref<Channel[]>([]),
   currentChannel: ref<Channel | null>(null),
   refresh: async function () {
@@ -11,4 +11,4 @@ const channelStore = {
   },
 };
 
-export { channelStore };
+export { channelsStore };

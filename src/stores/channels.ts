@@ -1,5 +1,6 @@
 import { getAllChannels } from "../utils/api/channels/getAllChannels";
 import { ref } from "vue";
+import { router } from "../router";
 import { Channel } from "../utils/api/types";
 
 const channelsStore = {
@@ -11,6 +12,7 @@ const channelsStore = {
   },
   setChannel: function (channel: Channel) {
     this.currentChannel.value = channel;
+    router.push(`/channels/${channel.id}`);
   },
   refresh: async function () {
     const allChannels = await getAllChannels();

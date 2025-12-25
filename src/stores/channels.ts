@@ -10,9 +10,14 @@ const channelsStore = {
   getChannel: function (id: string) {
     return channelsStore.channels.value.find((ch) => ch.id === id) ?? null;
   },
-  setChannel: function (channel: Channel) {
+  setChannel: function (channel: Channel | null) {
     this.currentChannel.value = channel;
-    router.push(`/channels/${channel.id}`);
+    if (channel) {
+      router.push(`/channels/${channel.id}`);
+    }
+  },
+  setMode: function (mode: "dm" | "chat") {
+    this.mode.value = mode;
   },
   refresh: async function () {
     const allChannels = await getAllChannels();

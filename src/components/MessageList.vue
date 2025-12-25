@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from "vue";
-import type { Message } from "../utils/api/base";
+import type { Message } from "../utils/api/types";
 import { getMessages } from "../utils/api/messages/getMessages";
 // import { client } from "../utils/store/auth";
 
@@ -48,11 +48,11 @@ watch(() => props.channelId, (cid) => {
 <template>
   <div
     ref="containerRef"
-    class="flex-1 p-4 overflow-auto h-full bg-bg-primary"
+    class="flex-1 p-4 overflow-auto h-full bg-bg2"
   >
     <div
       v-if="loading"
-      class="text-sm text-text-secondary"
+      class="text-sm text-text2"
     >
       Loading messages...
     </div>
@@ -66,17 +66,17 @@ watch(() => props.channelId, (cid) => {
           :key="m.id"
           class="p-2 rounded hover:bg-bg-hover"
         >
-          <div class="text-sm text-text-secondary">
+          <div class="text-sm text-text2">
             {{ m.authorId }} • {{ new Date(m.createdAt).toLocaleString() }}
           </div>
-          <div class="mt-1 text-text-primary">
+          <div class="mt-1 text-text1">
             {{ m.content }}
           </div>
         </li>
       </ul>
       <div
         v-else
-        class="text-sm text-text-secondary"
+        class="text-sm text-text2"
       >
         No messages yet.
       </div>

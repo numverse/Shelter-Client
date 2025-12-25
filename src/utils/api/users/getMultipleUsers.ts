@@ -1,4 +1,5 @@
-import { request, User } from "../base";
+import { request } from "../base";
+import { User } from "../types";
 
 interface GetMultipleUsersRequestData {
   userIds: string[];

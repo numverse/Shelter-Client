@@ -1,4 +1,5 @@
-import { Message, request } from "../base";
+import { request } from "../base";
+import { Message } from "../types";
 
 interface UpdateMessageRequestData {
   content: string;

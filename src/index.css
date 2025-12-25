@@ -4,7 +4,7 @@
   html, body {
     user-select: none;
     -webkit-user-select: none;
-    color: var(--color-text-primary);
+    color: var(--color-text1);
     font-family: var(--font-base);
     height: 100%;
   }
@@ -13,16 +13,16 @@
   }
 }
 @theme {
-  --color-bg-primary: #121214;
-  --color-bg-secondary: #1e1e22;
-  --color-bg-tertiary: #393942;
-  --color-text-primary: #ffffff;
-  --color-text-secondary: #a1a1aa;
+  --color-bg1: #121214;
+  --color-bg2: #1a1a1e;
+  --color-bg3: #29292d;
+  --color-text1: #ffffff;
+  --color-text2: #a1a1aa;
   --color-accent: #5966f3;
   --font-base: "Pretendard", sans-serif;
 }
 body {
-  background-color: var(--color-bg-primary);
+  background-color: var(--color-bg1);
 }
 #app {
   height: 100%;

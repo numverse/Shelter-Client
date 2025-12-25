@@ -1,4 +1,5 @@
-import { CurrentUser, request } from "../base";
+import { request } from "../base";
+import { CurrentUser } from "../types";
 
 interface UpdateCurrentUserRequestData {
   username?: string;

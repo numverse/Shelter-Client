@@ -1,4 +1,5 @@
-import { request, Channel } from "../base";
+import { request } from "../base";
+import { Channel } from "../types";
 
 interface GetAllChannelsResponse {
   channels: Channel[];

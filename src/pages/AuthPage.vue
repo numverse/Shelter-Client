@@ -5,7 +5,7 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
-import { checkAuthed } from "../utils/store/auth";
+import { checkAuthed } from "../client/auth";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
 import { forgotPassword } from "src/utils/api/auth/forgotPassword";
@@ -22,7 +22,7 @@ onMounted(async () => {
   const authed = await checkAuthed();
   setTimeout(() => {
     if (authed) {
-      return router.replace("/chat");
+      return router.replace("/channels");
     } else {
       isCheckingAuth.value = false;
     }
@@ -67,7 +67,7 @@ async function onSubmit() {
     isLoading.value = false;
     if (currentRequest?.ok) {
       errorMessage.value = null;
-      router.push("/chat");
+      router.push("/channels");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }
@@ -100,7 +100,7 @@ async function sendResetPasswordInstructions() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg-tertiary">
+  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg3">
     <ShelterLogo />
     <Transition
       name="fade"
@@ -117,7 +117,7 @@ async function sendResetPasswordInstructions() {
         />
         <div
           v-if="!isCheckingAuth"
-          class="relative bg-bg-secondary rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
+          class="relative bg-bg2 rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
         >
           <h1 class="text-4xl font-bold mb-6">
             {{ isLogin ? i18n("ui", "login") : i18n("ui", "register") }}
@@ -161,7 +161,7 @@ async function sendResetPasswordInstructions() {
             />
             <p
               v-if="isLogin"
-              class="mt-3 text-base text-text-secondary"
+              class="mt-3 text-base text-text2"
             >
               <span>
                 <button
@@ -176,7 +176,7 @@ async function sendResetPasswordInstructions() {
             <button
               type="submit"
               :disabled="!canSubmit"
-              class="w-full bg-accent text-text-primary text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
+              class="w-full bg-accent text-text1 text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
               {{ i18n(isLoading ? "loading" : "ui", isLogin ? "login" : "register") }}
             </button>
@@ -189,7 +189,7 @@ async function sendResetPasswordInstructions() {
             </p>
           </form>
 
-          <p class="mt-3 text-base text-text-secondary">
+          <p class="mt-3 text-base text-text2">
             <span>
               {{ i18n("help", isLogin ? "need_an_account" : "have_an_account") }}
               <button

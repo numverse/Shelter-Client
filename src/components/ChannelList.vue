@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
 import { getAllChannels } from "../utils/api/channels/getAllChannels";
-import type { Channel } from "../utils/api/base";
+import type { Channel } from "../utils/api/types";
 
 const channels = ref<Channel[]>([]);
 const loading = ref(true);
@@ -19,13 +19,13 @@ function selectChannel(ch: Channel) {
 </script>
 
 <template>
-  <aside class="w-64 bg-bg-secondary p-3 border-r border-bg-tertiary h-full">
+  <aside class="w-64 bg-bg1 p-3 h-full">
     <h3 class="text-sm font-semibold mb-2">
       Channels
     </h3>
     <div
       v-if="loading"
-      class="text-sm text-text-secondary"
+      class="text-sm text-text2"
     >
       Loading...
     </div>

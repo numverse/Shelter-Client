@@ -45,6 +45,9 @@ router.beforeEach(async (to) => {
   if (to.matched.length === 0) return;
   const needsAuth = to.matched.some((r) => (r.meta).requiresAuth);
   if (!needsAuth || authStore.authed) return;
+  return {
+    path: "/auth",
+  };
 });
 
 export { router };

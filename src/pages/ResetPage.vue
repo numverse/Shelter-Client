@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import ShelterLogo from "../components/ShelterLogo.vue";
+import TextInputBox from "../components/TextInputBox.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { i18n } from "../utils/i18n/i18n";
@@ -12,7 +13,7 @@ const verificationToken = ref("");
 const errorMessage = ref<string | null>(null);
 const resetFormIsValid = ref(false);
 
-const checkAuthFormValidity = async () => {
+const checkResetFormValidity = async () => {
   await nextTick();
   resetFormIsValid.value = resetForm.value?.checkValidity() ?? false;
 };
@@ -50,7 +51,7 @@ async function onSubmit() {
 </script>
 
 <template>
-  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg-tertiary">
+  <div class="flex flex-col gap-6 justify-center items-center h-full bg-bg3">
     <ShelterLogo />
     <Transition
       name="fade"
@@ -62,22 +63,22 @@ async function onSubmit() {
         class="flex items-center justify-center"
       >
         <div
-          class="relative bg-bg-secondary rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
+          class="relative bg-bg2 rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
         >
           <h1 class="text-4xl font-bold mb-6">
-            {{ "Change Your Password" }}
+            {{ i18n("reset", "change_password") }}
           </h1>
           <form
             ref="resetForm"
             class="space-y-4 w-md"
             @submit.prevent="onSubmit"
-            @input="checkAuthFormValidity"
-            @change="checkAuthFormValidity"
+            @input="checkResetFormValidity"
+            @change="checkResetFormValidity"
           >
             <TextInputBox
               id="password"
               v-model="password"
-              :label="i18n('ui', 'password')"
+              :label="i18n('ui', 'new_password')"
               type="password"
               :placeholder="i18n('placeholders', 'password')"
               :minlength="6"
@@ -89,7 +90,7 @@ async function onSubmit() {
               :disabled="!resetFormIsValid"
               class="w-full bg-accent text-text-primary text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
-              {{ "Reset Password" }}
+              {{ i18n("reset", "reset_password") }}
             </button>
 
             <p

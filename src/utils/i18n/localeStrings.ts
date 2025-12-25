@@ -21,6 +21,10 @@ const strings = {
       "en-US": "Password",
       "ko-KR": "비밀번호",
     },
+    new_password: {
+      "en-US": "New Password",
+      "ko-KR": "새 비밀번호",
+    },
     username: {
       "en-US": "Username",
       "ko-KR": "이름",
@@ -76,6 +80,16 @@ const strings = {
     login_resend: {
       "en-US": "Please log in and resend the link",
       "ko-KR": "로그인 후 링크를 재전송해주세요",
+    },
+  },
+  reset: {
+    change_password: {
+      "en-US": "Change Your Password",
+      "ko-KR": "비밀번호 변경",
+    },
+    reset_password: {
+      "en-US": "Reset Password",
+      "ko-KR": "비밀번호 재설정",
     },
   },
   errors: {

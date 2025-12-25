@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { CloudIcon, DollarSignIcon, MessageCircleIcon, MessagesSquareIcon } from "lucide-vue-next";
+import { CloudIcon, DollarSignIcon, MessageCircleIcon, MessagesSquareIcon, PackageIcon } from "lucide-vue-next";
 import WidgetItem from "./WidgetItem.vue";
 
 import { useRouter } from "vue-router";
@@ -32,6 +32,11 @@ const router = useRouter();
         :icon="DollarSignIcon"
         short-name="EXCH"
         label="Exchange Rate"
+      />
+      <WidgetItem
+        :icon="PackageIcon"
+        short-name="TRACK"
+        label="Package Tracking"
       />
     </ul>
   </aside>

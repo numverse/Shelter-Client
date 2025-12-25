@@ -8,6 +8,7 @@ import { i18n } from "../utils/i18n/i18n";
 import { checkAuthed } from "../utils/store/auth";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
+import { forgotPassword } from "src/utils/api/auth/forgotPassword";
 const router = useRouter();
 
 const authForm = ref<HTMLFormElement | null>(null);
@@ -81,10 +82,19 @@ function toggleMode() {
   password.value = "";
 }
 
-function sendResetPasswordInstructions() {
+async function sendResetPasswordInstructions() {
   if (email.value === "" || !/\S+@\S+\.\S+/.test(email.value)) {
     const input = document.getElementById("email");
     (input as HTMLInputElement | null)?.focus();
+  } else {
+    const response = await forgotPassword({
+      email: email.value,
+    });
+    if (response.ok) {
+      alert("Reset password instructions have been sent to your email.");
+    } else {
+      errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
+    }
   }
 }
 </script>

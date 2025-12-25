@@ -10,14 +10,14 @@ const channelsStore = {
     return channelsStore.channels.value.find((ch) => ch.id === id) ?? null;
   },
   setChannel: function (channel: Channel | null) {
-    this.currentChannel.value = channel;
+    channelsStore.currentChannel.value = channel;
     if (channel) {
       router.push(`/channels/${channel.id}`);
     }
   },
   refresh: async function () {
     const allChannels = await getAllChannels();
-    this.channels.value = allChannels.ok ? allChannels.channels : [];
+    channelsStore.channels.value = allChannels.ok ? allChannels.channels : [];
   },
 };
 

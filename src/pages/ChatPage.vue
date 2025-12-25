@@ -1,37 +1,36 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted } from "vue";
 import ChannelList from "../components/ChannelList.vue";
 import MessageList from "../components/MessageList.vue";
 import MessageInput from "../components/MessageInput.vue";
 import WidgetList from "../components/WidgetList.vue";
-import type { Channel } from "../utils/api/types";
 
-const selectedChannel = ref<Channel | null>(null);
+import { channelsStore } from "../stores/channels";
 
-function onSelectChannel(ch: Channel) {
-  selectedChannel.value = ch;
-}
-
+onMounted(async () => {
+  await channelsStore.refresh();
+  channelsStore.setChannel(channelsStore.channels.value[0]);
+});
 </script>
 
 <template>
   <div class="h-full flex">
     <WidgetList />
-    <ChannelList @select="onSelectChannel" />
+    <ChannelList v-if="channelsStore.mode.value === 'chat'" />
 
     <div class="flex-1 flex flex-col">
       <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">
         <div class="text-lg font-semibold">
-          {{ selectedChannel?.name ?? 'No channel selected' }}
+          # {{ channelsStore.currentChannel.value?.name ?? 'No channel selected' }}
         </div>
       </header>
 
       <MessageList
-        :channel-id="selectedChannel?.id ?? null"
+        :channel-id="channelsStore.currentChannel.value?.id ?? null"
         class="flex-1"
       />
 
-      <MessageInput :channel-id="selectedChannel?.id ?? null" />
+      <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
     </div>
 
     <aside class="w-64 bg-bg2 p-3 border-l border-bg3">

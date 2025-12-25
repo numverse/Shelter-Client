@@ -1,49 +1,22 @@
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
-import { getAllChannels } from "../utils/api/channels/getAllChannels";
-import type { Channel } from "../utils/api/types";
-
-const channels = ref<Channel[]>([]);
-const loading = ref(true);
-
-onMounted(async () => {
-  const res = await getAllChannels();
-  if (res.ok) channels.value = res.channels ?? []; // support array or wrapper
-  loading.value = false;
-});
-
-const emit = defineEmits<{ (e: "select", ch: Channel): void }>();
-function selectChannel(ch: Channel) {
-  emit("select", ch);
-}
+import { channelsStore } from "../stores/channels";
+import ChannelItem from "./ChannelItem.vue";
 </script>
 
 <template>
   <aside class="w-64 bg-bg1 p-3 h-full">
-    <h3 class="text-sm font-semibold mb-2">
+    <h3 class="text-lg font-semibold mb-2">
       Channels
     </h3>
-    <div
-      v-if="loading"
-      class="text-sm text-text2"
-    >
-      Loading...
-    </div>
     <ul
-      v-else
       class="space-y-1"
     >
-      <li
-        v-for="ch in channels"
+      <ChannelItem
+        v-for="ch in channelsStore.channels.value"
+        :id="ch.id"
         :key="ch.id"
-      >
-        <button
-          class="w-full text-left px-2 py-1 rounded hover:bg-bg-hover"
-          @click="selectChannel(ch)"
-        >
-          # {{ ch.name }}
-        </button>
-      </li>
+        :name="ch.name"
+      />
     </ul>
   </aside>
 </template>

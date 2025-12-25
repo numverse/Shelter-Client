@@ -2,6 +2,7 @@ import { createRouter, createWebHistory } from "vue-router";
 import ChatPage from "./pages/ChatPage.vue";
 import AuthPage from "./pages/AuthPage.vue";
 import VerifyPage from "./pages/VerifyPage.vue";
+import ResetPage from "./pages/ResetPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
 import { isAuthed } from "./client/auth";
 
@@ -24,6 +25,10 @@ const routes = [
   {
     path: "/verify",
     component: VerifyPage,
+  },
+  {
+    path: "/reset",
+    component: ResetPage,
   },
   {
     path: "/:pathMatch(.*)*",

@@ -4,7 +4,7 @@ import AuthPage from "./pages/AuthPage.vue";
 import VerifyPage from "./pages/VerifyPage.vue";
 import ResetPage from "./pages/ResetPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
-import { isAuthed } from "./client/auth";
+import { isAuthed } from "./stores/auth";
 
 const routes = [
   {

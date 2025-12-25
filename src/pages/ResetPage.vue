@@ -3,7 +3,7 @@ import ShelterLogo from "../components/ShelterLogo.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { i18n } from "../utils/i18n/i18n";
-import { resetPassword } from "src/utils/api/auth/resetPassword";
+import { resetPassword } from "../utils/api/auth/resetPassword";
 
 const resetForm = ref<HTMLFormElement | null>(null);
 

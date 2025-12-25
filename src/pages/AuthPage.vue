@@ -8,7 +8,7 @@ import { i18n } from "../utils/i18n/i18n";
 import { checkAuthed } from "../client/auth";
 import { useRouter } from "vue-router";
 import LoadingCircle from "../components/LoadingCircle.vue";
-import { forgotPassword } from "src/utils/api/auth/forgotPassword";
+import { forgotPassword } from "../utils/api/auth/forgotPassword";
 const router = useRouter();
 
 const authForm = ref<HTMLFormElement | null>(null);

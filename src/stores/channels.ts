@@ -3,8 +3,15 @@ import { ref } from "vue";
 import { Channel } from "../utils/api/types";
 
 const channelsStore = {
+  mode: ref<"dm" | "chat">("chat"),
   channels: ref<Channel[]>([]),
   currentChannel: ref<Channel | null>(null),
+  getChannel: function (id: string) {
+    return channelsStore.channels.value.find((ch) => ch.id === id) ?? null;
+  },
+  setChannel: function (channel: Channel) {
+    this.currentChannel.value = channel;
+  },
   refresh: async function () {
     const allChannels = await getAllChannels();
     this.channels.value = allChannels.ok ? allChannels.channels : [];

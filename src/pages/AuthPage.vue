@@ -8,7 +8,6 @@ import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
 import { useRouter } from "vue-router";
-import { forgotPassword } from "../utils/api/auth/forgotPassword";
 
 import { authStore } from "../stores/auth";
 const router = useRouter();

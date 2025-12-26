@@ -42,8 +42,8 @@ const strings = {
   },
   placeholders: {
     username: {
-      "en-US": "6~32 characters",
-      "ko-KR": "6~32자",
+      "en-US": "2~32 characters",
+      "ko-KR": "2~32자",
     },
     email: {
       "en-US": "email@example.com",
@@ -52,6 +52,12 @@ const strings = {
     password: {
       "en-US": "8~64 characters",
       "ko-KR": "8~64자",
+    },
+  },
+  validation: {
+    username: {
+      "en-US": "Please only use numbers, letters, underscores _ , or periods.",
+      "ko-KR": "숫자, 영어, 밑줄 _, 마침표만 사용해주세요.",
     },
   },
   help: {

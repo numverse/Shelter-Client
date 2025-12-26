@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, computed, nextTick, onMounted } from "vue";
+import { ref, onMounted } from "vue";
 import TextInputBox from "../components/TextInputBox.vue";
 import ShelterLogo from "../components/ShelterLogo.vue";
 import { login } from "../utils/api/auth/login";
@@ -12,12 +12,17 @@ import { forgotPassword } from "../utils/api/auth/forgotPassword";
 import { authStore } from "../stores/auth";
 const router = useRouter();
 
-const authForm = ref<HTMLFormElement | null>(null);
+const usernamebox = ref<typeof TextInputBox | null>(null);
+const emailbox = ref<typeof TextInputBox | null>(null);
+const passwordbox = ref<typeof TextInputBox | null>(null);
+
+const email = ref("");
+const username = ref("");
+const password = ref("");
 
 const isLogin = ref(true);
 const isLoading = ref(false);
 const isCheckingAuth = ref(true);
-const authFormIsValid = ref(false);
 
 onMounted(async () => {
   const authed = await authStore.checkAuthed();
@@ -30,22 +35,22 @@ onMounted(async () => {
   }, 300);
 });
 
-const checkAuthFormValidity = async () => {
-  await nextTick();
-  authFormIsValid.value = authForm.value?.checkValidity() ?? false;
-};
-
-const username = ref("");
-const email = ref("");
-const password = ref("");
-
 const errorMessage = ref<string | null>(null);
 
-const canSubmit = computed(() => {
-  return !isLoading.value && authFormIsValid.value;
-});
-
 async function onSubmit() {
+  if (!emailbox.value?.isValid()) {
+    emailbox.value?.input.value.focus();
+    return;
+  }
+  if (!isLogin.value && !usernamebox.value?.isValid()) {
+    usernamebox.value?.input.value.focus();
+    return;
+  }
+  if (!passwordbox.value?.isValid()) {
+    passwordbox.value?.input.value.focus();
+    return;
+  }
+
   isLoading.value = true;
   errorMessage.value = null;
   let currentRequest;
@@ -77,18 +82,14 @@ async function onSubmit() {
 function toggleMode() {
   isLogin.value = !isLogin.value;
   errorMessage.value = null;
-  // username.value = "";
-  // email.value = "";
-  // password.value = "";
 }
 
 async function sendResetPasswordInstructions() {
-  if (email.value === "" || !/\S+@\S+\.\S+/.test(email.value)) {
-    const input = document.getElementById("email");
-    (input as HTMLInputElement | null)?.focus();
+  if (!emailbox.value?.isValid()) {
+    emailbox.value?.input.value.focus();
   } else {
     const response = await forgotPassword({
-      email: email.value,
+      email: emailbox.value.input.value,
     });
     if (response.ok) {
       alert("Reset password instructions have been sent to your email.");
@@ -126,22 +127,10 @@ async function sendResetPasswordInstructions() {
             ref="authForm"
             class="space-y-4 w-md"
             @submit.prevent="onSubmit"
-            @input="checkAuthFormValidity"
-            @change="checkAuthFormValidity"
           >
             <TextInputBox
-              v-if="!isLogin"
-              id="username"
-              v-model="username"
-              :label="i18n('ui', 'username')"
-              type="text"
-              :placeholder="i18n('placeholders', 'username')"
-              :minlength="2"
-              :maxlength="32"
-              :required="true"
-            />
-            <TextInputBox
               id="email"
+              ref="emailbox"
               v-model="email"
               :label="i18n('ui', 'email')"
               type="email"
@@ -150,7 +139,22 @@ async function sendResetPasswordInstructions() {
               :autofocus="true"
             />
             <TextInputBox
+              v-if="!isLogin"
+              id="username"
+              ref="usernamebox"
+              v-model="username"
+              :label="i18n('ui', 'username')"
+              type="text"
+              :placeholder="i18n('placeholders', 'username')"
+              :minlength="2"
+              :maxlength="32"
+              :required="true"
+              :pattern="/^[A-Za-z0-9_.,]+$/"
+              :error-message="i18n('validation', 'username')"
+            />
+            <TextInputBox
               id="password"
+              ref="passwordbox"
               v-model="password"
               :label="i18n('ui', 'password')"
               type="password"
@@ -175,7 +179,7 @@ async function sendResetPasswordInstructions() {
             </p>
             <button
               type="submit"
-              :disabled="!canSubmit"
+              :disabled="isLoading"
               class="w-full bg-accent text-text1 text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
               {{ i18n(isLoading ? "loading" : "ui", isLogin ? "login" : "register") }}

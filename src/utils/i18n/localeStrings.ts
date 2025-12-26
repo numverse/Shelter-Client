@@ -253,6 +253,14 @@ const strings = {
       "en-US": "The requested channel was not found.",
       "ko-KR": "요청한 채널을 찾을 수 없습니다.",
     },
+    INVALID_OR_EXPIRED_VERIFICATION_TOKEN: {
+      "en-US": "The verification token is invalid or has expired.",
+      "ko-KR": "인증 토큰이 유효하지 않거나 만료되었습니다.",
+    },
+    RATE_LIMIT_EXCEEDED: {
+      "en-US": "Rate limit exceeded. Please try again later.",
+      "ko-KR": "요청 한도 초과입니다. 나중에 다시 시도해주세요.",
+    },
   },
 };
 

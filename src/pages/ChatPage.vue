@@ -10,7 +10,7 @@ import { channelsStore } from "../stores/channels";
 
 onMounted(async () => {
   await channelsStore.refresh();
-  channelsStore.setChannel(channelsStore.channels.value[0]);
+  channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 });
 </script>
 

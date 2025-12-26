@@ -15,11 +15,8 @@ const isSelected = computed(() =>
 );
 
 const selectChannel = () => {
-  const channel = channelsStore.getChannel(props.id);
-  if (channel) {
-    channelsStore.setChannel(channel);
-    router.push(`/channels/${channel.id}`);
-  }
+  channelsStore.setCurrentChannel(props.id);
+  router.push(`/channels/${props.id}`);
 };
 </script>
 

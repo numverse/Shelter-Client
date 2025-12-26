@@ -12,7 +12,9 @@ const containerRef = ref<HTMLElement | null>(null);
 
 async function load(channelId: string) {
   loading.value = true;
-  const res = await getMessages(channelId, "50", "");
+  const res = await getMessages({
+    channelId: channelId,
+  });
   if (res.ok) {
     messages.value = Array.isArray(res.messages) ? res.messages : [];
     messages.value.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());

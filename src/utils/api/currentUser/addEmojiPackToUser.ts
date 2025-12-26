@@ -1,13 +1,17 @@
 import { request } from "../base";
 
+interface AddEmojiPackToUserRequestData {
+  emojiPackId: string;
+}
+
 interface AddEmojiPackToUserResponse {
   success: boolean;
 }
 
-function addEmojiPackToUser(emojiPackId: string) {
+function addEmojiPackToUser(data: AddEmojiPackToUserRequestData) {
   return request<AddEmojiPackToUserResponse>({
     method: "POST",
-    url: `/api/users/@me/emoji-packs/${emojiPackId}`,
+    url: `/api/users/@me/emoji-packs/${data.emojiPackId}`,
   });
 }
 

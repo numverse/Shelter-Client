@@ -1,13 +1,18 @@
 import { request } from "../base";
 
+interface AddReactionToMessageRequestData {
+  messageId: string;
+  emojiId: string;
+}
+
 interface AddReactionToMessageResponse {
   success: boolean;
 }
 
-function addReactionToMessage(messageId: string, emojiId: string) {
+function addReactionToMessage(data: AddReactionToMessageRequestData) {
   return request<AddReactionToMessageResponse>({
     method: "PUT",
-    url: `/api/messages/${messageId}/reactions/${emojiId}`,
+    url: `/api/messages/${data.messageId}/reactions/${data.emojiId}`,
   });
 }
 

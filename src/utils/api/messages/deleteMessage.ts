@@ -1,9 +1,13 @@
 import { request } from "../base";
 
-function deleteMessage(messageId: string) {
+interface DeleteMessageRequestData {
+  messageId: string;
+}
+
+function deleteMessage(data: DeleteMessageRequestData) {
   return request<void>({
     method: "DELETE",
-    url: `/api/messages/${messageId}`,
+    url: `/api/messages/${data.messageId}`,
   });
 }
 

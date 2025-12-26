@@ -1,9 +1,13 @@
 import { request } from "../base";
 
-function deleteChannel(channelId: string) {
+interface deleteChannelRequestData {
+  channelId: string;
+}
+
+function deleteChannel(data: deleteChannelRequestData) {
   return request<void>({
     method: "DELETE",
-    url: `/api/channels/${channelId}`,
+    url: `/api/channels/${data.channelId}`,
   });
 }
 

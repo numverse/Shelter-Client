@@ -1,9 +1,14 @@
 import { request } from "../base";
 
-function removeAttachmentFromMessage(messageId: string, attachmentId: string) {
+interface RemoveAttachmentRequestData {
+  messageId: string;
+  attachmentId: string;
+}
+
+function removeAttachmentFromMessage(data: RemoveAttachmentRequestData) {
   return request<void>({
     method: "DELETE",
-    url: `/api/messages/${messageId}/attachments/${attachmentId}`,
+    url: `/api/messages/${data.messageId}/attachments/${data.attachmentId}`,
   });
 }
 

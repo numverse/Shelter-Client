@@ -1,9 +1,13 @@
 import { request } from "../base";
 
-function removeEmojiPackFromUser(emojiPackId: string) {
+interface RemoveEmojiPackFromUserRequestData {
+  emojiPackId: string;
+}
+
+function removeEmojiPackFromUser(data: RemoveEmojiPackFromUserRequestData) {
   return request<void>({
     method: "DELETE",
-    url: `/api/users/@me/emoji-packs/${emojiPackId}`,
+    url: `/api/users/@me/emoji-packs/${data.emojiPackId}`,
   });
 }
 

@@ -1,6 +1,12 @@
 import { request } from "../base";
 import { Message } from "../types";
 
+interface GetMessagesAroundRequestData {
+  messageId: string;
+  beforeCount: string;
+  afterCount: string;
+}
+
 interface GetMessagesAroundResponse {
   anchor: Message;
   before: {
@@ -13,10 +19,10 @@ interface GetMessagesAroundResponse {
   };
 }
 
-function getMessagesAround(messageId: string, beforeCount: string, afterCount: string) {
+function getMessagesAround(data: GetMessagesAroundRequestData) {
   return request<GetMessagesAroundResponse>({
     method: "GET",
-    url: `/api/messages/around/${messageId}?beforeCount=${beforeCount}&afterCount=${afterCount}`,
+    url: `/api/messages/around/${data.messageId}?beforeCount=${data.beforeCount}&afterCount=${data.afterCount}`,
   });
 }
 

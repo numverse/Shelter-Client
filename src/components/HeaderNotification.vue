@@ -1,3 +1,36 @@
+<script setup lang="ts">
+import { ref, watch } from "vue";
+
+const props = defineProps({
+  modelValue: {
+    type: Boolean,
+    default: true,
+  },
+  message: {
+    type: String,
+    default: "Please check your email to verify your account.",
+  },
+  buttonLabel: {
+    type: String,
+    default: "Resend Email",
+  },
+});
+const emit = defineEmits(["update:modelValue", "action", "close"]);
+
+const visible = ref(props.modelValue);
+watch(() => props.modelValue, (v) => (visible.value = v));
+
+function close() {
+  visible.value = false;
+  emit("update:modelValue", false);
+  emit("close");
+}
+
+function onAction() {
+  emit("action");
+}
+</script>
+
 <template>
   <transition name="slide-down">
     <div
@@ -41,36 +74,3 @@
     </div>
   </transition>
 </template>
-
-<script setup lang="ts">
-import { ref, watch } from "vue";
-
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: true,
-  },
-  message: {
-    type: String,
-    default: "Please check your email to verify your account.",
-  },
-  buttonLabel: {
-    type: String,
-    default: "Resend Email",
-  },
-});
-const emit = defineEmits(["update:modelValue", "action", "close"]);
-
-const visible = ref(props.modelValue);
-watch(() => props.modelValue, (v) => (visible.value = v));
-
-function close() {
-  visible.value = false;
-  emit("update:modelValue", false);
-  emit("close");
-}
-
-function onAction() {
-  emit("action");
-}
-</script>

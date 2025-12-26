@@ -13,9 +13,13 @@ interface GetMessagesResponse {
 }
 
 function getMessages(data: GetMessagesRequestData) {
+  const params = new URLSearchParams();
+  if (data.limit) params.append("limit", data.limit);
+  if (data.messageId) params.append("messageId", data.messageId);
+
   return request<GetMessagesResponse>({
     method: "GET",
-    url: `/api/messages/${data.channelId}?limit=${data.limit}&messageId=${data.messageId}`,
+    url: `/api/messages/${data.channelId}?${params.toString()}`,
   });
 }
 

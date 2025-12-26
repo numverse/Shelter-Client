@@ -20,9 +20,13 @@ interface GetMessagesAroundResponse {
 }
 
 function getMessagesAround(data: GetMessagesAroundRequestData) {
+  const params = new URLSearchParams();
+  if (data.beforeCount) params.append("beforeCount", data.beforeCount);
+  if (data.afterCount) params.append("afterCount", data.afterCount);
+
   return request<GetMessagesAroundResponse>({
     method: "GET",
-    url: `/api/messages/around/${data.messageId}?beforeCount=${data.beforeCount}&afterCount=${data.afterCount}`,
+    url: `/api/messages/around/${data.messageId}?${params.toString()}`,
   });
 }
 

@@ -109,6 +109,18 @@ const strings = {
       "en-US": "Log In",
       "ko-KR": "로그인",
     },
+    chat: {
+      "en-US": "Chat",
+      "ko-KR": "채팅",
+    },
+    verified: {
+      "en-US": "Email successfully verified!",
+      "ko-KR": "이메일 인증에 성공했어요!",
+    },
+    click_to_chat: {
+      "en-US": "Click below to start chatting.",
+      "ko-KR": "아래를 클릭하여 채팅을 시작하세요.",
+    },
     link_expired: {
       "en-US": "Email verification link has expired or is invalid",
       "ko-KR": "이메일 인증 링크가 만료되었거나 유효하지 않습니다",

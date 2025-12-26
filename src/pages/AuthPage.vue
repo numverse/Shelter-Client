@@ -8,6 +8,7 @@ import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
 import { useRouter } from "vue-router";
+import { forgotPassword } from "../utils/api/auth/forgotPassword";
 
 import { authStore } from "../stores/auth";
 const router = useRouter();
@@ -73,6 +74,7 @@ async function onSubmit() {
   } finally {
     isLoading.value = false;
     if (currentRequest?.ok) {
+      authStore.authed = true;
       router.push("/channels");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
@@ -89,16 +91,13 @@ async function sendResetPasswordInstructions() {
   if (!emailbox.value?.isValid()) {
     emailbox.value?.input.value.focus();
   } else {
-    // const response = await forgotPassword({
-    //   email: emailbox.value.input.value,
-    // });
-    const response = {
-      ok: true,
-    };
+    const response = await forgotPassword({
+      email: emailbox.value.input.value,
+    });
     if (response.ok) {
       showInfoModal.value = true;
     } else {
-      // errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
+      errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
     }
   }
 }

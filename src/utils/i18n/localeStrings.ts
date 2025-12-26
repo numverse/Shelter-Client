@@ -29,6 +29,10 @@ const strings = {
       "en-US": "Username",
       "ko-KR": "이름",
     },
+    okay: {
+      "en-US": "Okay",
+      "ko-KR": "확인",
+    },
   },
   loading: {
     login: {
@@ -58,6 +62,20 @@ const strings = {
     username: {
       "en-US": "Please only use numbers, letters, underscores _ , or periods.",
       "ko-KR": "숫자, 영어, 밑줄 _, 마침표만 사용해주세요.",
+    },
+  },
+  info: {
+    instructions_sent: {
+      "en-US": "Instructions Sent",
+      "ko-KR": "지시사항을 전송했어요",
+    },
+    reset_instructions_before_email: {
+      "en-US": "We sent instructions to change your password to ",
+      "ko-KR": "비밀번호 변경 방법을 ",
+    },
+    reset_instructions_after_email: {
+      "en-US": ", please check both your inbox and spam folder.",
+      "ko-KR": "(으)로 보냈어요. 받은 편지함과 스팸 편지함을 모두 확인해주세요.",
     },
   },
   help: {

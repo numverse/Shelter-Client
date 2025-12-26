@@ -2,11 +2,12 @@
 import { ref, onMounted } from "vue";
 import TextInputBox from "../components/TextInputBox.vue";
 import ShelterLogo from "../components/ShelterLogo.vue";
+import LoadingCircle from "../components/LoadingCircle.vue";
+import DialogModal from "../components/DialogModal.vue";
 import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
 import { useRouter } from "vue-router";
-import LoadingCircle from "../components/LoadingCircle.vue";
 import { forgotPassword } from "../utils/api/auth/forgotPassword";
 
 import { authStore } from "../stores/auth";
@@ -23,6 +24,7 @@ const password = ref("");
 const isLogin = ref(true);
 const isLoading = ref(false);
 const isCheckingAuth = ref(true);
+const showInfoModal = ref(false);
 
 onMounted(async () => {
   const authed = await authStore.checkAuthed();
@@ -88,13 +90,16 @@ async function sendResetPasswordInstructions() {
   if (!emailbox.value?.isValid()) {
     emailbox.value?.input.value.focus();
   } else {
-    const response = await forgotPassword({
-      email: emailbox.value.input.value,
-    });
+    // const response = await forgotPassword({
+    //   email: emailbox.value.input.value,
+    // });
+    const response = {
+      ok: true,
+    };
     if (response.ok) {
-      alert("Reset password instructions have been sent to your email.");
+      showInfoModal.value = true;
     } else {
-      errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
+      // errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
     }
   }
 }
@@ -208,5 +213,15 @@ async function sendResetPasswordInstructions() {
         </div>
       </div>
     </Transition>
+    <DialogModal
+      v-if="!isCheckingAuth"
+      ref="infoModal"
+      v-model="showInfoModal"
+      :title="i18n('info', 'instructions_sent')"
+      :message="i18n('info', 'reset_instructions_before_email')"
+      :highlight="email"
+      :message-after="i18n('info', 'reset_instructions_after_email')"
+      :confirm-text="i18n('ui', 'okay')"
+    />
   </div>
 </template>

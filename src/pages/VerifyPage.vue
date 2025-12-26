@@ -71,7 +71,7 @@ async function onSubmit() {
           </ul>
           <button
             class="px-4 py-2 text-lg bg-accent text-text1 cursor-pointer rounded-md hover:bg-accent/80  transition-colors duration-200"
-            @click="router.replace('/auth')"
+            @click="router.replace('/')"
           >
             {{ i18n("verify", "login") }}
           </button>

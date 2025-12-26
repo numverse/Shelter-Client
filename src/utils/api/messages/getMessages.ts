@@ -3,8 +3,8 @@ import { Message } from "../types";
 
 interface GetMessagesRequestData {
   channelId: string;
-  limit: string;
-  before: string;
+  messageId?: string;
+  limit?: string;
 }
 
 interface GetMessagesResponse {
@@ -15,7 +15,7 @@ interface GetMessagesResponse {
 function getMessages(data: GetMessagesRequestData) {
   return request<GetMessagesResponse>({
     method: "GET",
-    url: `/api/messages/${data.channelId}?limit=${data.limit}&before=${data.before}`,
+    url: `/api/messages/${data.channelId}?limit=${data.limit}&messageId=${data.messageId}`,
   });
 }
 

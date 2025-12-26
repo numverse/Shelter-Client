@@ -2,49 +2,41 @@
 import { ref, onMounted } from "vue";
 import TextInputBox from "../components/TextInputBox.vue";
 import ShelterLogo from "../components/ShelterLogo.vue";
-import LoadingCircle from "../components/LoadingCircle.vue";
-import DialogModal from "../components/DialogModal.vue";
-import { login } from "../utils/api/auth/login";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
 import { useRouter } from "vue-router";
-import { forgotPassword } from "../utils/api/auth/forgotPassword";
 
 import { authStore } from "../stores/auth";
+import { checkUsernameTaken } from "../utils/api/users/checkUsernameTaken";
 const router = useRouter();
+
+const usernamePattern = /^[A-Za-z0-9_.,]+$/;
 
 const usernamebox = ref<typeof TextInputBox | null>(null);
 const emailbox = ref<typeof TextInputBox | null>(null);
 const passwordbox = ref<typeof TextInputBox | null>(null);
 
 const email = ref("");
+const displayName = ref("");
 const username = ref("");
 const password = ref("");
 
-const isLogin = ref(true);
 const isLoading = ref(false);
-const isCheckingAuth = ref(true);
-const showInfoModal = ref(false);
-
-onMounted(async () => {
-  const authed = await authStore.checkAuthed();
-  setTimeout(() => {
-    if (authed) {
-      return router.replace("/channels");
-    } else {
-      isCheckingAuth.value = false;
-    }
-  }, 300);
-});
 
 const errorMessage = ref<string | null>(null);
+
+onMounted(async () => {
+  if (authStore.authed) {
+    return router.replace("/channels");
+  }
+});
 
 async function onSubmit() {
   if (!emailbox.value?.isValid()) {
     emailbox.value?.input.value.focus();
     return;
   }
-  if (!isLogin.value && !usernamebox.value?.isValid()) {
+  if (!usernamebox.value?.isValid()) {
     usernamebox.value?.input.value.focus();
     return;
   }
@@ -57,18 +49,11 @@ async function onSubmit() {
   errorMessage.value = null;
   let currentRequest;
   try {
-    if (isLogin.value) {
-      currentRequest = await login({
-        email: email.value,
-        password: password.value,
-      });
-    } else {
-      currentRequest = await register({
-        username: username.value,
-        email: email.value,
-        password: password.value,
-      });
-    }
+    currentRequest = await register({
+      username: username.value,
+      email: email.value,
+      password: password.value,
+    });
   } catch {
     errorMessage.value = i18n("errors", "unknown");
   } finally {
@@ -82,22 +67,28 @@ async function onSubmit() {
   }
 }
 
-function toggleMode() {
-  isLogin.value = !isLogin.value;
-  errorMessage.value = null;
+async function setUsernameErrorMessage(v: string | undefined) {
+  if (v) {
+    if (!usernamePattern.test(v)) {
+      return usernamebox.value?.setErrorMessage(
+        i18n("validation", "username"),
+      );
+    }
+  }
+  return usernamebox.value?.setErrorMessage(undefined);
 }
 
-async function sendResetPasswordInstructions() {
-  if (!emailbox.value?.isValid()) {
-    emailbox.value?.input.value.focus();
-  } else {
-    const response = await forgotPassword({
-      email: emailbox.value.input.value,
-    });
+async function checkUsernameAvailability() {
+  if (usernamebox.value && usernamebox.value.isValid()) {
+    const response = await checkUsernameTaken(username.value);
     if (response.ok) {
-      showInfoModal.value = true;
+      if (response.taken) {
+        usernamebox.value.setErrorMessage(i18n("validation", "username_taken"));
+      } else {
+        usernamebox.value.setErrorMessage(null);
+      }
     } else {
-      errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
+      usernamebox.value.setErrorMessage(i18n("errors", "unknown"));
     }
   }
 }
@@ -112,19 +103,14 @@ async function sendResetPasswordInstructions() {
       appear
     >
       <div
-        :key="isCheckingAuth ? 'loading' : 'form'"
+        :key="'form'"
         class="flex items-center justify-center"
       >
-        <LoadingCircle
-          v-if="isCheckingAuth"
-          class="w-16 h-16 text-accent animate-spin"
-        />
         <div
-          v-if="!isCheckingAuth"
           class="relative bg-bg2 rounded-2xl flex flex-col items-center justify-center z-10 w-fit py-8 px-12"
         >
           <h1 class="text-4xl font-bold mb-6">
-            {{ isLogin ? i18n("ui", "login") : i18n("ui", "register") }}
+            {{ i18n("ui", "register") }}
           </h1>
           <form
             ref="authForm"
@@ -142,7 +128,16 @@ async function sendResetPasswordInstructions() {
               :autofocus="true"
             />
             <TextInputBox
-              v-if="!isLogin"
+              id="displayName"
+              v-model="displayName"
+              :label="i18n('ui', 'displayName')"
+              type="text"
+              :placeholder="i18n('placeholders', 'displayName')"
+              :minlength="2"
+              :maxlength="32"
+              :required="false"
+            />
+            <TextInputBox
               id="username"
               ref="usernamebox"
               v-model="username"
@@ -152,8 +147,9 @@ async function sendResetPasswordInstructions() {
               :minlength="2"
               :maxlength="32"
               :required="true"
-              :pattern="/^[A-Za-z0-9_.,]+$/"
-              :error-message="i18n('validation', 'username')"
+              :pattern="usernamePattern"
+              @update:model-value="setUsernameErrorMessage"
+              @blur="() => checkUsernameAvailability()"
             />
             <TextInputBox
               id="password"
@@ -166,26 +162,12 @@ async function sendResetPasswordInstructions() {
               :maxlength="64"
               :required="true"
             />
-            <p
-              v-if="isLogin"
-              class="mt-3 text-base text-text2"
-            >
-              <span>
-                <button
-                  class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
-                  type="button"
-                  @click="sendResetPasswordInstructions"
-                >
-                  {{ i18n("help", "forgot_password") }}
-                </button>
-              </span>
-            </p>
             <button
               type="submit"
               :disabled="isLoading"
               class="w-full bg-accent text-text1 text-2xl font-bold py-2 rounded-sm hover:bg-accent/80 disabled:opacity-50 hover:cursor-pointer disabled:hover:cursor-not-allowed transition-all duration-200"
             >
-              {{ i18n(isLoading ? "loading" : "ui", isLogin ? "login" : "register") }}
+              {{ i18n(isLoading ? "loading" : "ui", "register") }}
             </button>
 
             <p
@@ -198,28 +180,18 @@ async function sendResetPasswordInstructions() {
 
           <p class="mt-3 text-base text-text2">
             <span>
-              {{ i18n("help", isLogin ? "need_an_account" : "have_an_account") }}
+              {{ i18n("help", "have_an_account") }}
               <button
                 class="text-blue-600 hover:underline ml-1 hover:cursor-pointer"
                 type="button"
-                @click="toggleMode"
+                @click="router.push('/login')"
               >
-                {{ i18n("ui", isLogin ? "register" : "login") }}
+                {{ i18n("ui", "login") }}
               </button>
             </span>
           </p>
         </div>
       </div>
     </Transition>
-    <DialogModal
-      v-if="!isCheckingAuth"
-      ref="infoModal"
-      v-model="showInfoModal"
-      :title="i18n('info', 'instructions_sent')"
-      :message="i18n('info', 'reset_instructions_before_email')"
-      :highlight="email"
-      :message-after="i18n('info', 'reset_instructions_after_email')"
-      :confirm-text="i18n('ui', 'okay')"
-    />
   </div>
 </template>

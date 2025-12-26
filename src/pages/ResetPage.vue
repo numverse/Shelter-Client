@@ -42,7 +42,7 @@ async function onSubmit() {
   } finally {
     if (currentRequest?.ok) {
       errorMessage.value = null;
-      router.push("/auth");
+      router.push("/");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
     }

@@ -5,10 +5,12 @@ import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { verifyEmail } from "../utils/api/auth/verifyEmail";
 import { i18n } from "../utils/i18n/i18n";
+import { authStore } from "../stores/auth";
 
 const router = useRouter();
 const verificationToken = ref("");
 const isVerifying = ref(true);
+const isVerified = ref(false);
 const errorMessage = ref<string | null>(null);
 
 onMounted(() => {
@@ -31,8 +33,10 @@ async function onSubmit() {
     const res = await verifyEmail({
       token: verificationToken.value,
     });
-    if (res.ok)
-      router.replace("/");
+    if (res.ok) {
+      isVerified.value = true;
+      authStore.authed = true;
+    }
   } catch (_) {
     errorMessage.value = "";
   } finally {
@@ -63,17 +67,17 @@ async function onSubmit() {
         >
           <ul class="text-center text-text1 space-y-1">
             <li class="text-2xl font-medium">
-              {{ i18n("verify", "link_expired") }}
+              {{ i18n("verify", isVerified ? "verified" : "link_expired") }}
             </li>
             <li class="text-lg text-text2">
-              {{ i18n("verify", "login_resend") }}
+              {{ i18n("verify", isVerified ? "click_to_chat" :"login_resend") }}
             </li>
           </ul>
           <button
             class="px-4 py-2 text-lg bg-accent text-text1 cursor-pointer rounded-md hover:bg-accent/80  transition-colors duration-200"
-            @click="router.replace('/auth')"
+            @click="router.replace('/')"
           >
-            {{ i18n("verify", "login") }}
+            {{ i18n("verify", isVerified ? "chat" : "login") }}
           </button>
         </div>
       </div>

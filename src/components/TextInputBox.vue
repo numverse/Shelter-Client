@@ -4,21 +4,33 @@ import { ref } from "vue";
 const model = defineModel<string>();
 
 const input = ref<HTMLInputElement | null>(null);
+const errorMessage = ref<string | null>(null);
+
+const emit = defineEmits<{
+  (e: "update:modelValue", v: string): void;
+  (e: "blur", v?: string): void;
+}>();
+
+function onBlur() {
+  emit("blur", input.value?.value);
+}
 
 function isValid() {
   return !!input.value && input.value.validity.valid;
 }
-function reportValidity() {
-  return input.value?.reportValidity() ?? false;
+
+function setErrorMessage(message: string | null) {
+  errorMessage.value = message;
+}
+
+function focus() {
+  input.value?.focus();
 }
 
 defineExpose({
-  input,
+  focus,
   isValid,
-  reportValidity,
-  get value() {
-    return model;
-  },
+  setErrorMessage,
 });
 
 defineProps<{
@@ -32,7 +44,6 @@ defineProps<{
   classes?: string;
   autofocus?: boolean;
   pattern?: string | RegExp;
-  errorMessage?: string;
 }>();
 </script>
 
@@ -64,10 +75,11 @@ defineProps<{
       :autofocus="autofocus"
       :pattern="pattern ? (pattern instanceof RegExp ? pattern.source : pattern) : undefined"
       autocomplete="off"
+      @blur="onBlur"
     >
 
     <p
-      v-if="!isValid()"
+      v-if="errorMessage"
       class="mt-1 text-sm text-red-500"
     >
       {{ errorMessage }}

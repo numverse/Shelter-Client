@@ -77,6 +77,10 @@ export default [
       }],
       "@stylistic/eol-last": ["warn", "always"],
       "@stylistic/no-trailing-spaces": "warn",
+
+      "vue/block-order": ["error", {
+        order: ["script", "template", "style"],
+      }],
     },
   },
 ];

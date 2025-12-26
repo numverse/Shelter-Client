@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 import ChatPage from "./pages/ChatPage.vue";
-import AuthPage from "./pages/AuthPage.vue";
+import RegisterPage from "./pages/RegisterPage.vue";
+import LoginPage from "./pages/LoginPage.vue";
 import VerifyPage from "./pages/VerifyPage.vue";
 import ResetPage from "./pages/ResetPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
@@ -9,7 +10,7 @@ import { authStore } from "./stores/auth";
 const routes = [
   {
     path: "/",
-    redirect: "/auth",
+    redirect: "/login",
   },
   {
     path: "/channels/:channelId?",
@@ -19,8 +20,12 @@ const routes = [
     },
   },
   {
-    path: "/auth",
-    component: AuthPage,
+    path: "/register",
+    component: RegisterPage,
+  },
+  {
+    path: "/login",
+    component: LoginPage,
   },
   {
     path: "/verify",
@@ -41,12 +46,14 @@ const router = createRouter({
   routes: routes,
 });
 
+authStore.authed = await authStore.checkAuthed();
+
 router.beforeEach(async (to) => {
   if (to.matched.length === 0) return;
   const needsAuth = to.matched.some((r) => (r.meta).requiresAuth);
   if (!needsAuth || authStore.authed) return;
   return {
-    path: "/auth",
+    path: "/login",
   };
 });
 

@@ -29,6 +29,10 @@ const strings = {
       "en-US": "Username",
       "ko-KR": "이름",
     },
+    displayName: {
+      "en-US": "Display Name",
+      "ko-KR": "별명",
+    },
     okay: {
       "en-US": "Okay",
       "ko-KR": "확인",
@@ -49,6 +53,10 @@ const strings = {
       "en-US": "2~32 characters",
       "ko-KR": "2~32자",
     },
+    displayName: {
+      "en-US": "2~32 characters",
+      "ko-KR": "2~32자",
+    },
     email: {
       "en-US": "email@example.com",
       "ko-KR": "이메일@내도메인.한국",
@@ -62,6 +70,10 @@ const strings = {
     username: {
       "en-US": "Please only use numbers, letters, underscores _ , or periods.",
       "ko-KR": "숫자, 영어, 밑줄 _, 마침표만 사용해주세요.",
+    },
+    username_taken: {
+      "en-US": "Username is unavailable. Try adding numbers, letters, underscores _ , or periods.",
+      "ko-KR": "이미 사용 중인 이름입니다. 숫자, 영어, 밑줄 _, 마침표를 추가해보세요.",
     },
   },
   info: {

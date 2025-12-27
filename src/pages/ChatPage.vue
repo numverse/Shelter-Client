@@ -11,7 +11,7 @@ import CurrentUser from "../components/layout/CurrentUser.vue";
 import { channelsStore } from "../stores/channels";
 
 onMounted(async () => {
-  await channelsStore.refresh();
+  await channelsStore.fetch();
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 });
 </script>

@@ -23,4 +23,4 @@ function getMessages(data: GetMessagesRequestData) {
   });
 }
 
-export { getMessages };
+export { getMessages, GetMessagesRequestData };

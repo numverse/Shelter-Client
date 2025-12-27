@@ -32,7 +32,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="flex-1 overflow-auto h-full bg-bg2">
+  <div class="flex-1 overflow-auto h-full bg-bg2 pb-4">
     <div
       v-if="loading"
       class="flex flex-col items-center h-full"

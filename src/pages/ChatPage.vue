@@ -55,15 +55,15 @@ ws.on("MESSAGE_CREATE", async (message) => {
       @close="notificationMessage = null;"
       @action="notificationAction"
     />
-    <div class="flex-1 flex">
+    <div class="flex-1 flex min-h-0">
       <WidgetList
         class="fixed left-0 top-7 h-screen"
       />
-      <div class="ml-18 flex-1 flex">
+      <div class="ml-18 flex-1 flex min-h-0">
         <ChannelList />
         <CurrentUser />
 
-        <div class="flex-1 flex flex-col bg-bg2">
+        <div class="flex-1 flex flex-col bg-bg2 min-h-0">
           <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
             <div class="text-lg font-semibold">
               # {{ channelsStore.currentChannel.value?.name ?? '' }}

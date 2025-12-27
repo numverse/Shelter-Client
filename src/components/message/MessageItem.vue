@@ -43,7 +43,7 @@ const deleteMessage = async () => {
     >
       <img
         v-if="props.showAuthor"
-        :src="messageAuthor?.avatarId ? `/cdn/avatars/${messageAuthor?.id}/${messageAuthor?.avatarId}.png` : `/avatars/${(BigInt(messageAuthor?.id ?? 0) >> 22n) % 6n}.png`"
+        :src="messageAuthor?.avatarId ? `https://shelter.zero624.dev/cdn/avatars/${messageAuthor?.id}/${messageAuthor?.avatarId}.png` : `/avatars/${(BigInt(messageAuthor?.id ?? 0) >> 22n) % 6n}.png`"
         :alt="messageAuthor?.username"
         class="w-12 h-12 rounded-full"
       >

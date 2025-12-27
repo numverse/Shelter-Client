@@ -63,6 +63,15 @@ const channelsStore = {
   fetchDMMessages: async function () {
     // DMs not implemented yet
   },
+  deleteChannelMessage: function (channelId: string, messageId: string) {
+    const channel = channelsStore.channels.get(channelId);
+    if (channel) {
+      channel.messages.delete(messageId);
+    }
+  },
+  deleteDMMessage: function () {
+    // DMs not implemented yet
+  },
 };
 
 export { channelsStore };

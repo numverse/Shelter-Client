@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
+import { X } from "lucide-vue-next";
 
 const props = defineProps({
   modelValue: {
@@ -62,11 +63,7 @@ function onAction() {
               aria-label="Close notification"
               @click="close"
             >
-              <img
-                src="/close.svg"
-                class="h-5 w-5"
-                alt="Close"
-              >
+              <X />
             </button>
           </div>
         </div>

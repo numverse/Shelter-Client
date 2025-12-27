@@ -33,41 +33,26 @@ function onAction() {
 </script>
 
 <template>
-  <transition name="slide-down">
+  <transition name="slide-up">
     <div
       v-if="visible"
-      class="w-full text-white"
+      class="w-full h-10 text-white rounded-tl relative z-50 bg-green-700 shadow-md text-center px-4 flex items-center justify-center"
     >
-      <div class="bg-green-700 shadow-md">
-        <div class="mx-auto flex items-center px-4 py-2 gap-4">
-          <div class="flex-1" />
-
-          <div class="flex items-center gap-4 flex-1 min-w-0 justify-center">
-            <p class="truncate text-sm sm:text-base text-center">
-              {{ message }}
-            </p>
-            <div class="hidden sm:flex items-center gap-2">
-              <button
-                class="border border-white text-white font-medium px-3 py-1 rounded hover:bg-green-800"
-                @click="onAction"
-              >
-                {{ buttonLabel }}
-              </button>
-            </div>
-          </div>
-
-          <div class="flex items-center justify-end flex-1">
-            <button
-              type="button"
-              class="text-white hover:text-gray-200 p-1 rounded focus:outline-none"
-              aria-label="Close notification"
-              @click="close"
-            >
-              <X />
-            </button>
-          </div>
-        </div>
-      </div>
+      <button
+        type="button"
+        class="text-white hover:text-gray-200 h-full rounded focus:outline-none absolute right-3 top-0 flex items-center justify-center"
+        aria-label="Close notification"
+        @click="close"
+      >
+        <X />
+      </button>
+      {{ message }}
+      <button
+        class="border border-white text-white font-medium px-1 py-1 text-sm rounded hover:bg-green-800 ml-2"
+        @click="onAction"
+      >
+        {{ buttonLabel }}
+      </button>
     </div>
   </transition>
 </template>

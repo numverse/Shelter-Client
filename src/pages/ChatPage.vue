@@ -29,6 +29,7 @@ onMounted(async () => {
       <ChannelList />
       <CurrentUser
         :username="authStore.currentUser.value?.username"
+        :user-id="authStore.currentUser.value?.id"
         :avatar-id="authStore.currentUser.value?.avatarId"
       />
 

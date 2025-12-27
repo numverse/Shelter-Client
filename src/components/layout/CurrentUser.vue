@@ -4,7 +4,8 @@ import { i18n } from "../../utils/i18n/i18n";
 
 defineProps<{
   username?: string;
-  avatarId?: string;
+  userId?: string;
+  avatar?: string;
 }>();
 </script>
 
@@ -12,7 +13,7 @@ defineProps<{
   <section class="absolute flex bottom-0 left-0 flex-col bg-bg2 rounded w-76 m-3 p-3">
     <div class="flex items-center justify-between">
       <img
-        :src="avatarId ? `/cdn/avatars/${avatarId}.png` : '/shelter_logo.png'"
+        :src="avatar ? `/cdn/avatars/${userId}/${avatar}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
         class="w-10 h-10 bg-cover bg-center rounded-full"
       >
       <div class="flex-1 flex flex-col ml-1">

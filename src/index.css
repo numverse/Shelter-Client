@@ -28,6 +28,24 @@ body {
   height: 100%;
 }
 
+*::-webkit-scrollbar {
+  width: 8px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--color-text2);
+  border-radius: 8px;
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  cursor: grab;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.4s ease;

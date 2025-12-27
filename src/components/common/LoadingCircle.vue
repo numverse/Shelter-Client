@@ -3,5 +3,5 @@ import { LoaderCircleIcon } from "lucide-vue-next";
 </script>
 
 <template>
-  <LoaderCircleIcon />
+  <LoaderCircleIcon class="animate-spin" />
 </template>

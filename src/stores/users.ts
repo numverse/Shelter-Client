@@ -1,15 +1,20 @@
 import { getAllUsers } from "../utils/api/users/getAllUsers";
-import { ref } from "vue";
+import { reactive } from "vue";
 import { User } from "../utils/api/types";
 
 const usersStore = {
-  users: ref<User[]>([]),
+  users: reactive<Map<string, User>>(new Map()),
   getUser: function (id: string) {
-    return usersStore.users.value.find((ch) => ch.id === id) ?? null;
+    return usersStore.users.get(id) ?? null;
   },
-  refresh: async function () {
+  fetchAll: async function () {
     const allUsers = await getAllUsers();
-    usersStore.users.value = allUsers.ok ? allUsers.users : [];
+    if (allUsers.ok) {
+      usersStore.users.clear();
+      for (const user of allUsers.users) {
+        usersStore.users.set(user.id, user);
+      }
+    }
   },
 };
 

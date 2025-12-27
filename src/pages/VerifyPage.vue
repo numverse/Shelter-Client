@@ -59,7 +59,7 @@ async function onSubmit() {
       >
         <LoadingCircle
           v-if="isVerifying"
-          class="w-16 h-16 text-accent animate-spin"
+          class="w-16 h-16 text-accent"
         />
         <div
           v-if="!isVerifying"

@@ -1,22 +1,41 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
 import { channelsStore } from "../../stores/channels";
 
 const text = ref("");
 const sending = ref(false);
+const editor = ref<HTMLDivElement | null>(null);
+
+const placeholder = computed(() => {
+  return channelsStore.currentChannel.value
+    ? `Message #${channelsStore.currentChannel.value.name}`
+    : "";
+});
+
+const currentChannelId = computed(() => channelsStore.currentChannel.value?.id);
+
+function onInput(e: Event) {
+  text.value = (e.target as HTMLDivElement).innerText;
+}
 
 async function send() {
-  if (!channelsStore.currentChannel.value?.id || !text.value.trim()) return;
+  if (!currentChannelId.value || !text.value.trim()) return;
   sending.value = true;
-  const res = await createMessage({
-    channelId: channelsStore.currentChannel.value.id,
-    content: text.value.trim(),
-  });
-  if (res.ok) {
-    text.value = "";
+  try {
+    const res = await createMessage({
+      channelId: currentChannelId.value,
+      content: text.value.trim(),
+    });
+    if (res.ok) {
+      text.value = "";
+      if (editor.value) editor.value.innerText = "";
+    }
+  } catch (err) {
+    console.error("Failed to send message", err);
+  } finally {
+    sending.value = false;
   }
-  sending.value = false;
 }
 
 function onKey(e: KeyboardEvent) {
@@ -28,22 +47,21 @@ function onKey(e: KeyboardEvent) {
 </script>
 
 <template>
-  <div class="p-3 border-t border-bg3 bg-bg2">
-    <textarea
-      v-model="text"
-      :placeholder="channelsStore.currentChannel.value ? 'Message #' + channelsStore.currentChannel.value.name : 'Select a channel'"
-      :disabled="!channelsStore.currentChannel.value"
-      class="w-full p-2 rounded bg-bg-input text-text1 resize-none h-20"
+  <div class="flex items-center mx-3 mb-3 bg-bg3 rounded px-3 py-2 text-lg relative">
+    <span
+      v-show="!text.trim()"
+      class="absolute pointer-events-none text-text2 select-none"
+    >
+      {{ placeholder }}
+    </span>
+    <div
+      ref="editor"
+      contenteditable="true"
+      class="flex-1 min-h-10 max-h-96 leading-6 overflow-y-auto py-3.5 whitespace-pre-wrap wrap-break-word outline-none"
+      role="textbox"
+      aria-multiline="true"
+      @input="onInput"
       @keydown="onKey"
     />
-    <div class="flex justify-end mt-2">
-      <button
-        :disabled="sending || !channelsStore.currentChannel.value || !text.trim()"
-        class="px-4 py-2 bg-accent text-white rounded"
-        @click="send"
-      >
-        Send
-      </button>
-    </div>
   </div>
 </template>

@@ -63,7 +63,7 @@ ws.on("MESSAGE_CREATE", async (message) => {
         <ChannelList />
         <CurrentUser />
 
-        <div class="flex-1 flex flex-col">
+        <div class="flex-1 flex flex-col bg-bg2">
           <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
             <div class="text-lg font-semibold">
               # {{ channelsStore.currentChannel.value?.name ?? '' }}

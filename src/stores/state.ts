@@ -4,6 +4,7 @@ import { channelsStore } from "./channels";
 
 const stateStore = {
   chatMode: ref<"chat" | "dm">("chat"),
+  locale: ref<string>("en-US"),
   toggleChatMode: function () {
     stateStore.chatMode.value = stateStore.chatMode.value === "chat" ? "dm" : "chat";
     router.push(

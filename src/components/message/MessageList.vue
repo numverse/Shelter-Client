@@ -2,9 +2,10 @@
 import { computed, ref, watch, onMounted } from "vue";
 import { channelsStore } from "../../stores/channels";
 import MessageItem from "./MessageItem.vue";
+import LoadingCircle from "../common/LoadingCircle.vue";
 
 const props = defineProps<{ channelId: string | null }>();
-const loading = ref(false);
+const loading = ref(true);
 
 const messagesList = computed(() => {
   if (!props.channelId) return [];
@@ -35,9 +36,9 @@ onMounted(() => {
   <div class="py-4 flex-1 overflow-auto h-full bg-bg2">
     <div
       v-if="loading"
-      class="text-sm text-text-secondary"
+      class="flex justify-center items-center h-full"
     >
-      Loading messages...
+      <LoadingCircle class="w-16 h-16 text-accent" />
     </div>
     <div v-else>
       <ul
@@ -56,7 +57,7 @@ onMounted(() => {
       </ul>
       <div
         v-else
-        class="text-sm text-text-secondary"
+        class="px-3 text-sm text-text-secondary"
       >
         No messages yet.
       </div>

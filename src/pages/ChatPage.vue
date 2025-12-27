@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -18,43 +18,59 @@ onMounted(async () => {
   await authStore.fetchCurrentUser();
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 });
+
+const notificationMessage = ref<string | null>("Welcome to Shelter Chat!");
+function action() {
+  alert("Action button clicked!");
+}
 </script>
 
 <template>
   <div class="flex flex-col h-screen">
     <TitleHeader />
-    <!-- <NotificationHeader /> -->
+    <NotificationHeader
+      v-show="notificationMessage"
+      :message="notificationMessage"
+      :closable="true"
+      button-label="Take Action"
+      @close="notificationMessage = null;"
+      @action="action"
+    />
     <div class="flex-1 flex">
-      <WidgetList />
-      <ChannelList />
-      <CurrentUser
-        :username="authStore.currentUser.value?.username"
-        :avatar-id="authStore.currentUser.value?.avatarId"
+      <WidgetList
+        class="fixed left-0 top-7 h-screen"
       />
-
-      <div class="flex-1 flex flex-col">
-        <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
-          <div class="text-lg font-semibold">
-            # {{ channelsStore.currentChannel.value?.name ?? '' }}
-          </div>
-        </header>
-
-        <MessageList
-          :channel-id="channelsStore.currentChannel.value?.id ?? null"
-          class="flex-1"
+      <div class="ml-18 flex-1 flex">
+        <ChannelList />
+        <CurrentUser
+          :username="authStore.currentUser.value?.username"
+          :avatar-id="authStore.currentUser.value?.avatarId"
         />
 
-        <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
-      </div>
+        <div class="flex-1 flex flex-col">
+          <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
+            <div class="text-lg font-semibold">
+              # {{ channelsStore.currentChannel.value?.name ?? '' }}
+            </div>
+          </header>
 
-      <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">
-        <h4 class="text-sm font-semibold">
-          Members
-        </h4>
-        <div class="text-sm text-text2 mt-2">
-          (Not implemented)
+          <MessageList
+            :channel-id="channelsStore.currentChannel.value?.id ?? null"
+            class="flex-1"
+          />
+
+          <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
         </div>
-      </aside>
+
+        <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">
+          <h4 class="text-sm font-semibold">
+            Members
+          </h4>
+          <div class="text-sm text-text2 mt-2">
+            (Not implemented)
+          </div>
+        </aside>
+      </div>
     </div>
   </div>
 </template>

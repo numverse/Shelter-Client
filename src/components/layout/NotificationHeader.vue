@@ -1,58 +1,37 @@
 <script setup lang="ts">
-import { ref, watch } from "vue";
-import { X } from "lucide-vue-next";
+import { XIcon } from "lucide-vue-next";
 
-const props = defineProps({
-  modelValue: {
-    type: Boolean,
-    default: true,
-  },
-  message: {
-    type: String,
-    default: "Please check your email to verify your account.",
-  },
-  buttonLabel: {
-    type: String,
-    default: "Resend Email",
-  },
-});
-const emit = defineEmits(["update:modelValue", "action", "close"]);
+defineProps<{
+  message: string | null;
+  buttonLabel?: string;
+  color?: string;
+  closable: boolean;
+}>();
 
-const visible = ref(props.modelValue);
-watch(() => props.modelValue, (v) => (visible.value = v));
-
-function close() {
-  visible.value = false;
-  emit("update:modelValue", false);
-  emit("close");
-}
-
-function onAction() {
-  emit("action");
-}
+const emit = defineEmits<{
+  action: [];
+  close: [];
+}>();
 </script>
 
 <template>
-  <transition name="slide-up">
-    <div
-      v-if="visible"
-      class="w-full h-10 text-white rounded-tl relative z-50 bg-green-700 shadow-md text-center px-4 flex items-center justify-center"
-    >
-      <button
-        type="button"
-        class="text-white hover:text-gray-200 h-full rounded focus:outline-none absolute right-3 top-0 flex items-center justify-center"
-        aria-label="Close notification"
-        @click="close"
-      >
-        <X />
-      </button>
+  <div
+    class="ml-18 rounded-tl bg-accent p-1 h-10 flex items-center justify-center relative"
+  >
+    <div class="pr-18 flex flex-row items-center justify-center">
       {{ message }}
-      <button
-        class="border border-white text-white font-medium px-1 py-1 text-sm rounded hover:bg-green-800 ml-2"
-        @click="onAction"
+      <div
+        v-show="buttonLabel"
+        class="border border-text1 text-text1 px-1 py-1 text-sm rounded hover:bg-text1/20 ml-2 cursor-pointer"
+        @click="emit('action')"
       >
         {{ buttonLabel }}
-      </button>
+      </div>
     </div>
-  </transition>
+    <XIcon
+      v-show="closable"
+      class="text-text1 cursor-pointer hover:bg-text1/20 rounded w-fit h-fit absolute right-1"
+      @click="emit('close')"
+    />
+  </div>
 </template>

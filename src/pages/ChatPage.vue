@@ -7,6 +7,7 @@ import WidgetList from "../components/widget/WidgetList.vue";
 import NotificationHeader from "../components/layout/NotificationHeader.vue";
 import TitleHeader from "../components/layout/TitleHeader.vue";
 import CurrentUser from "../components/layout/CurrentUser.vue";
+import UserList from "../components/users/UserList.vue";
 
 import { channelsStore } from "../stores/channels";
 import { usersStore } from "../stores/users";
@@ -95,7 +96,7 @@ ws.on("MESSAGE_DELETE", (data) => {
             Members
           </h4>
           <div class="text-sm text-text2 mt-2">
-            (Not implemented)
+            <UserList />
           </div>
         </aside>
       </div>

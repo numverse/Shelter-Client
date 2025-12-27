@@ -4,7 +4,8 @@ import ChannelList from "../components/ChannelList.vue";
 import MessageList from "../components/MessageList.vue";
 import MessageInput from "../components/MessageInput.vue";
 import WidgetList from "../components/WidgetList.vue";
-import HeaderNotification from "../components/HeaderNotification.vue";
+import NotificationHeader from "../components/NotificationHeader.vue";
+import TitleHeader from "../components/TitleHeader.vue";
 
 import { channelsStore } from "../stores/channels";
 
@@ -15,7 +16,8 @@ onMounted(async () => {
 </script>
 
 <template>
-  <HeaderNotification />
+  <!-- <NotificationHeader /> -->
+  <TitleHeader />
   <div class="h-full flex">
     <WidgetList />
     <ChannelList />

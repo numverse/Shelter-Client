@@ -1,84 +1,62 @@
 <script setup lang="ts">
-import { ref, watch, onMounted, onUnmounted, nextTick } from "vue";
-import type { Message } from "../../utils/api/types";
-import { getMessages } from "../../utils/api/messages/getMessages";
-// import { client } from "../utils/store/auth";
+import { computed, ref, watch, onMounted } from "vue";
+import { channelsStore } from "../../stores/channels";
+import MessageItem from "./MessageItem.vue";
 
 const props = defineProps<{ channelId: string | null }>();
-
-const messages = ref<Message[]>([]);
 const loading = ref(false);
-const containerRef = ref<HTMLElement | null>(null);
 
-async function load(channelId: string) {
-  loading.value = true;
-  const res = await getMessages({
-    channelId: channelId,
-  });
-  if (res.ok) {
-    messages.value = Array.isArray(res.messages) ? res.messages : [];
-    messages.value.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    await nextTick();
-    if (containerRef.value) containerRef.value.scrollTop = containerRef.value.scrollHeight;
-  } else {
-    messages.value = [];
-  }
-  loading.value = false;
-}
+const messagesList = computed(() => {
+  if (!props.channelId) return [];
+  const ch = channelsStore.channels.get(props.channelId);
+  if (!ch) return [];
 
-let wsListener: ((m: Message) => void) | null = null;
-
-watch(() => props.channelId, (cid) => {
-  messages.value = [];
-  if (cid) load(cid);
+  return Array.from(ch.messages.values());
 });
 
-// onMounted(() => {
-//   wsListener = (m: Message) => {
-//     if (m.channelId === props.channelId) {
-//       messages.value.push(m);
-//     }
-//   };
-//   client.on("MESSAGE_CREATE", wsListener);
-// });
+const loadMessages = async (channelId: string) => {
+  loading.value = true;
+  await channelsStore.fetchChannelMessages({
+    channelId,
+    limit: "50",
+  });
+  loading.value = false;
+};
 
-// onUnmounted(() => {
-//   if (wsListener) client.off("MESSAGE_CREATE", wsListener);
-// });
+watch(() => props.channelId, (id) => {
+  if (id) loadMessages(id);
+});
+onMounted(() => {
+  if (props.channelId) loadMessages(props.channelId);
+});
 </script>
 
 <template>
-  <div
-    ref="containerRef"
-    class="flex-1 p-4 overflow-auto h-full bg-bg2"
-  >
+  <div class="py-4 flex-1 overflow-auto h-full bg-bg2">
     <div
       v-if="loading"
-      class="text-sm text-text2"
+      class="text-sm text-text-secondary"
     >
       Loading messages...
     </div>
     <div v-else>
       <ul
-        v-if="messages.length"
-        class="space-y-3"
+        v-if="messagesList.length"
       >
         <li
-          v-for="m in messages"
+          v-for="(m, i) in messagesList"
           :key="m.id"
-          class="p-2 rounded hover:bg-bg-hover"
         >
-          <div class="text-sm text-text2">
-            {{ m.authorId }} • {{ new Date(m.createdAt).toLocaleString() }}
-          </div>
-          <div class="mt-1 text-text1">
-            {{ m.content }}
-          </div>
+          <MessageItem
+            :message="m"
+            :channel-id="props.channelId!"
+            :show-author="i === 0 || messagesList[i-1].authorId !== m.authorId"
+          />
         </li>
       </ul>
       <div
         v-else
-        class="text-sm text-text2"
+        class="text-sm text-text-secondary"
       >
         No messages yet.
       </div>

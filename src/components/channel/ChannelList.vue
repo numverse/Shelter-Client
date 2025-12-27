@@ -4,7 +4,7 @@ import ChannelItem from "./ChannelItem.vue";
 </script>
 
 <template>
-  <aside class="bg-bg1 border-l border-t border-bg3 rounded-b rounded-tl p-3 h-full">
+  <aside class="w-64 bg-bg1 border-l border-t border-bg3 rounded-b rounded-tl p-3 h-full">
     <h3 class="text-lg font-semibold mb-2">
       Channels
     </h3>

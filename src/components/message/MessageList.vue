@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, onUnmounted, nextTick } from "vue";
-import type { Message } from "../utils/api/types";
-import { getMessages } from "../utils/api/messages/getMessages";
+import type { Message } from "../../utils/api/types";
+import { getMessages } from "../../utils/api/messages/getMessages";
 // import { client } from "../utils/store/auth";
 
 const props = defineProps<{ channelId: string | null }>();

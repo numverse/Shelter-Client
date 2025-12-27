@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { onMounted } from "vue";
-import ChannelList from "../components/ChannelList.vue";
-import MessageList from "../components/MessageList.vue";
-import MessageInput from "../components/MessageInput.vue";
-import WidgetList from "../components/WidgetList.vue";
-import NotificationHeader from "../components/NotificationHeader.vue";
-import TitleHeader from "../components/TitleHeader.vue";
-import CurrentUser from "../components/CurrentUser.vue";
+import ChannelList from "../components/channel/ChannelList.vue";
+import MessageList from "../components/message/MessageList.vue";
+import MessageInput from "../components/message/MessageInput.vue";
+import WidgetList from "../components/widget/WidgetList.vue";
+import NotificationHeader from "../components/layout/NotificationHeader.vue";
+import TitleHeader from "../components/layout/TitleHeader.vue";
+import CurrentUser from "../components/layout/CurrentUser.vue";
 
 import { channelsStore } from "../stores/channels";
 

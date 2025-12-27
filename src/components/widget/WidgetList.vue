@@ -2,7 +2,7 @@
 import { CloudIcon, DollarSignIcon, MessageCircleIcon, MessagesSquareIcon, PackageIcon } from "lucide-vue-next";
 import WidgetItem from "./WidgetItem.vue";
 
-import { stateStore } from "../stores/state";
+import { stateStore } from "../../stores/state";
 </script>
 
 <template>

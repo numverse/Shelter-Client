@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelsStore } from "../stores/channels";
+import { channelsStore } from "../../stores/channels";
 import ChannelItem from "./ChannelItem.vue";
 </script>
 

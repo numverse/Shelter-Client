@@ -2,6 +2,7 @@ import { request } from "../base";
 
 interface RegisterRequestData {
   username: string;
+  displayName?: string;
   email: string;
   password: string;
 }

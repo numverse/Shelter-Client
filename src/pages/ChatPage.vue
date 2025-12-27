@@ -9,9 +9,11 @@ import TitleHeader from "../components/layout/TitleHeader.vue";
 import CurrentUser from "../components/layout/CurrentUser.vue";
 
 import { channelsStore } from "../stores/channels";
+import { usersStore } from "../stores/users";
 
 onMounted(async () => {
   await channelsStore.fetch();
+  await usersStore.fetchAll();
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 });
 </script>
@@ -28,7 +30,7 @@ onMounted(async () => {
       <div class="flex-1 flex flex-col">
         <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
           <div class="text-lg font-semibold">
-            # {{ channelsStore.currentChannel.value?.name ?? 'No channel selected' }}
+            # {{ channelsStore.currentChannel.value?.name ?? '' }}
           </div>
         </header>
 

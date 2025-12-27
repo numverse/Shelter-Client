@@ -32,13 +32,18 @@ interface EventMap {
   close: CloseEvent;
   MESSAGE_CREATE: Message;
   MESSAGE_UPDATE: Message;
-  MESSAGE_DELETE: string;
+  MESSAGE_DELETE: {
+    messageId: string;
+    channelId: string;
+  };
   REACTION_ADD: ReactionPayload;
   REACTION_REMOVE: ReactionPayload;
   PRESENCE_UPDATE: PresenceUpdatePayload;
   CHANNEL_CREATE: Channel;
   CHANNEL_UPDATE: Channel;
-  CHANNEL_DELETE: string;
+  CHANNEL_DELETE: {
+    channelId: string;
+  };
 };
 
 export { GatewayOpCode, EventMap };

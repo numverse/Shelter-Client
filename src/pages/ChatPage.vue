@@ -51,6 +51,13 @@ ws.on("MESSAGE_CREATE", async (message) => {
     messageListRef.value?.scrollToBottom();
   }
 });
+
+ws.on("MESSAGE_DELETE", (data) => {
+  const channel = channelsStore.channels.get(data.channelId);
+  if (channel) {
+    channel.messages.delete(data.messageId);
+  }
+});
 </script>
 
 <template>

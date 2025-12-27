@@ -36,9 +36,9 @@ onMounted(() => {
   <div class="py-4 flex-1 overflow-auto h-full bg-bg2">
     <div
       v-if="loading"
-      class="flex justify-center items-center h-full"
+      class="flex flex-col items-center h-full"
     >
-      <LoadingCircle class="w-16 h-16 text-accent" />
+      <LoadingCircle class="w-12 h-12 text-accent" />
     </div>
     <div v-else>
       <ul

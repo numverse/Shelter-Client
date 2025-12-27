@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-import TextInputBox from "../components/TextInputBox.vue";
-import ShelterLogo from "../components/ShelterLogo.vue";
+import TextInputBox from "../components/common/TextInputBox.vue";
+import ShelterLogo from "../components/common/ShelterLogo.vue";
 import { register } from "../utils/api/auth/register";
 import { i18n } from "../utils/i18n/i18n";
 import { useRouter } from "vue-router";

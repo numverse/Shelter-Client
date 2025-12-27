@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ShelterLogo from "../components/ShelterLogo.vue";
-import LoadingCircle from "../components/LoadingCircle.vue";
+import ShelterLogo from "../components/common/ShelterLogo.vue";
+import LoadingCircle from "../components/common/LoadingCircle.vue";
 import { ref, onMounted } from "vue";
 import { useRouter } from "vue-router";
 import { verifyEmail } from "../utils/api/auth/verifyEmail";

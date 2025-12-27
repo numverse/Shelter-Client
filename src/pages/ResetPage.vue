@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import ShelterLogo from "../components/ShelterLogo.vue";
-import TextInputBox from "../components/TextInputBox.vue";
+import ShelterLogo from "../components/common/ShelterLogo.vue";
+import TextInputBox from "../components/common/TextInputBox.vue";
 import { ref, onMounted, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { i18n } from "../utils/i18n/i18n";

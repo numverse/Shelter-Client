@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelsStore } from "../stores/channels";
+import { channelsStore } from "../../stores/channels";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 

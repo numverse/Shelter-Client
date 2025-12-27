@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import { channelsStore } from "../stores/channels";
-import ChannelItem from "./ChannelItem.vue";
+import { channelsStore } from "../../stores/channels";
+import ChannelItem from "./channel/ChannelItem.vue";
 </script>
 
 <template>

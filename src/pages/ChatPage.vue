@@ -6,6 +6,7 @@ import MessageInput from "../components/MessageInput.vue";
 import WidgetList from "../components/WidgetList.vue";
 import NotificationHeader from "../components/NotificationHeader.vue";
 import TitleHeader from "../components/TitleHeader.vue";
+import CurrentUser from "../components/CurrentUser.vue";
 
 import { channelsStore } from "../stores/channels";
 
@@ -22,6 +23,7 @@ onMounted(async () => {
     <div class="flex-1 flex">
       <WidgetList />
       <ChannelList />
+      <CurrentUser />
 
       <div class="flex-1 flex flex-col">
         <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">

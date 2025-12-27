@@ -112,7 +112,7 @@ async function sendResetPasswordInstructions() {
               :placeholder="i18n('placeholders', 'email')"
               :required="true"
               :autofocus="true"
-              @update:model-value="emailbox?.value.setErrorMessage(null)"
+              @update:model-value="emailbox?.setErrorMessage(null)"
             />
             <TextInputBox
               id="password"

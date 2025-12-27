@@ -28,8 +28,12 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
   const headers = {
     ...(data.headers ?? {}),
   };
-  if (!(data.data instanceof FormData) && data.data) {
+  let body;
+  if (data.data instanceof FormData) {
+    body = data.data;
+  } else if (data.data) {
     headers["Content-Type"] = "application/json";
+    body = JSON.stringify(data.data);
   }
   const res = await ky(`${baseURL}${data.url}`, {
     method: data.method,
@@ -37,7 +41,7 @@ async function request<T>(data: requestData): Promise<requestResponse<T>> {
     throwHttpErrors: false,
     credentials: "include",
     headers: headers,
-    json: data.data,
+    body: body,
   });
   if (!res.ok) {
     const body = await res.json<errorResponse>();

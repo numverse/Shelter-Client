@@ -22,7 +22,7 @@ const selectChannel = () => {
 
 <template>
   <div
-    class="w-full cursor-pointer px-2 py-1 rounded"
+    class="cursor-pointer px-2 py-1 rounded"
     :class="isSelected ? 'bg-bg3' : 'hover:bg-bg3/60'"
     @click="selectChannel"
   >

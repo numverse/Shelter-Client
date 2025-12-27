@@ -26,7 +26,7 @@ onMounted(async () => {
       <CurrentUser />
 
       <div class="flex-1 flex flex-col">
-        <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">
+        <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
           <div class="text-lg font-semibold">
             # {{ channelsStore.currentChannel.value?.name ?? 'No channel selected' }}
           </div>
@@ -40,7 +40,7 @@ onMounted(async () => {
         <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
       </div>
 
-      <aside class="w-64 bg-bg2 p-3 border-l border-bg3">
+      <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">
         <h4 class="text-sm font-semibold">
           Members
         </h4>

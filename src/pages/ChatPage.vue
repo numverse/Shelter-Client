@@ -13,6 +13,7 @@ import { usersStore } from "../stores/users";
 import { authStore } from "../stores/auth";
 import { i18n } from "../utils/i18n/i18n";
 import { resend } from "../utils/api/auth/resend";
+import { ws } from "../stores/ws";
 
 const notificationMessage = ref<string | null>(null);
 const notificationButtonLabel = ref<string | undefined>(undefined);
@@ -34,6 +35,13 @@ onMounted(async () => {
     };
   }
 });
+
+ws.on("MESSAGE_CREATE", async (message) => {
+  const channel = channelsStore.channels.get(message.channelId);
+  if (channel) {
+    channel.messages.set(message.id, message);
+  }
+});
 </script>
 
 <template>
@@ -53,11 +61,7 @@ onMounted(async () => {
       />
       <div class="ml-18 flex-1 flex">
         <ChannelList />
-        <CurrentUser
-          :username="authStore.currentUser.value?.username"
-          :user-id="authStore.currentUser.value?.id"
-          :avatar-id="authStore.currentUser.value?.avatarId"
-        />
+        <CurrentUser />
 
         <div class="flex-1 flex flex-col">
           <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
@@ -66,12 +70,8 @@ onMounted(async () => {
             </div>
           </header>
 
-          <MessageList
-            :channel-id="channelsStore.currentChannel.value?.id ?? null"
-            class="flex-1"
-          />
-
-          <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
+          <MessageList />
+          <MessageInput />
         </div>
 
         <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">

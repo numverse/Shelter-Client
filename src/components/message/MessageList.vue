@@ -4,12 +4,11 @@ import { channelsStore } from "../../stores/channels";
 import MessageItem from "./MessageItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
-const props = defineProps<{ channelId: string | null }>();
 const loading = ref(true);
 
 const messagesList = computed(() => {
-  if (!props.channelId) return [];
-  const ch = channelsStore.channels.get(props.channelId);
+  if (!channelsStore.currentChannel.value?.id) return [];
+  const ch = channelsStore.channels.get(channelsStore.currentChannel.value.id);
   if (!ch) return [];
 
   return Array.from(ch.messages.values());
@@ -24,11 +23,11 @@ const loadMessages = async (channelId: string) => {
   loading.value = false;
 };
 
-watch(() => props.channelId, (id) => {
+watch(() => channelsStore.currentChannel.value?.id, (id) => {
   if (id) loadMessages(id);
 });
 onMounted(() => {
-  if (props.channelId) loadMessages(props.channelId);
+  if (channelsStore.currentChannel.value?.id) loadMessages(channelsStore.currentChannel.value.id);
 });
 </script>
 
@@ -50,7 +49,7 @@ onMounted(() => {
         >
           <MessageItem
             :message="m"
-            :channel-id="props.channelId!"
+            :channel-id="channelsStore.currentChannel.value?.id!"
             :show-author="i === 0 || messagesList[i-1].authorId !== m.authorId"
           />
         </li>

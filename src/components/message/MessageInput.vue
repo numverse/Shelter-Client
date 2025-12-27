@@ -1,17 +1,16 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
-
-const props = defineProps<{ channelId: string | null }>();
+import { channelsStore } from "../../stores/channels";
 
 const text = ref("");
 const sending = ref(false);
 
 async function send() {
-  if (!props.channelId || !text.value.trim()) return;
+  if (!channelsStore.currentChannel.value?.id || !text.value.trim()) return;
   sending.value = true;
   const res = await createMessage({
-    channelId: props.channelId,
+    channelId: channelsStore.currentChannel.value.id,
     content: text.value.trim(),
   });
   if (res.ok) {
@@ -32,14 +31,14 @@ function onKey(e: KeyboardEvent) {
   <div class="p-3 border-t border-bg3 bg-bg2">
     <textarea
       v-model="text"
-      :placeholder="props.channelId ? 'Message #' + props.channelId : 'Select a channel'"
-      :disabled="!props.channelId"
+      :placeholder="channelsStore.currentChannel.value ? 'Message #' + channelsStore.currentChannel.value.name : 'Select a channel'"
+      :disabled="!channelsStore.currentChannel.value"
       class="w-full p-2 rounded bg-bg-input text-text1 resize-none h-20"
       @keydown="onKey"
     />
     <div class="flex justify-end mt-2">
       <button
-        :disabled="sending || !props.channelId || !text.trim()"
+        :disabled="sending || !channelsStore.currentChannel.value || !text.trim()"
         class="px-4 py-2 bg-accent text-white rounded"
         @click="send"
       >

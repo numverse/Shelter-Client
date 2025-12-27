@@ -40,22 +40,20 @@ async function onSubmit() {
 
   isLoading.value = true;
   errorMessage.value = null;
-  let currentRequest;
   try {
-    currentRequest = await login({
+    const response = await login({
       email: email.value,
       password: password.value,
     });
-  } catch {
-    errorMessage.value = i18n("errors", "unknown");
-  } finally {
     isLoading.value = false;
-    if (currentRequest?.ok) {
+    if (response?.ok) {
       authStore.authed = true;
       router.push("/channels");
     } else {
-      errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));
+      errorMessage.value = i18n("errors", response.code);
     }
+  } catch {
+    errorMessage.value = i18n("errors", "unknown");
   }
 }
 
@@ -65,13 +63,19 @@ async function sendResetPasswordInstructions() {
     return;
   }
 
-  const response = await forgotPassword({
-    email: email.value,
-  });
-  if (response.ok) {
-    showInfoModal.value = true;
-  } else {
-    errorMessage.value = i18n("errors", (response?.code ?? "unknown"));
+  try {
+    const response = await forgotPassword({
+      email: email.value,
+    });
+    if (response.ok) {
+      showInfoModal.value = true;
+    } else if (response.code === "USER_NOT_FOUND") {
+      emailbox.value.setErrorMessage(i18n("validation", "email_not_found"));
+    } else {
+      errorMessage.value = i18n("errors", response.code);
+    }
+  } catch {
+    errorMessage.value = i18n("errors", "unknown");
   }
 }
 </script>
@@ -108,6 +112,7 @@ async function sendResetPasswordInstructions() {
               :placeholder="i18n('placeholders', 'email')"
               :required="true"
               :autofocus="true"
+              @update:model-value="emailbox?.value.setErrorMessage(null)"
             />
             <TextInputBox
               id="password"

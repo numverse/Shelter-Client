@@ -75,6 +75,10 @@ const strings = {
       "en-US": "Username is unavailable. Try adding numbers, letters, underscores _ , or periods.",
       "ko-KR": "이미 사용 중인 이름입니다. 숫자, 영어, 밑줄 _, 마침표를 추가해보세요.",
     },
+    email_not_found: {
+      "en-US": "Email does not exist.",
+      "ko-KR": "이메일이 존재하지 않아요.",
+    },
   },
   info: {
     instructions_sent: {
@@ -308,6 +312,10 @@ const strings = {
     RATE_LIMIT_EXCEEDED: {
       "en-US": "Rate limit exceeded. Please try again later.",
       "ko-KR": "요청 한도 초과입니다. 나중에 다시 시도해주세요.",
+    },
+    USER_NOT_FOUND: {
+      "en-US": "The requested user was not found.",
+      "ko-KR": "요청한 사용자를 찾을 수 없습니다.",
     },
   },
 };

@@ -10,10 +10,12 @@ import CurrentUser from "../components/layout/CurrentUser.vue";
 
 import { channelsStore } from "../stores/channels";
 import { usersStore } from "../stores/users";
+import { authStore } from "../stores/auth";
 
 onMounted(async () => {
   await channelsStore.fetch();
   await usersStore.fetchAll();
+  await authStore.fetchCurrentUser();
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 });
 </script>
@@ -25,7 +27,10 @@ onMounted(async () => {
     <div class="flex-1 flex">
       <WidgetList />
       <ChannelList />
-      <CurrentUser />
+      <CurrentUser
+        :username="authStore.currentUser.value?.username"
+        :avatar-id="authStore.currentUser.value?.avatarId"
+      />
 
       <div class="flex-1 flex flex-col">
         <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">

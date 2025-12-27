@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, ref, nextTick } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -18,6 +18,7 @@ import { ws } from "../stores/ws";
 const notificationMessage = ref<string | null>(null);
 const notificationButtonLabel = ref<string | undefined>(undefined);
 const notificationAction = ref<(() => void) | undefined>(undefined);
+const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 
 onMounted(async () => {
   await channelsStore.fetch();
@@ -37,9 +38,17 @@ onMounted(async () => {
 });
 
 ws.on("MESSAGE_CREATE", async (message) => {
+  const isCurrentChannel = message.channelId === channelsStore.currentChannel.value?.id;
+  const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
+  const isMine = message.authorId === authStore.currentUser.value?.id;
+
   const channel = channelsStore.channels.get(message.channelId);
   if (channel) {
     channel.messages.set(message.id, message);
+  }
+  if (isCurrentChannel && (isMine || shouldStick)) {
+    await nextTick();
+    messageListRef.value?.scrollToBottom();
   }
 });
 </script>
@@ -70,7 +79,7 @@ ws.on("MESSAGE_CREATE", async (message) => {
             </div>
           </header>
 
-          <MessageList />
+          <MessageList ref="messageListRef" />
           <MessageInput />
         </div>
 

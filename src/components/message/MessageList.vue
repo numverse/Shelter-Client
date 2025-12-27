@@ -1,10 +1,11 @@
 <script setup lang="ts">
-import { computed, ref, watch, onMounted } from "vue";
+import { computed, ref, watch, onMounted, nextTick, onUnmounted } from "vue";
 import { channelsStore } from "../../stores/channels";
 import MessageItem from "./MessageItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
 const loading = ref(true);
+const scrollContainer = ref<HTMLElement | null>(null);
 
 const messagesList = computed(() => {
   if (!channelsStore.currentChannel.value?.id) return [];
@@ -12,6 +13,24 @@ const messagesList = computed(() => {
   if (!ch) return [];
 
   return Array.from(ch.messages.values());
+});
+
+const scrollToBottom = () => {
+  if (scrollContainer.value) {
+    scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight;
+  }
+};
+
+const isAtBottom = (threshold = 32) => {
+  const el = scrollContainer.value;
+  if (!el) return true;
+  const distance = el.scrollHeight - (el.scrollTop + el.clientHeight);
+  return distance <= threshold;
+};
+
+defineExpose({
+  scrollToBottom,
+  isAtBottom,
 });
 
 const loadMessages = async (channelId: string) => {
@@ -23,16 +42,33 @@ const loadMessages = async (channelId: string) => {
   loading.value = false;
 };
 
+const handleKeyDown = (e: KeyboardEvent) => {
+  if (e.key === "Escape") {
+    scrollToBottom();
+  }
+};
+
 watch(() => channelsStore.currentChannel.value?.id, (id) => {
   if (id) loadMessages(id);
 });
-onMounted(() => {
-  if (channelsStore.currentChannel.value?.id) loadMessages(channelsStore.currentChannel.value.id);
+
+onMounted(async () => {
+  if (channelsStore.currentChannel.value?.id) await loadMessages(channelsStore.currentChannel.value.id);
+  await nextTick();
+  scrollToBottom();
+  window.addEventListener("keydown", handleKeyDown);
+});
+
+onUnmounted(() => {
+  window.removeEventListener("keydown", handleKeyDown);
 });
 </script>
 
 <template>
-  <div class="flex-1 overflow-auto h-full bg-bg2 pb-4">
+  <div
+    ref="scrollContainer"
+    class="flex-1 overflow-auto h-full pb-4 bg-bg2"
+  >
     <div
       v-if="loading"
       class="flex flex-col items-center h-full"

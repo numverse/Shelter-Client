@@ -1,10 +1,10 @@
-import { GatewayOpCode, EventMap, WS } from "./types";
+import { GatewayOpCode, EventMap } from "./types";
 
 type EventType = keyof EventMap;
 
 type Listeners = { [K in EventType]?: Array<(payload: EventMap[K]) => void> };
 
-class BaseWebSocket implements WS {
+class BaseWebSocket {
   private socket: WebSocket | null = null;
   private url: string;
   private protocols?: string | string[];

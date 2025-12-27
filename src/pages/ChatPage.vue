@@ -16,34 +16,36 @@ onMounted(async () => {
 </script>
 
 <template>
-  <!-- <NotificationHeader /> -->
-  <TitleHeader />
-  <div class="h-full flex">
-    <WidgetList />
-    <ChannelList />
+  <div class="flex flex-col h-screen">
+    <TitleHeader />
+    <!-- <NotificationHeader /> -->
+    <div class="flex-1 flex">
+      <WidgetList />
+      <ChannelList />
 
-    <div class="flex-1 flex flex-col">
-      <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">
-        <div class="text-lg font-semibold">
-          # {{ channelsStore.currentChannel.value?.name ?? 'No channel selected' }}
-        </div>
-      </header>
+      <div class="flex-1 flex flex-col">
+        <header class="px-4 py-3 border-b border-bg3 bg-bg2 flex items-center justify-between">
+          <div class="text-lg font-semibold">
+            # {{ channelsStore.currentChannel.value?.name ?? 'No channel selected' }}
+          </div>
+        </header>
 
-      <MessageList
-        :channel-id="channelsStore.currentChannel.value?.id ?? null"
-        class="flex-1"
-      />
+        <MessageList
+          :channel-id="channelsStore.currentChannel.value?.id ?? null"
+          class="flex-1"
+        />
 
-      <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
-    </div>
-
-    <aside class="w-64 bg-bg2 p-3 border-l border-bg3">
-      <h4 class="text-sm font-semibold">
-        Members
-      </h4>
-      <div class="text-sm text-text2 mt-2">
-        (Not implemented)
+        <MessageInput :channel-id="channelsStore.currentChannel.value?.id ?? null" />
       </div>
-    </aside>
+
+      <aside class="w-64 bg-bg2 p-3 border-l border-bg3">
+        <h4 class="text-sm font-semibold">
+          Members
+        </h4>
+        <div class="text-sm text-text2 mt-2">
+          (Not implemented)
+        </div>
+      </aside>
+    </div>
   </div>
 </template>

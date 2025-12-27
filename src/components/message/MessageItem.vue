@@ -37,10 +37,13 @@ const deleteMessage = async () => {
 
 <template>
   <div class="px-4 hover:bg-bg3 group relative text-lg font-light">
-    <div class="flex gap-3 justify-center items-center">
+    <div
+      class="flex gap-3 justify-center items-center"
+      :class="props.showAuthor ? 'mt-4' : ''"
+    >
       <img
         v-if="props.showAuthor"
-        :src="messageAuthor?.avatarId ? messageAuthor.avatarId : '/shelter_logo.png'"
+        :src="authStore.currentUser.value?.avatarId ? `/cdn/avatars/${authStore.currentUser.value?.id}/${authStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(authStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
         :alt="messageAuthor?.username"
         class="w-12 h-12 rounded-full"
       >

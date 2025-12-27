@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { CloudIcon, DollarSignIcon, MessageCircleIcon, MessagesSquareIcon, PackageIcon } from "lucide-vue-next";
-import WidgetItem from "./widget/WidgetItem.vue";
+import WidgetItem from "./WidgetItem.vue";
 
 import { stateStore } from "../../stores/state";
 </script>

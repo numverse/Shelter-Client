@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
-import { createMessage } from "../utils/api/messages/createMessage";
+import { createMessage } from "../../utils/api/messages/createMessage";
 
 const props = defineProps<{ channelId: string | null }>();
 

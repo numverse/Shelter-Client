@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { Settings } from "lucide-vue-next";
 
-const props = defineProps({
+defineProps({
   avatarId: {
     type: String,
+    default: null,
   },
   username: {
     type: String,

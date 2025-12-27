@@ -94,6 +94,20 @@ const strings = {
       "ko-KR": "(으)로 보냈어요. 받은 편지함과 스팸 편지함을 모두 확인해주세요.",
     },
   },
+  notifications: {
+    verify_email: {
+      "en-US": "Please verify your email.",
+      "ko-KR": "이메일을 인증해주세요.",
+    },
+    resend_verify_email: {
+      "en-US": "Resend Verification Email",
+      "ko-KR": "인증 이메일 재전송",
+    },
+    verify_email_sent: {
+      "en-US": "Verification email sent.",
+      "ko-KR": "인증 이메일을 보냈어요.",
+    },
+  },
   help: {
     forgot_password: {
       "en-US": "Forgot your password?",

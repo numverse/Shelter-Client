@@ -11,18 +11,29 @@ import CurrentUser from "../components/layout/CurrentUser.vue";
 import { channelsStore } from "../stores/channels";
 import { usersStore } from "../stores/users";
 import { authStore } from "../stores/auth";
+import { i18n } from "../utils/i18n/i18n";
+import { resend } from "../utils/api/auth/resend";
+
+const notificationMessage = ref<string | null>(null);
+const notificationButtonLabel = ref<string | undefined>(undefined);
+const notificationAction = ref<(() => void) | undefined>(undefined);
 
 onMounted(async () => {
   await channelsStore.fetch();
   await usersStore.fetchAll();
   await authStore.fetchCurrentUser();
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
-});
 
-const notificationMessage = ref<string | null>("Welcome to Shelter Chat!");
-function action() {
-  alert("Action button clicked!");
-}
+  if (((authStore.currentUser.value?.flags || 0) & 2) === 0) {
+    notificationMessage.value = i18n("notifications", "verify_email");
+    notificationButtonLabel.value = i18n("notifications", "resend_verify_email");
+    notificationAction.value = async function () {
+      await resend();
+      notificationButtonLabel.value = i18n("notifications", "verify_email_sent");
+      notificationAction.value = undefined;
+    };
+  }
+});
 </script>
 
 <template>
@@ -32,9 +43,9 @@ function action() {
       v-show="notificationMessage"
       :message="notificationMessage"
       :closable="true"
-      button-label="Take Action"
+      :button-label="notificationButtonLabel"
       @close="notificationMessage = null;"
-      @action="action"
+      @action="notificationAction"
     />
     <div class="flex-1 flex">
       <WidgetList

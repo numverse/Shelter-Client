@@ -3,7 +3,7 @@ import { ref, onMounted, nextTick } from "vue";
 import UserItem from "./UserItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 import { usersStore } from "../../stores/users";
-import { User } from "src/utils/api/types";
+import type { User } from "../../utils/api/types";
 
 const loading = ref(true);
 const users = ref<Array<User>>([]);

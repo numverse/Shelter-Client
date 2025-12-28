@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, nextTick } from "vue";
+import { onMounted, ref, nextTick, onUnmounted } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -14,12 +14,15 @@ import { usersStore } from "../stores/users";
 import { authStore } from "../stores/auth";
 import { i18n } from "../utils/i18n/i18n";
 import { resend } from "../utils/api/auth/resend";
-import { ws } from "../stores/ws";
+import { refreshTokens } from "../utils/api/auth/refreshTokens";
+import { BaseWebSocket } from "../utils/ws/base";
 
 const notificationMessage = ref<string | null>(null);
 const notificationButtonLabel = ref<string | undefined>(undefined);
 const notificationAction = ref<(() => void) | undefined>(undefined);
 const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
+
+let ws: BaseWebSocket;
 
 onMounted(async () => {
   await channelsStore.fetch();
@@ -36,27 +39,59 @@ onMounted(async () => {
       notificationAction.value = undefined;
     };
   }
+
+  ws = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
+
+  ws.on("open", () => {
+    authStore.authed = true;
+  });
+
+  ws.on("error", (evt) => {
+    console.error("WebSocket error:", evt);
+  });
+
+  ws.on("close", async (evt) => {
+    if (evt.reason === "AUTHENTICATION_REQUIRED") {
+      const res = await refreshTokens().catch(() => ({
+        ok: false,
+      }));
+      authStore.authed = res.ok;
+    }
+    console.error("WebSocket closed:", evt.reason);
+
+    if (authStore.authed) {
+      setTimeout(() => {
+        ws.reconnect();
+      }, 5000);
+    }
+  });
+
+  ws.on("MESSAGE_CREATE", async (message) => {
+    const isCurrentChannel = message.channelId === channelsStore.currentChannel.value?.id;
+    const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
+    const isMine = message.authorId === authStore.currentUser.value?.id;
+
+    const channel = channelsStore.channels.get(message.channelId);
+    if (channel) {
+      channel.messages.set(message.id, message);
+    }
+    if (isCurrentChannel && (isMine || shouldStick)) {
+      await nextTick();
+      messageListRef.value?.scrollToBottom();
+    }
+  });
+
+  ws.on("MESSAGE_DELETE", (data) => {
+    const channel = channelsStore.channels.get(data.channelId);
+    if (channel) {
+      channel.messages.delete(data.messageId);
+    }
+  });
 });
 
-ws.on("MESSAGE_CREATE", async (message) => {
-  const isCurrentChannel = message.channelId === channelsStore.currentChannel.value?.id;
-  const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
-  const isMine = message.authorId === authStore.currentUser.value?.id;
-
-  const channel = channelsStore.channels.get(message.channelId);
-  if (channel) {
-    channel.messages.set(message.id, message);
-  }
-  if (isCurrentChannel && (isMine || shouldStick)) {
-    await nextTick();
-    messageListRef.value?.scrollToBottom();
-  }
-});
-
-ws.on("MESSAGE_DELETE", (data) => {
-  const channel = channelsStore.channels.get(data.channelId);
-  if (channel) {
-    channel.messages.delete(data.messageId);
+onUnmounted(() => {
+  if (ws) {
+    ws.close();
   }
 });
 </script>

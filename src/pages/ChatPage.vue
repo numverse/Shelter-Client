@@ -12,14 +12,13 @@ import UserList from "../components/users/UserList.vue";
 import { channelsStore } from "../stores/channels";
 import { usersStore } from "../stores/users";
 import { authStore } from "../stores/auth";
+import { stateStore } from "../stores/state";
+
 import { i18n } from "../utils/i18n/i18n";
 import { resend } from "../utils/api/auth/resend";
 import { refreshTokens } from "../utils/api/auth/refreshTokens";
 import { BaseWebSocket } from "../utils/ws/base";
 
-const notificationMessage = ref<string | null>(null);
-const notificationButtonLabel = ref<string | undefined>(undefined);
-const notificationAction = ref<(() => void) | undefined>(undefined);
 const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 
 let ws: BaseWebSocket;
@@ -31,13 +30,18 @@ onMounted(async () => {
   channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
 
   if (((authStore.currentUser.value?.flags || 0) & 2) === 0) {
-    notificationMessage.value = i18n("notifications", "verify_email");
-    notificationButtonLabel.value = i18n("notifications", "resend_verify_email");
-    notificationAction.value = async function () {
-      await resend();
-      notificationButtonLabel.value = i18n("notifications", "verify_email_sent");
-      notificationAction.value = undefined;
-    };
+    stateStore.setNotificationHeader({
+      text: i18n("notifications", "verify_email"),
+      type: "info",
+      actionButtonLabel: i18n("notifications", "resend_verify_email"),
+      action: async () => {
+        await resend();
+        stateStore.setNotificationHeader({
+          text: i18n("notifications", "verify_email_sent"),
+          type: "info",
+        });
+      },
+    });
   }
 
   ws = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
@@ -51,6 +55,10 @@ onMounted(async () => {
   });
 
   ws.on("close", async (evt) => {
+    stateStore.setNotificationHeader({
+      text: i18n("notifications", "disconnected"),
+      type: "error",
+    });
     if (evt.reason === "AUTHENTICATION_REQUIRED") {
       const res = await refreshTokens().catch(() => ({
         ok: false,
@@ -99,14 +107,7 @@ onUnmounted(() => {
 <template>
   <div class="flex flex-col h-screen">
     <TitleHeader />
-    <NotificationHeader
-      v-show="notificationMessage"
-      :message="notificationMessage"
-      :closable="true"
-      :button-label="notificationButtonLabel"
-      @close="notificationMessage = null;"
-      @action="notificationAction"
-    />
+    <NotificationHeader />
     <div class="flex-1 flex min-h-0">
       <WidgetList
         class="fixed left-0 top-7 h-screen"

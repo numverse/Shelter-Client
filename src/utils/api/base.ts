@@ -25,7 +25,13 @@ type requestResponse<T> = {
 } & T;
 
 async function request<T>(data: requestData): Promise<requestResponse<T>> {
-  const headers = {
+  let deviceId = localStorage.getItem("deviceId");
+  if (!deviceId) {
+    deviceId = crypto.randomUUID();
+    localStorage.setItem("deviceId", deviceId);
+  }
+  const headers: Record<string, string> = {
+    "x-device-id": deviceId,
     ...(data.headers ?? {}),
   };
   let body;

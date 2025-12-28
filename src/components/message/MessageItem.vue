@@ -52,7 +52,7 @@ const deleteMessage = async () => {
         class="w-12"
       />
 
-      <div class="flex flex-col flex-1">
+      <div class="flex flex-col flex-1 select-text">
         <div
           v-if="props.showAuthor"
           class="flex items-center gap-2"

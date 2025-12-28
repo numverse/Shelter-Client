@@ -75,7 +75,7 @@ function confirm() {
 
         <div class="flex justify-end">
           <button
-            class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white rounded-md shadow"
+            class="px-4 py-2 bg-red hover:bg-red text-text1 rounded-md shadow"
             @click="confirm"
           >
             {{ confirmText }}

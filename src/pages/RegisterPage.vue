@@ -172,7 +172,7 @@ async function checkUsernameAvailability() {
 
             <p
               v-if="errorMessage"
-              class="text-red-500 -mt-2 text-sm"
+              class="text-red -mt-2 text-sm"
             >
               {{ errorMessage }}
             </p>

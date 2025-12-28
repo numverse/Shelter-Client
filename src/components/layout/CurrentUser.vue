@@ -16,17 +16,17 @@ import { authStore } from "../../stores/auth";
           :class="[
             'absolute top-6 left-6 right-0 w-4.5 h-4.5 rounded-full border-3 border-bg2',
             {
-              'online': 'bg-green-400',
-              'idle': 'bg-yellow-400',
-              'offline': 'bg-gray-500',
-              'dnd': 'bg-red-500',
+              'online': 'bg-green',
+              'idle': 'bg-yellow',
+              'offline': 'bg-gray',
+              'dnd': 'bg-red',
             }[authStore.currentUser.value?.presence?.status ?? 'online']
           ]"
           aria-hidden="true"
         />
       </div>
       <div class="flex-1 flex flex-col ml-1">
-        <p class="font-medium text-white">
+        <p class="font-medium text-text1">
           {{ authStore.currentUser.value?.username || i18n("ui", "username") }}
         </p>
         <p class="text-sm text-text2">

@@ -14,7 +14,7 @@ defineProps<{
       v-if="isOwner"
       :icon="TrashIcon"
       title="Delete message"
-      icon-class="text-red-500"
+      icon-class="text-red"
       :on-click="deleteMessage"
     />
   </div>

@@ -56,7 +56,7 @@ defineProps<{
       {{ label }}
       <span
         v-if="required"
-        class="text-red-500 ml-1"
+        class="text-red ml-1"
         aria-hidden="true"
       >*</span>
     </label>
@@ -66,7 +66,7 @@ defineProps<{
       ref="input"
       v-model="model"
       :type="type ?? 'text'"
-      class="mt-1 text-xl w-full border border-text2/50 bg-bg1 rounded-sm p-2 focus:border-text1 transition-all duration-200 not-placeholder-shown:valid:border-accent not-placeholder-shown:invalid:border-red-500"
+      class="mt-1 text-xl w-full border border-text2/50 bg-bg1 rounded-sm p-2 focus:border-text1 transition-all duration-200 not-placeholder-shown:valid:border-accent not-placeholder-shown:invalid:border-red"
       :class="classes"
       :placeholder="placeholder"
       :minlength="minlength"
@@ -80,7 +80,7 @@ defineProps<{
 
     <p
       v-if="errorMessage"
-      class="mt-1 text-sm text-red-500"
+      class="mt-1 text-sm text-red"
     >
       {{ errorMessage }}
     </p>

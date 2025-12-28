@@ -6,9 +6,9 @@ import { stateStore } from "../../stores/state";
 
 const notificationColors = {
   info: "bg-accent",
-  error: "bg-red-500",
-  success: "bg-green-600",
-  warning: "bg-yellow-500",
+  error: "bg-red",
+  success: "bg-green",
+  warning: "bg-yellow",
 };
 
 const notificationHeader = computed(() => {

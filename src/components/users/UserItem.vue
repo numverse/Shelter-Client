@@ -16,7 +16,7 @@ defineProps<{
   <div class="flex items-center justify-between">
     <div class="relative">
       <img
-        :src="avatarId ? `/cdn/avatars/${userId}/${avatarId}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
+        :src="avatarId ? `https://shelter.zero624.dev/cdn/avatars/${userId}/${avatarId}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
         class="w-10 h-10 bg-cover bg-center rounded-full"
       >
       <span

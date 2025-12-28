@@ -107,6 +107,10 @@ const strings = {
       "en-US": "Verification email sent.",
       "ko-KR": "인증 이메일을 보냈어요.",
     },
+    disconnected: {
+      "en-US": "Disconnected from server. Attempting to reconnect...",
+      "ko-KR": "서버와 연결이 끊어졌어요. 다시 연결을 시도 중입니다...",
+    },
   },
   help: {
     forgot_password: {

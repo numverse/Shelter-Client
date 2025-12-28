@@ -92,12 +92,7 @@ ws.on("MESSAGE_DELETE", (data) => {
         </div>
 
         <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">
-          <h4 class="text-sm font-semibold">
-            Members
-          </h4>
-          <div class="text-sm text-text2 mt-2">
-            <UserList />
-          </div>
+          <UserList />
         </aside>
       </div>
     </div>

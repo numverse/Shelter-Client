@@ -3,8 +3,11 @@ import { ref, onMounted, nextTick } from "vue";
 import UserItem from "./UserItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 import { usersStore } from "../../stores/users";
+import { User } from "src/utils/api/types";
 
 const loading = ref(true);
+const users = ref<Array<User>>([]);
+const offlineUsers = ref<Array<User>>([]);
 
 onMounted(async () => {
   if (usersStore.users.size === 0) {
@@ -15,24 +18,60 @@ onMounted(async () => {
     loading.value = false;
   }
   await nextTick();
+
+  for (const user of usersStore.users.values()) {
+    if (user.presence && user.presence.status !== "offline") {
+      users.value.push(user);
+    } else {
+      offlineUsers.value.push(user);
+    }
+  }
 });
 </script>
 
 <template>
-  <div
-    ref="scrollContainer"
-    class="flex-1 overflow-auto h-full pb-4 bg-bg2"
-  >
+  <h4 class="text-sm font-semibold">
+    Members
+  </h4>
+  <div class="text-sm text-text2 mt-2">
     <div
-      v-if="loading"
-      class="flex flex-col items-center h-full"
+      ref="scrollContainer"
+      class="flex-1 overflow-auto h-full pb-4 bg-bg2"
     >
-      <LoadingCircle class="w-12 h-12 text-accent" />
+      <div
+        v-if="loading"
+        class="flex flex-col items-center h-full"
+      >
+        <LoadingCircle class="w-12 h-12 text-accent" />
+      </div>
+      <div v-else>
+        <ul>
+          <li
+            v-for="m in users"
+            :key="m.id"
+          >
+            <UserItem
+              :user-id="m.id"
+              :username="m.username"
+              :display-name="m.displayName"
+              :avatar-id="m.avatarId"
+            />
+          </li>
+        </ul>
+      </div>
     </div>
-    <div v-else>
+  </div>
+  <h4 class="text-sm font-semibold">
+    Offline
+  </h4>
+  <div class="text-sm text-text2 mt-2">
+    <div
+      ref="scrollContainer"
+      class="flex-1 overflow-auto h-full pb-4 bg-bg2"
+    >
       <ul>
         <li
-          v-for="(m ) in usersStore.users.values()"
+          v-for="m in offlineUsers"
           :key="m.id"
         >
           <UserItem

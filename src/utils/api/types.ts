@@ -48,6 +48,9 @@ interface User {
   id: string;
   username: string;
   displayName?: string;
+  presence: {
+    status: "online" | "offline" | "idle" | "dnd";
+  };
   flags: number;
   avatarId?: string;
   createdAt: string;

@@ -7,10 +7,24 @@ import { authStore } from "../../stores/auth";
 <template>
   <section class="absolute flex bottom-0 left-0 flex-col bg-bg2 rounded w-76 m-3 p-3">
     <div class="flex items-center justify-between">
-      <img
-        :src="authStore.currentUser.value?.avatarId ? `/cdn/avatars/${authStore.currentUser.value?.id}/${authStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(authStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
-        class="w-10 h-10 bg-cover bg-center rounded-full"
-      >
+      <div class="relative">
+        <img
+          :src="authStore.currentUser.value?.avatarId ? `/cdn/avatars/${authStore.currentUser.value?.id}/${authStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(authStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
+          class="w-10 h-10 bg-cover bg-center rounded-full"
+        >
+        <span
+          :class="[
+            'absolute top-6 left-6 right-0 w-4.5 h-4.5 rounded-full border-3 border-bg2',
+            {
+              'online': 'bg-green-400',
+              'idle': 'bg-yellow-400',
+              'offline': 'bg-gray-500',
+              'dnd': 'bg-red-500',
+            }[authStore.currentUser.value?.presence?.status ?? 'online']
+          ]"
+          aria-hidden="true"
+        />
+      </div>
       <div class="flex-1 flex flex-col ml-1">
         <p class="font-medium text-white">
           {{ authStore.currentUser.value?.username || i18n("ui", "username") }}

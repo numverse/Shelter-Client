@@ -19,6 +19,9 @@
   --color-text1: #ffffff;
   --color-text2: #a1a1aa;
   --color-accent: #5966f3;
+  --color-red: #fb2c36;
+  --color-green: #00a63e;
+  --color-yellow: #d08700;
   --font-base: "Pretendard", sans-serif;
 }
 body {

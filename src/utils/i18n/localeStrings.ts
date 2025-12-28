@@ -111,6 +111,10 @@ const strings = {
       "en-US": "Disconnected from server. Attempting to reconnect...",
       "ko-KR": "서버와 연결이 끊어졌어요. 다시 연결을 시도 중입니다...",
     },
+    reconnected: {
+      "en-US": "Reconnected to server.",
+      "ko-KR": "서버에 다시 연결되었어요.",
+    },
   },
   help: {
     forgot_password: {

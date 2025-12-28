@@ -46,8 +46,23 @@ onMounted(async () => {
 
   ws = new BaseWebSocket("wss://shelter.zero624.dev/gateway");
 
+  let wsConnectedOnce = false;
+
   ws.on("open", () => {
+    if (wsConnectedOnce) {
+      stateStore.setNotificationHeader({
+        text: i18n("notifications", "reconnected"),
+        type: "success",
+      }, 3000);
+    }
+    wsConnectedOnce = true;
     authStore.authed = true;
+    if (channelsStore.currentChannel.value) {
+      channelsStore.fetchChannelMessages({
+        channelId: channelsStore.currentChannel.value.id,
+        limit: "50",
+      });
+    }
   });
 
   ws.on("error", (evt) => {
@@ -60,17 +75,14 @@ onMounted(async () => {
       type: "error",
     });
     if (evt.reason === "AUTHENTICATION_REQUIRED") {
-      const res = await refreshTokens().catch(() => ({
-        ok: false,
-      }));
-      authStore.authed = res.ok;
+      await refreshTokens();
     }
     console.error("WebSocket closed:", evt.reason);
 
     if (authStore.authed) {
       setTimeout(() => {
         ws.reconnect();
-      }, 5000);
+      }, 2000);
     }
   });
 

@@ -17,8 +17,13 @@ const stateStore = {
     text: "",
     type: "info",
   }),
-  setNotificationHeader: function (header: NotificationHeader) {
+  setNotificationHeader: function (header: NotificationHeader, duration?: number) {
     stateStore.notificationHeader.value = header;
+    if (duration) {
+      setTimeout(() => {
+        stateStore.closeNotificationHeader();
+      }, duration);
+    }
   },
   closeNotificationHeader: function () {
     stateStore.notificationHeader.value.text = "";

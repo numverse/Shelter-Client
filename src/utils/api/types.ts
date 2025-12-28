@@ -13,13 +13,14 @@ interface Message {
   replyTo?: string;
   createdAt: string;
   updatedAt?: string;
-  attachments: Attachment[];
-  reactions: [
+  attachments?: Attachment[];
+  reactions?: [
     {
       emojiId: string;
       userIds: string[];
     },
   ];
+  status?: "SENDING" | "FAILED";
 }
 
 interface EmojiPack {

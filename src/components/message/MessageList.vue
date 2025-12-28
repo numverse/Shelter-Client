@@ -15,8 +15,9 @@ const messagesList = computed(() => {
   return Array.from(ch.messages.values());
 });
 
-const scrollToBottom = () => {
+const scrollToBottom = async () => {
   if (scrollContainer.value) {
+    await nextTick();
     scrollContainer.value.scrollTop = scrollContainer.value.scrollHeight;
   }
 };
@@ -54,7 +55,6 @@ watch(() => channelsStore.currentChannel.value?.id, (id) => {
 
 onMounted(async () => {
   if (channelsStore.currentChannel.value?.id) await loadMessages(channelsStore.currentChannel.value.id);
-  await nextTick();
   scrollToBottom();
   window.addEventListener("keydown", handleKeyDown);
 });

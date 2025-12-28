@@ -10,7 +10,7 @@ interface ExtendedChannel extends Channel {
 
 const channelsStore = {
   channels: reactive<Map<string, ExtendedChannel>>(new Map()),
-  currentChannel: ref<Channel | null>(null),
+  currentChannel: ref<ExtendedChannel | null>(null),
   dms: reactive<Map<string, User>>(new Map()),
   currentDM: ref<User | null>(null),
   getChannel: function (id: string) {

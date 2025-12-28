@@ -65,7 +65,10 @@ const deleteMessage = async () => {
           </span>
         </div>
 
-        <p class="text-text1">
+        <p
+          :class="message.status === 'SENDING' ? 'text-text2/60' : message.status === 'FAILED' ? 'text-red' : 'text-text1'"
+          class="whitespace-pre-wrap wrap-break-word"
+        >
           {{ message.content }}
         </p>
 

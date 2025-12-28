@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, nextTick, onUnmounted } from "vue";
+import { onMounted, ref, onUnmounted } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -90,13 +90,13 @@ onMounted(async () => {
     const isCurrentChannel = message.channelId === channelsStore.currentChannel.value?.id;
     const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
     const isMine = message.authorId === authStore.currentUser.value?.id;
+    if (isMine) return;
 
     const channel = channelsStore.channels.get(message.channelId);
     if (channel) {
       channel.messages.set(message.id, message);
     }
-    if (isCurrentChannel && (isMine || shouldStick)) {
-      await nextTick();
+    if (isCurrentChannel && shouldStick) {
       messageListRef.value?.scrollToBottom();
     }
   });
@@ -133,7 +133,9 @@ onUnmounted(() => {
           </header>
 
           <MessageList ref="messageListRef" />
-          <MessageInput />
+          <MessageInput
+            :scroll-to-bottom="messageListRef?.scrollToBottom!"
+          />
         </div>
         <UserList />
       </div>

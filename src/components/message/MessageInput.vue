@@ -1,10 +1,15 @@
 <script setup lang="ts">
 import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
+
 import { channelsStore } from "../../stores/channels";
+import { authStore } from "../../stores/auth";
+
+const props = defineProps<{
+  scrollToBottom?: () => void;
+}>();
 
 const text = ref("");
-const sending = ref(false);
 const editor = ref<HTMLDivElement | null>(null);
 
 const placeholder = computed(() => {
@@ -13,28 +18,41 @@ const placeholder = computed(() => {
     : "";
 });
 
-const currentChannelId = computed(() => channelsStore.currentChannel.value?.id);
+const currentChannel = computed(() => channelsStore.currentChannel.value);
 
 function onInput(e: Event) {
   text.value = (e.target as HTMLDivElement).innerText;
 }
 
 async function send() {
-  if (!currentChannelId.value || !text.value.trim()) return;
-  sending.value = true;
-  try {
-    const res = await createMessage({
-      channelId: currentChannelId.value,
-      content: text.value.trim(),
+  if (!currentChannel.value?.id || !text.value.trim()) return;
+  const messageContent = text.value.trim();
+  const tempId = `temp-${Date.now()}`;
+  text.value = "";
+  if (editor.value) editor.value.innerText = "";
+  channelsStore.currentChannel.value?.messages.set(tempId, {
+    id: tempId,
+    channelId: currentChannel.value.id,
+    authorId: authStore.currentUser.value?.id || "0",
+    content: messageContent,
+    createdAt: new Date().toISOString(),
+    status: "SENDING",
+  });
+  if (props.scrollToBottom) {
+    props.scrollToBottom();
+  }
+  const res = await createMessage({
+    channelId: currentChannel.value.id,
+    content: messageContent,
+  });
+  if (res.ok) {
+    currentChannel.value?.messages.delete(tempId);
+    currentChannel.value?.messages.set(res.id, res);
+  } else {
+    currentChannel.value?.messages.set(tempId, {
+      ...currentChannel.value.messages.get(tempId)!,
+      status: "FAILED",
     });
-    if (res.ok) {
-      text.value = "";
-      if (editor.value) editor.value.innerText = "";
-    }
-  } catch (err) {
-    console.error("Failed to send message", err);
-  } finally {
-    sending.value = false;
   }
 }
 

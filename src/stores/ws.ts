@@ -8,15 +8,18 @@ ws.on("open", () => {
   authStore.authed = true;
 });
 
-ws.once("close", async (evt) => {
+ws.on("close", async (evt) => {
   if (evt.reason === "AUTHENTICATION_REQUIRED") {
-    const res = await refreshTokens();
-    if (res.ok) {
-      authStore.authed = true;
+    const res = await refreshTokens().catch(() => ({
+      ok: false,
+    }));
+    authStore.authed = res.ok;
+  }
+
+  if (authStore.authed) {
+    setTimeout(() => {
       ws.reconnect();
-    } else {
-      authStore.authed = false;
-    }
+    }, 1000);
   }
 });
 

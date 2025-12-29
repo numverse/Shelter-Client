@@ -36,23 +36,19 @@ const deleteMessage = async () => {
 </script>
 
 <template>
-  <div class="px-4 hover:bg-bg3 group relative text-lg font-light">
+  <div class="pr-8 pl-4 hover:bg-bg3 group relative text-lg font-light">
     <div
-      class="flex gap-3 justify-center items-center"
+      class="flex gap-3"
       :class="props.showAuthor ? 'mt-4' : ''"
     >
       <img
         v-if="props.showAuthor"
         :src="messageAuthor?.avatarId ? `https://shelter.zero624.dev/cdn/avatars/${messageAuthor?.id}/${messageAuthor?.avatarId}.png` : `/avatars/${(BigInt(messageAuthor?.id ?? 0) >> 22n) % 6n}.png`"
         :alt="messageAuthor?.username"
-        class="w-12 h-12 rounded-full"
+        class="w-12 h-12 mt-0.5 absolute rounded-full"
       >
-      <div
-        v-else
-        class="w-12"
-      />
 
-      <div class="flex flex-col flex-1 select-text">
+      <div class="flex flex-col flex-1 ml-16 select-text">
         <div
           v-if="props.showAuthor"
           class="flex items-center gap-2"

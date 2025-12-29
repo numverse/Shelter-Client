@@ -2,7 +2,7 @@
 import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
 
-import { channelsStore } from "../../stores/channels";
+import { channelStore } from "../../stores/channel";
 import { authStore } from "../../stores/auth";
 
 const props = defineProps<{
@@ -13,12 +13,12 @@ const text = ref("");
 const editor = ref<HTMLDivElement | null>(null);
 
 const placeholder = computed(() => {
-  return channelsStore.currentChannel.value
-    ? `Message #${channelsStore.currentChannel.value.name}`
+  return channelStore.currentChannel.value
+    ? `Message #${channelStore.currentChannel.value.name}`
     : "";
 });
 
-const currentChannel = computed(() => channelsStore.currentChannel.value);
+const currentChannel = computed(() => channelStore.currentChannel.value);
 
 function onInput(e: Event) {
   text.value = (e.target as HTMLDivElement).innerText;
@@ -30,7 +30,7 @@ async function send() {
   const tempId = `temp-${Date.now()}`;
   text.value = "";
   if (editor.value) editor.value.innerText = "";
-  channelsStore.currentChannel.value?.messages.set(tempId, {
+  channelStore.currentChannel.value?.messages.set(tempId, {
     id: tempId,
     channelId: currentChannel.value.id,
     authorId: authStore.currentUser.value?.id || "0",

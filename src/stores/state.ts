@@ -1,6 +1,6 @@
 import { ref } from "vue";
 import { router } from "../router";
-import { channelsStore } from "./channels";
+import { channelStore } from "./channel";
 
 interface NotificationHeader {
   text: string;
@@ -31,7 +31,7 @@ const stateStore = {
   toggleChatMode: function () {
     stateStore.chatMode.value = stateStore.chatMode.value === "chat" ? "dm" : "chat";
     router.push(
-      stateStore.chatMode.value === "chat" ? `/channels${channelsStore.currentChannel.value ? `/${channelsStore.currentChannel.value?.id}` : ""}` : `/channels/@me${channelsStore.currentDM.value ? `/${channelsStore.currentDM.value}` : ""}`,
+      stateStore.chatMode.value === "chat" ? `/channels${channelStore.currentChannel.value ? `/${channelStore.currentChannel.value?.id}` : ""}` : `/channels/@me${channelStore.currentDM.value ? `/${channelStore.currentDM.value}` : ""}`,
     );
   },
 };

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelsStore } from "../../stores/channels";
+import { channelStore } from "../../stores/channel";
 import ChannelItem from "./ChannelItem.vue";
 </script>
 
@@ -12,7 +12,7 @@ import ChannelItem from "./ChannelItem.vue";
       class="space-y-1"
     >
       <ChannelItem
-        v-for="ch in channelsStore.channels.values()"
+        v-for="ch in channelStore.channels.values()"
         :id="ch.id"
         :key="ch.id"
         :name="ch.name"

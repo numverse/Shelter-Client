@@ -9,7 +9,7 @@ import TitleHeader from "../components/layout/TitleHeader.vue";
 import CurrentUser from "../components/layout/CurrentUser.vue";
 import UserList from "../components/users/UserList.vue";
 
-import { channelsStore } from "../stores/channels";
+import { channelStore } from "../stores/channel";
 import { usersStore } from "../stores/users";
 import { authStore } from "../stores/auth";
 import { stateStore } from "../stores/state";
@@ -24,10 +24,10 @@ const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 let ws: BaseWebSocket;
 
 onMounted(async () => {
-  await channelsStore.fetch();
+  await channelStore.fetch();
   await usersStore.fetchAll();
   await authStore.fetchCurrentUser();
-  channelsStore.setCurrentChannel(channelsStore.channels.keys().next().value || null);
+  channelStore.setCurrentChannel(channelStore.channels.keys().next().value || null);
 
   if (((authStore.currentUser.value?.flags || 0) & 2) === 0) {
     stateStore.setNotificationHeader({
@@ -57,9 +57,9 @@ onMounted(async () => {
     }
     wsConnectedOnce = true;
     authStore.authed = true;
-    if (channelsStore.currentChannel.value) {
-      channelsStore.fetchChannelMessages({
-        channelId: channelsStore.currentChannel.value.id,
+    if (channelStore.currentChannel.value) {
+      channelStore.fetchChannelMessages({
+        channelId: channelStore.currentChannel.value.id,
         limit: "50",
       });
     }
@@ -87,12 +87,12 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_CREATE", async (message) => {
-    const isCurrentChannel = message.channelId === channelsStore.currentChannel.value?.id;
+    const isCurrentChannel = message.channelId === channelStore.currentChannel.value?.id;
     const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
     const isMine = message.authorId === authStore.currentUser.value?.id;
     if (isMine) return;
 
-    const channel = channelsStore.channels.get(message.channelId);
+    const channel = channelStore.channels.get(message.channelId);
     if (channel) {
       channel.messages.set(message.id, message);
     }
@@ -102,7 +102,7 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_DELETE", (data) => {
-    const channel = channelsStore.channels.get(data.channelId);
+    const channel = channelStore.channels.get(data.channelId);
     if (channel) {
       channel.messages.delete(data.messageId);
     }
@@ -128,7 +128,7 @@ onUnmounted(() => {
         <div class="flex-1 flex flex-col bg-bg2 min-h-0">
           <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
             <div class="text-lg font-semibold">
-              # {{ channelsStore.currentChannel.value?.name ?? '' }}
+              # {{ channelStore.currentChannel.value?.name ?? '' }}
             </div>
           </header>
 

@@ -8,37 +8,37 @@ interface ExtendedChannel extends Channel {
   messages: Map<string, Message>;
 }
 
-const channelsStore = {
+const channelStore = {
   channels: reactive<Map<string, ExtendedChannel>>(new Map()),
   currentChannel: ref<ExtendedChannel | null>(null),
   dms: reactive<Map<string, User>>(new Map()),
   currentDM: ref<User | null>(null),
   getChannel: function (id: string) {
-    return channelsStore.channels.get(id) || null;
+    return channelStore.channels.get(id) || null;
   },
   setCurrentChannel: function (id: string | null) {
-    const channel = id ? channelsStore.channels.get(id) || null : null;
-    channelsStore.currentChannel.value = channel;
+    const channel = id ? channelStore.channels.get(id) || null : null;
+    channelStore.currentChannel.value = channel;
     router.push(`/channels/${id}`);
   },
   getDM: function (id: string) {
-    return channelsStore.dms.get(id) || null;
+    return channelStore.dms.get(id) || null;
   },
   setCurrentDM: function (id: string | null) {
-    const dm = id ? channelsStore.dms.get(id) || null : null;
-    channelsStore.currentDM.value = dm || null;
+    const dm = id ? channelStore.dms.get(id) || null : null;
+    channelStore.currentDM.value = dm || null;
     router.push(`/channels/@me/${id}`);
   },
   fetch: async function () {
-    await channelsStore.fetchChannels();
-    await channelsStore.fetchDMs();
+    await channelStore.fetchChannels();
+    await channelStore.fetchDMs();
   },
   fetchChannels: async function () {
     const allChannels = await getAllChannels();
-    channelsStore.channels.clear();
+    channelStore.channels.clear();
     if (allChannels.ok) {
       for (const ch of allChannels.channels) {
-        channelsStore.channels.set(ch.id, {
+        channelStore.channels.set(ch.id, {
           ...ch,
           messages: new Map(),
         });
@@ -47,12 +47,12 @@ const channelsStore = {
   },
   fetchDMs: async function () {
     // DMs not implemented yet
-    channelsStore.dms.clear();
+    channelStore.dms.clear();
   },
   fetchChannelMessages: async function (data: GetMessagesRequestData) {
     const res = await getMessages(data);
     if (res.ok) {
-      const channel = channelsStore.channels.get(data.channelId);
+      const channel = channelStore.channels.get(data.channelId);
       if (channel) {
         for (const msg of res.messages) {
           channel.messages.set(msg.id, msg);
@@ -64,7 +64,7 @@ const channelsStore = {
     // DMs not implemented yet
   },
   deleteChannelMessage: function (channelId: string, messageId: string) {
-    const channel = channelsStore.channels.get(channelId);
+    const channel = channelStore.channels.get(channelId);
     if (channel) {
       channel.messages.delete(messageId);
     }
@@ -74,4 +74,4 @@ const channelsStore = {
   },
 };
 
-export { channelsStore };
+export { channelStore };

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { Message } from "../../utils/api/types";
-import { channelsStore } from "../../stores/channels";
+import { channelStore } from "../../stores/channel";
 import { authStore } from "../../stores/auth";
 import { deleteMessage as apiDeleteMessage } from "../../utils/api/messages/deleteMessage";
 import { usersStore } from "../../stores/users";
@@ -29,7 +29,7 @@ const deleteMessage = async () => {
       messageId: props.message.id,
     });
     if (res.ok) {
-      channelsStore.deleteChannelMessage(props.channelId, props.message.id);
+      channelStore.deleteChannelMessage(props.channelId, props.message.id);
     }
   }
 };

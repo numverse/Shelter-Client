@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, nextTick, onUnmounted } from "vue";
-import { channelsStore } from "../../stores/channels";
+import { channelStore } from "../../stores/channel";
 import MessageItem from "./MessageItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
@@ -8,8 +8,8 @@ const loading = ref(true);
 const scrollContainer = ref<HTMLElement | null>(null);
 
 const messagesList = computed(() => {
-  if (!channelsStore.currentChannel.value?.id) return [];
-  const ch = channelsStore.channels.get(channelsStore.currentChannel.value.id);
+  if (!channelStore.currentChannel.value?.id) return [];
+  const ch = channelStore.channels.get(channelStore.currentChannel.value.id);
   if (!ch) return [];
 
   return Array.from(ch.messages.values());
@@ -36,7 +36,7 @@ defineExpose({
 
 const loadMessages = async (channelId: string) => {
   loading.value = true;
-  await channelsStore.fetchChannelMessages({
+  await channelStore.fetchChannelMessages({
     channelId,
     limit: "50",
   });
@@ -49,12 +49,12 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 };
 
-watch(() => channelsStore.currentChannel.value?.id, (id) => {
+watch(() => channelStore.currentChannel.value?.id, (id) => {
   if (id) loadMessages(id);
 });
 
 onMounted(async () => {
-  if (channelsStore.currentChannel.value?.id) await loadMessages(channelsStore.currentChannel.value.id);
+  if (channelStore.currentChannel.value?.id) await loadMessages(channelStore.currentChannel.value.id);
   scrollToBottom();
   window.addEventListener("keydown", handleKeyDown);
 });
@@ -85,7 +85,7 @@ onUnmounted(() => {
         >
           <MessageItem
             :message="m"
-            :channel-id="channelsStore.currentChannel.value?.id!"
+            :channel-id="channelStore.currentChannel.value?.id!"
             :show-author="i === 0 || messagesList[i-1].authorId !== m.authorId"
           />
         </li>

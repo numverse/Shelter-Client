@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelsStore } from "../../stores/channels";
+import { channelStore } from "../../stores/channel";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 
@@ -11,11 +11,11 @@ const props = defineProps<{
 }>();
 
 const isSelected = computed(() =>
-  channelsStore.currentChannel.value?.id === props.id,
+  channelStore.currentChannel.value?.id === props.id,
 );
 
 const selectChannel = () => {
-  channelsStore.setCurrentChannel(props.id);
+  channelStore.setCurrentChannel(props.id);
   router.push(`/channels/${props.id}`);
 };
 </script>

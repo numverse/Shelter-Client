@@ -67,7 +67,7 @@ const deleteMessage = async () => {
 
         <p
           :class="message.status === 'SENDING' ? 'opacity-50' : message.status === 'FAILED' ? 'text-red' : 'text-text1 opacity-100'"
-          class="whitespace-pre-wrap wrap-break-word"
+          class="whitespace-break-spaces wrap-break-word leading-6 pb-0.5"
         >
           {{ message.content }}
         </p>

@@ -11,6 +11,9 @@
   *:focus {
     @apply outline-none shadow-none;
   }
+  *, ::before, ::after {
+    @apply font-normal;
+  }
 }
 @theme {
   --color-bg1: #121214;

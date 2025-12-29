@@ -56,7 +56,7 @@ const deleteMessage = async () => {
           <span class="font-semibold text-text1">
             {{ messageAuthor?.username || "Unknown User" }}
           </span>
-          <span class="text-xs text-text2">
+          <span class="text-xs mt-0.5 text-text2">
             {{ i18nFormatTime(message.createdAt) }}
           </span>
         </div>
@@ -67,6 +67,12 @@ const deleteMessage = async () => {
         >
           {{ message.content }}
         </p>
+        <span
+          v-if="!props.showAuthor"
+          class="text-xs mt-1 opacity-0 absolute -ml-16 group-hover:opacity-100 text-text2"
+        >
+          {{ i18nFormatTime(message.createdAt) }}
+        </span>
 
         <div
           v-if="message.reactions?.length"

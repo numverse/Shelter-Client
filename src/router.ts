@@ -46,7 +46,7 @@ const router = createRouter({
   routes: routes,
 });
 
-authStore.authed = await authStore.checkAuthed();
+authStore.authed.value = await authStore.checkAuthed();
 
 router.beforeEach(async (to) => {
   if (to.matched.length === 0) return;

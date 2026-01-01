@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted } from "vue";
+import { onMounted, ref, onUnmounted, computed } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -10,8 +10,9 @@ import CurrentUser from "../components/layout/CurrentUser.vue";
 import UserList from "../components/users/UserList.vue";
 
 import { channelStore } from "../stores/channel";
-import { usersStore } from "../stores/users";
+import { userStore } from "../stores/users";
 import { authStore } from "../stores/auth";
+import { messageStore } from "../stores/message";
 import { stateStore } from "../stores/state";
 
 import { i18n } from "../utils/i18n/i18n";
@@ -23,13 +24,17 @@ const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 
 let ws: BaseWebSocket;
 
-onMounted(async () => {
-  await channelStore.fetch();
-  await usersStore.fetchAll();
-  await authStore.fetchCurrentUser();
-  channelStore.setCurrentChannel(channelStore.channels.keys().next().value || null);
+const currentChannel = computed(() => {
+  return channelStore.channelDataMap.get(channelStore.currentChannelID.value || "");
+});
 
-  if (((authStore.currentUser.value?.flags || 0) & 2) === 0) {
+onMounted(async () => {
+  await channelStore.fetchAll();
+  await userStore.fetchAll();
+  await userStore.fetchCurrentUser();
+  channelStore.currentChannelID.value = channelStore.channelList.value[0] || null;
+
+  if (((userStore.currentUser.value?.flags || 0) & 2) === 0) {
     stateStore.setNotificationHeader({
       text: i18n("notifications", "verify_email"),
       type: "info",
@@ -56,10 +61,10 @@ onMounted(async () => {
       }, 3000);
     }
     wsConnectedOnce = true;
-    authStore.authed = true;
-    if (channelStore.currentChannel.value) {
-      channelStore.fetchChannelMessages({
-        channelId: channelStore.currentChannel.value.id,
+    authStore.authed.value = true;
+    if (channelStore.currentChannelID.value) {
+      messageStore.fetchChannelMessages({
+        channelId: channelStore.currentChannelID.value,
         limit: "50",
       });
     }
@@ -79,7 +84,7 @@ onMounted(async () => {
     }
     console.error("WebSocket closed:", evt.reason);
 
-    if (authStore.authed) {
+    if (authStore.authed.value) {
       setTimeout(() => {
         ws.reconnect();
       }, 2000);
@@ -87,14 +92,15 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_CREATE", async (message) => {
-    const isCurrentChannel = message.channelId === channelStore.currentChannel.value?.id;
+    const isCurrentChannel = message.channelId === channelStore.currentChannelID.value;
     const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
-    const isMine = message.authorId === authStore.currentUser.value?.id;
+    const isMine = message.authorId === userStore.currentUser.value?.id;
     if (isMine) return;
 
-    const channel = channelStore.channels.get(message.channelId);
+    const channel = channelStore.channelDataMap.get(message.channelId);
     if (channel) {
-      channel.messages.set(message.id, message);
+      messageStore.messageDataMap.set(message.id, message);
+      messageStore.messageListByChannel.get(message.channelId)?.push(message.id);
     }
     if (isCurrentChannel && shouldStick) {
       messageListRef.value?.scrollToBottom();
@@ -102,9 +108,9 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_DELETE", (data) => {
-    const channel = channelStore.channels.get(data.channelId);
+    const channel = channelStore.channelDataMap.get(data.channelId);
     if (channel) {
-      channel.messages.delete(data.messageId);
+      messageStore.deleteMessage(data.messageId);
     }
   });
 });
@@ -128,7 +134,7 @@ onUnmounted(() => {
         <div class="flex-1 flex flex-col bg-bg2 min-h-0">
           <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
             <div class="text-lg font-semibold">
-              # {{ channelStore.currentChannel.value?.name ?? '' }}
+              # {{ currentChannel?.name ?? '' }}
             </div>
           </header>
 

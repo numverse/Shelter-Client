@@ -2,7 +2,9 @@
 import { ref, onMounted, nextTick } from "vue";
 import UserItem from "./UserItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
-import { usersStore } from "../../stores/users";
+
+import { userStore } from "../../stores/users";
+
 import type { User } from "../../utils/api/types";
 
 const loading = ref(true);
@@ -10,16 +12,18 @@ const users = ref<Array<User>>([]);
 const offlineUsers = ref<Array<User>>([]);
 
 onMounted(async () => {
-  if (usersStore.users.size === 0) {
+  if (userStore.userList.value.length === 0) {
     loading.value = true;
-    await usersStore.fetchAll();
+    await userStore.fetchAll();
     loading.value = false;
   } else {
     loading.value = false;
   }
   await nextTick();
 
-  for (const user of usersStore.users.values()) {
+  for (const id of userStore.userList.value) {
+    const user = userStore.userDataMap.get(id);
+    if (!user) continue;
     if (user.presence && user.presence.status !== "offline") {
       users.value.push(user);
     } else {

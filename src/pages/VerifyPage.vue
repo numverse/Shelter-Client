@@ -35,7 +35,7 @@ async function onSubmit() {
     });
     if (res.ok) {
       isVerified.value = true;
-      authStore.authed = true;
+      authStore.authed.value = true;
     }
   } catch (_) {
     errorMessage.value = "";

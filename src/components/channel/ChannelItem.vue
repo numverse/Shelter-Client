@@ -7,15 +7,19 @@ const router = useRouter();
 
 const props = defineProps<{
   id: string;
-  name: string;
 }>();
 
 const isSelected = computed(() =>
-  channelStore.currentChannel.value?.id === props.id,
+  channelStore.currentChannelID.value === props.id,
 );
 
+const channelName = computed(() => {
+  const channel = channelStore.channelDataMap.get(props.id);
+  return channel ? channel.name : "Unknown";
+});
+
 const selectChannel = () => {
-  channelStore.setCurrentChannel(props.id);
+  channelStore.currentChannelID.value = props.id;
   router.push(`/channels/${props.id}`);
 };
 </script>
@@ -26,6 +30,6 @@ const selectChannel = () => {
     :class="isSelected ? 'bg-bg3' : 'hover:bg-bg3/60'"
     @click="selectChannel"
   >
-    # {{ name }}
+    # {{ channelName }}
   </div>
 </template>

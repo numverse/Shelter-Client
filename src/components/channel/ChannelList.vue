@@ -12,10 +12,9 @@ import ChannelItem from "./ChannelItem.vue";
       class="space-y-1"
     >
       <ChannelItem
-        v-for="ch in channelStore.channels.values()"
-        :id="ch.id"
-        :key="ch.id"
-        :name="ch.name"
+        v-for="id in channelStore.channelList.value"
+        :id="id"
+        :key="id"
       />
     </ul>
   </aside>

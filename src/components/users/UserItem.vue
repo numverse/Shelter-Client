@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { authStore } from "../../stores/auth";
+import { userStore } from "../../stores/users";
 
 defineProps<{
   userId: string;
@@ -20,7 +20,7 @@ defineProps<{
         class="w-10 h-10 bg-cover bg-center rounded-full"
       >
       <span
-        v-if="presence?.status && presence?.status !== 'offline' || userId === authStore.currentUser.value?.id"
+        v-if="presence?.status && presence?.status !== 'offline' || userId === userStore.currentUser.value?.id"
         :class="[
           'absolute top-6 left-6 right-0 w-4.5 h-4.5 rounded-full border-3 border-bg2',
           {

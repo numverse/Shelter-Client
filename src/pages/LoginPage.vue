@@ -47,7 +47,7 @@ async function onSubmit() {
     });
     isLoading.value = false;
     if (response?.ok) {
-      authStore.authed = true;
+      authStore.authed.value = true;
       router.push("/channels");
     } else {
       errorMessage.value = i18n("errors", response.code);

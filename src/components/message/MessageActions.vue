@@ -2,10 +2,25 @@
 import { TrashIcon } from "lucide-vue-next";
 import MessageActionsItem from "./MessageActionsItem.vue";
 
-defineProps<{
+import { deleteMessage as apiDeleteMessage } from "../../utils/api/messages/deleteMessage";
+
+import { messageStore } from "../../stores/message";
+
+const props = defineProps<{
+  id: string;
   isOwner: boolean;
-  deleteMessage: () => void;
 }>();
+
+const deleteMessage = async () => {
+  if (confirm("Delete this message?")) {
+    const res = await apiDeleteMessage({
+      messageId: props.id,
+    });
+    if (res.ok) {
+      messageStore.deleteMessage(props.id);
+    }
+  }
+};
 </script>
 
 <template>

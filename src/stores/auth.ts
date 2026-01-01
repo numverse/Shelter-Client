@@ -1,38 +1,29 @@
-import { getCurrentUser } from "../utils/api/currentUser/getCurrentUser";
 import { refreshTokens } from "../utils/api/auth/refreshTokens";
-import { CurrentUser } from "../utils/api/types";
 import { ref } from "vue";
 
 const authStore = {
-  authed: false,
+  authed: ref<boolean>(false),
   refreshTimestamp: 0,
-  currentUser: ref<CurrentUser | null>(null),
   checkAuthed: async function (): Promise<boolean> {
     const res = await refreshTokens();
     if (!res.ok) {
       if (res.statusCode === 401) {
-        this.authed = false;
+        this.authed.value = false;
       }
     } else {
-      this.authed = true;
+      this.authed.value = true;
     }
-    return this.authed;
+    return this.authed.value;
   },
   refreshTokens: async function (): Promise<boolean> {
     const res = await refreshTokens();
     if (res.ok) {
-      this.authed = true;
+      this.authed.value = true;
       this.refreshTimestamp = Date.now();
     } else {
-      this.authed = false;
+      this.authed.value = false;
     }
-    return this.authed;
-  },
-  fetchCurrentUser: async function () {
-    const currentUser = await getCurrentUser();
-    if (currentUser.ok) {
-      this.currentUser.value = currentUser;
-    }
+    return this.authed.value;
   },
 };
 

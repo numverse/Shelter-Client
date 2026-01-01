@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { SettingsIcon } from "lucide-vue-next";
 import { i18n } from "../../utils/i18n/i18n";
-import { authStore } from "../../stores/auth";
+import { userStore } from "../../stores/users";
 </script>
 
 <template>
@@ -9,7 +9,7 @@ import { authStore } from "../../stores/auth";
     <div class="flex items-center justify-between">
       <div class="relative">
         <img
-          :src="authStore.currentUser.value?.avatarId ? `/cdn/avatars/${authStore.currentUser.value?.id}/${authStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(authStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
+          :src="userStore.currentUser.value?.avatarId ? `/cdn/avatars/${userStore.currentUser.value?.id}/${userStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(userStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
           class="w-10 h-10 bg-cover bg-center rounded-full"
         >
         <span
@@ -20,14 +20,14 @@ import { authStore } from "../../stores/auth";
               'idle': 'bg-yellow',
               'offline': 'bg-gray',
               'dnd': 'bg-red',
-            }[authStore.currentUser.value?.presence?.status ?? 'online']
+            }[userStore.currentUser.value?.presence?.status ?? 'online']
           ]"
           aria-hidden="true"
         />
       </div>
       <div class="flex-1 flex flex-col ml-1">
         <p class="font-medium text-text1">
-          {{ authStore.currentUser.value?.username || i18n("ui", "username") }}
+          {{ userStore.currentUser.value?.username || i18n("ui", "username") }}
         </p>
         <p class="text-sm text-text2">
           Online

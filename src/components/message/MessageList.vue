@@ -1,18 +1,20 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, nextTick, onUnmounted } from "vue";
-import { channelStore } from "../../stores/channel";
 import MessageItem from "./MessageItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
+
+import { channelStore } from "../../stores/channel";
+import { messageStore } from "../../stores/message";
 
 const loading = ref(true);
 const scrollContainer = ref<HTMLElement | null>(null);
 
 const messagesList = computed(() => {
-  if (!channelStore.currentChannel.value?.id) return [];
-  const ch = channelStore.channels.get(channelStore.currentChannel.value.id);
-  if (!ch) return [];
-
-  return Array.from(ch.messages.values());
+  if (!channelStore.currentChannelID.value) return [];
+  if (!channelStore.channelDataMap.get(channelStore.currentChannelID.value || "")) {
+    return [];
+  }
+  return messageStore.messageListByChannel.get(channelStore.currentChannelID.value) || [];
 });
 
 const scrollToBottom = async () => {
@@ -36,7 +38,7 @@ defineExpose({
 
 const loadMessages = async (channelId: string) => {
   loading.value = true;
-  await channelStore.fetchChannelMessages({
+  await messageStore.fetchChannelMessages({
     channelId,
     limit: "50",
   });
@@ -49,12 +51,12 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 };
 
-watch(() => channelStore.currentChannel.value?.id, (id) => {
+watch(() => channelStore.currentChannelID.value, (id) => {
   if (id) loadMessages(id);
 });
 
 onMounted(async () => {
-  if (channelStore.currentChannel.value?.id) await loadMessages(channelStore.currentChannel.value.id);
+  if (channelStore.currentChannelID.value) await loadMessages(channelStore.currentChannelID.value);
   scrollToBottom();
   window.addEventListener("keydown", handleKeyDown);
 });
@@ -79,16 +81,11 @@ onUnmounted(() => {
       <ul
         v-if="messagesList.length"
       >
-        <li
-          v-for="(m, i) in messagesList"
-          :key="m.id"
-        >
-          <MessageItem
-            :message="m"
-            :channel-id="channelStore.currentChannel.value?.id!"
-            :show-author="i === 0 || messagesList[i-1].authorId !== m.authorId"
-          />
-        </li>
+        <MessageItem
+          v-for="id in messagesList"
+          :id="id"
+          :key="id"
+        />
       </ul>
       <div
         v-else

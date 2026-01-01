@@ -1,21 +1,27 @@
 import { getAllUsers } from "../utils/api/users/getAllUsers";
-import { reactive } from "vue";
-import { User } from "../utils/api/types";
+import { ref } from "vue";
+import { CurrentUser, User } from "../utils/api/types";
+import { getCurrentUser } from "../utils/api/currentUser/getCurrentUser";
 
-const usersStore = {
-  users: reactive<Map<string, User>>(new Map()),
-  getUser: function (id: string) {
-    return usersStore.users.get(id) ?? null;
-  },
+const userStore = {
+  userDataMap: new Map<string, User>(),
+  userList: ref<Array<string>>([]),
+  currentUser: ref<CurrentUser | null>(null),
   fetchAll: async function () {
     const allUsers = await getAllUsers();
     if (allUsers.ok) {
-      usersStore.users.clear();
+      userStore.userDataMap.clear();
       for (const user of allUsers.users) {
-        usersStore.users.set(user.id, user);
+        userStore.userDataMap.set(user.id, user);
       }
+    }
+  },
+  fetchCurrentUser: async function () {
+    const currentUser = await getCurrentUser();
+    if (currentUser.ok) {
+      this.currentUser.value = currentUser;
     }
   },
 };
 
-export { usersStore };
+export { userStore };

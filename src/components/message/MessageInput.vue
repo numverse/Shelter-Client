@@ -3,7 +3,8 @@ import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
 
 import { channelStore } from "../../stores/channel";
-import { authStore } from "../../stores/auth";
+import { userStore } from "../../stores/users";
+import { messageStore } from "../../stores/message";
 
 const props = defineProps<{
   scrollToBottom?: () => void;
@@ -13,12 +14,12 @@ const text = ref("");
 const editor = ref<HTMLDivElement | null>(null);
 
 const placeholder = computed(() => {
-  return channelStore.currentChannel.value
-    ? `Message #${channelStore.currentChannel.value.name}`
-    : "";
+  return "Type a message!";
 });
 
-const currentChannel = computed(() => channelStore.currentChannel.value);
+const currentChannel = computed(() => {
+  return channelStore.channelDataMap.get(channelStore.currentChannelID?.value ?? "") || null;
+});
 
 function onInput(e: Event) {
   text.value = (e.target as HTMLDivElement).innerText;
@@ -26,18 +27,20 @@ function onInput(e: Event) {
 
 async function send() {
   if (!currentChannel.value?.id || !text.value.trim()) return;
+  const currentChannelMessageList = messageStore.messageListByChannel.get(currentChannel.value.id);
   const messageContent = text.value.trim();
   const tempId = `temp-${Date.now()}`;
   text.value = "";
   if (editor.value) editor.value.innerText = "";
-  channelStore.currentChannel.value?.messages.set(tempId, {
+  messageStore.messageDataMap.set(tempId, {
     id: tempId,
     channelId: currentChannel.value.id,
-    authorId: authStore.currentUser.value?.id || "0",
+    authorId: userStore.currentUser.value?.id || "0",
     content: messageContent,
     createdAt: new Date().toISOString(),
     status: "SENDING",
   });
+  currentChannelMessageList?.push(tempId);
   if (props.scrollToBottom) {
     props.scrollToBottom();
   }
@@ -46,11 +49,16 @@ async function send() {
     content: messageContent,
   });
   if (res.ok) {
-    currentChannel.value?.messages.delete(tempId);
-    currentChannel.value?.messages.set(res.id, res);
+    const list = messageStore.messageListByChannel.get(currentChannel.value.id);
+    const index = list?.indexOf(tempId);
+    if (index !== undefined && index !== -1 && list) {
+      list[index] = res.id;
+    }
+    messageStore.messageDataMap.delete(tempId);
+    messageStore.messageDataMap.set(res.id, res);
   } else {
-    currentChannel.value?.messages.set(tempId, {
-      ...currentChannel.value.messages.get(tempId)!,
+    messageStore.messageDataMap.set(tempId, {
+      ...messageStore.messageDataMap.get(tempId)!,
       status: "FAILED",
     });
   }

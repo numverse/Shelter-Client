@@ -59,7 +59,7 @@ async function onSubmit() {
   } finally {
     isLoading.value = false;
     if (currentRequest?.ok) {
-      authStore.authed = true;
+      authStore.authed.value = true;
       router.push("/channels");
     } else {
       errorMessage.value = i18n("errors", (currentRequest?.code ?? "unknown"));

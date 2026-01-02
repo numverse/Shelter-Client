@@ -20,6 +20,9 @@ import { resend } from "../utils/api/auth/resend";
 import { refreshTokens } from "../utils/api/auth/refreshTokens";
 import { BaseWebSocket } from "../utils/ws/base";
 
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 
 let ws: BaseWebSocket;
@@ -80,7 +83,7 @@ onMounted(async () => {
       type: "error",
     });
     if (evt.reason === "AUTHENTICATION_REQUIRED") {
-      await refreshTokens();
+      await authStore.refreshTokens();
     }
     console.error("WebSocket closed:", evt.reason);
 
@@ -88,6 +91,8 @@ onMounted(async () => {
       setTimeout(() => {
         ws.reconnect();
       }, 2000);
+    } else {
+      return router.replace("/login");
     }
   });
 

@@ -7,7 +7,9 @@ const authStore = {
   checkAuthed: async function (): Promise<boolean> {
     const res = await refreshTokens();
     if (!res.ok) {
-      if (res.statusCode === 401) {
+      if (res.statusCode === 401
+        || res.statusCode === 400
+      ) {
         this.authed.value = false;
       }
     } else {

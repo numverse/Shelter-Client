@@ -40,6 +40,7 @@ interface EmojiPack {
 interface Channel {
   id: string;
   name: string;
+  position: number;
   description?: string;
   createdAt: string;
   updatedAt?: string;

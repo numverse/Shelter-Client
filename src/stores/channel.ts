@@ -18,6 +18,7 @@ const channelStore = {
     channelStore.channelDataMap.clear();
     channelStore.channelList.value = [];
     if (allChannels.ok) {
+      allChannels.channels.sort((a, b) => a.position - b.position);
       for (const ch of allChannels.channels) {
         channelStore.channelDataMap.set(ch.id, ch);
         channelStore.channelList.value.push(ch.id);

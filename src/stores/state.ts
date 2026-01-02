@@ -31,7 +31,7 @@ const stateStore = {
   toggleChatMode: function () {
     stateStore.chatMode.value = stateStore.chatMode.value === "chat" ? "dm" : "chat";
     router.push(
-      stateStore.chatMode.value === "chat" ? `/channels${channelStore.currentChannel.value ? `/${channelStore.currentChannel.value?.id}` : ""}` : `/channels/@me${channelStore.currentDM.value ? `/${channelStore.currentDM.value}` : ""}`,
+      stateStore.chatMode.value === "chat" ? `/channels/${channelStore.currentChannelID.value}` : `/channels/@me/${channelStore.currentDMID.value}`,
     );
   },
 };

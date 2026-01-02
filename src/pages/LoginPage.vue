@@ -21,7 +21,7 @@ const isLoading = ref(false);
 const showInfoModal = ref(false);
 
 onMounted(async () => {
-  if (authStore.authed) {
+  if (authStore.authed.value) {
     return router.replace("/channels");
   }
 });

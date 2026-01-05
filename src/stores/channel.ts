@@ -21,6 +21,7 @@ const channelStore = {
       const channels: Channel[] = [];
       const childChannels: Record<string, Channel[]> = {};
       for (const ch of allChannels.channels) {
+        channelStore.channelDataMap.set(ch.id, ch);
         if (ch.parentId
           && allChannels.channels.find((c) =>
             c.id === ch.parentId
@@ -46,17 +47,18 @@ const channelStore = {
         return a.position - b.position;
       });
 
-      for (const catId in childChannels) {
-        const categoryChannelIndex = channels.findIndex((c) => c.id === catId);
-        if (categoryChannelIndex !== -1) {
-          const children = childChannels[catId];
-          children.sort((a, b) => a.position - b.position);
-          channels.splice(categoryChannelIndex + 1, 0, ...children);
-        }
-      }
-
       for (const ch of channels) {
-        channelStore.channelDataMap.set(ch.id, ch);
+        if (ch.type === ChannelType.GuildCategory) {
+          channelStore.channelList.value.push(ch.id);
+          if (childChannels[ch.id]) {
+            childChannels[ch.id].sort((a, b) => a.position - b.position);
+            for (const childCh of childChannels[ch.id]) {
+              channelStore.channelList.value.push(childCh.id);
+            }
+          }
+          continue;
+        }
+
         channelStore.channelList.value.push(ch.id);
       }
     }

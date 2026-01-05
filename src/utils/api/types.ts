@@ -48,6 +48,7 @@ enum ChannelType {
 interface Channel {
   id: string;
   type: ChannelType;
+  parentId?: string;
   name: string;
   position: number;
   description?: string;

@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { channelStore } from "../../stores/channel";
-import ChannelItem from "./ChannelItem.vue";
+import TextChannel from "./TextChannel.vue";
+import VoiceChannel from "./VoiceChannel.vue";
+import CategoryChannel from "./CategoryChannel.vue";
 </script>
 
 <template>
@@ -11,11 +13,24 @@ import ChannelItem from "./ChannelItem.vue";
     <ul
       class="space-y-1"
     >
-      <ChannelItem
+      <li
         v-for="id in channelStore.channelList.value"
         :id="id"
         :key="id"
-      />
+      >
+        <CategoryChannel
+          v-if="channelStore.channelDataMap.get(id)?.type === 4"
+          :id="id"
+        />
+        <TextChannel
+          v-else-if="channelStore.channelDataMap.get(id)?.type === 0"
+          :id="id"
+        />
+        <VoiceChannel
+          v-else-if="channelStore.channelDataMap.get(id)?.type === 2"
+          :id="id"
+        />
+      </li>
     </ul>
   </aside>
 </template>

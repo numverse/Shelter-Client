@@ -37,8 +37,17 @@ interface EmojiPack {
   ];
 }
 
+enum ChannelType {
+  GuildText = 0,
+  DM = 1,
+  GuildVoice = 2,
+  GroupDM = 3,
+  GuildCategory = 4,
+}
+
 interface Channel {
   id: string;
+  type: ChannelType;
   name: string;
   position: number;
   description?: string;
@@ -64,4 +73,4 @@ interface CurrentUser extends User {
   updatedAt: string;
 }
 
-export { Attachment, Message, EmojiPack, Channel, User, CurrentUser };
+export { Attachment, Message, EmojiPack, Channel, ChannelType, User, CurrentUser };

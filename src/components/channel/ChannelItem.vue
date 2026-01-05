@@ -15,14 +15,7 @@ const isSelected = computed(() =>
   channelStore.currentChannelID.value === props.id,
 );
 
-const channelName = computed(() => {
-  const channel = channelStore.channelDataMap.get(props.id);
-  return channel ? channel.name : "Unknown";
-});
-const channelType = computed(() => {
-  const channel = channelStore.channelDataMap.get(props.id);
-  return channel ? channel.type : ChannelType.GuildText;
-});
+const channel = computed(() => channelStore.channelDataMap.get(props.id));
 
 const selectChannel = () => {
   channelStore.currentChannelID.value = props.id;
@@ -32,29 +25,29 @@ const selectChannel = () => {
 
 <template>
   <div
-    v-if="channelType !== ChannelType.GuildCategory"
+    v-if="channel?.type !== ChannelType.GuildCategory"
     class="cursor-pointer px-2 py-1 rounded flex"
     :class="isSelected ? 'bg-bg3' : 'hover:bg-bg3/60'"
     @click="selectChannel"
   >
     <div class="flex items-center mr-1">
       <Hash
-        v-if="channelType === ChannelType.GuildText"
+        v-if="channel?.type === ChannelType.GuildText"
         class="w-5 h-5"
       />
       <Volume2
-        v-if="channelType === ChannelType.GuildVoice"
+        v-if="channel?.type === ChannelType.GuildVoice"
         class="w-5 h-5"
       />
     </div>
     <div class="flex items-center">
-      {{ channelName }}
+      {{ channel?.name }}
     </div>
   </div>
   <div
-    v-if="channelType === ChannelType.GuildCategory"
+    v-if="channel?.type === ChannelType.GuildCategory"
     class="pt-2"
   >
-    {{ channelName }}
+    {{ channel?.name }}
   </div>
 </template>

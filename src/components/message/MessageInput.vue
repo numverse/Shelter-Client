@@ -44,8 +44,7 @@ async function send() {
   if (props.scrollToBottom) {
     props.scrollToBottom();
   }
-  const res = await createMessage({
-    channelId: currentChannel.value.id,
+  const res = await createMessage(currentChannel.value.id, {
     content: messageContent,
   });
   if (res.ok) {

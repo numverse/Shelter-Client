@@ -8,12 +8,14 @@ import { messageStore } from "../../stores/message";
 
 const props = defineProps<{
   id: string;
+  channelId: string;
   isOwner: boolean;
 }>();
 
 const deleteMessage = async () => {
   if (confirm("Delete this message?")) {
     const res = await apiDeleteMessage({
+      channelId: props.channelId,
       messageId: props.id,
     });
     if (res.ok) {

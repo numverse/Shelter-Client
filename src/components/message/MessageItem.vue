@@ -98,6 +98,7 @@ const showAuthor = computed(() => {
       <MessageActions
         :id="props.id"
         :key="props.id"
+        :channel-id="messageData?.channelId!"
         :is-owner="isAuthor"
       />
     </div>

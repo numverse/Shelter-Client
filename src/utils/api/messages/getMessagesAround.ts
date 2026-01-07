@@ -2,6 +2,7 @@ import { request } from "../base";
 import { Message } from "../types";
 
 interface GetMessagesAroundRequestData {
+  channelId: string;
   messageId: string;
   beforeCount: string;
   afterCount: string;
@@ -26,7 +27,7 @@ function getMessagesAround(data: GetMessagesAroundRequestData) {
 
   return request<GetMessagesAroundResponse>({
     method: "GET",
-    url: `/api/messages/around/${data.messageId}?${params.toString()}`,
+    url: `/api/channels/${data.channelId}/messages/around/${data.messageId}?${params.toString()}`,
   });
 }
 

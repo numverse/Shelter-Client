@@ -19,7 +19,7 @@ function getMessages(data: GetMessagesRequestData) {
 
   return request<GetMessagesResponse>({
     method: "GET",
-    url: `/api/messages/${data.channelId}?${params.toString()}`,
+    url: `/api/channels/${data.channelId}/messages?${params.toString()}`,
   });
 }
 

@@ -1,6 +1,7 @@
 import { request } from "../base";
 
 interface AddReactionToMessageRequestData {
+  channelId: string;
   messageId: string;
   emojiId: string;
 }
@@ -12,7 +13,7 @@ interface AddReactionToMessageResponse {
 function addReactionToMessage(data: AddReactionToMessageRequestData) {
   return request<AddReactionToMessageResponse>({
     method: "PUT",
-    url: `/api/messages/${data.messageId}/reactions/${data.emojiId}`,
+    url: `/api/channels/${data.channelId}/messages/${data.messageId}/reactions/${data.emojiId}`,
   });
 }
 

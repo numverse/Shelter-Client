@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { onMounted, ref, onUnmounted, computed } from "vue";
+import { onMounted, ref, onUnmounted } from "vue";
 import ChannelList from "../components/channel/ChannelList.vue";
 import MessageList from "../components/message/MessageList.vue";
 import MessageInput from "../components/message/MessageInput.vue";
@@ -30,7 +30,14 @@ onMounted(async () => {
   await channelStore.fetchAll();
   await userStore.fetchAll();
   await userStore.fetchCurrentUser();
-  channelStore.currentChannelID.value = channelStore.channelList.value[0] || null;
+
+  const channelId = router.currentRoute.value.params.channelId as string | undefined;
+  if (channelId && channelStore.channelList.value.includes(channelId)) {
+    channelStore.currentChannelID.value = channelId;
+  } else {
+    channelStore.currentChannelID.value = channelStore.channelList.value[0] || null;
+    router.replace(`/channels/${channelStore.currentChannelID.value}`);
+  }
 
   if (((userStore.currentUser.value?.flags || 0) & 2) === 0) {
     stateStore.setNotificationHeader({

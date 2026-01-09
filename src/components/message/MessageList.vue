@@ -10,6 +10,25 @@ import { messageStore } from "../../stores/message";
 
 const loading = ref(true);
 const scrollContainer = ref<HTMLElement | null>(null);
+const scrollPositionMap = new Map<string, number>();
+
+const saveScrollPosition = (channelId: string) => {
+  if (scrollContainer.value) {
+    scrollPositionMap.set(channelId, scrollContainer.value.scrollTop);
+  }
+};
+
+const restoreScrollPosition = async (channelId: string) => {
+  await nextTick();
+  if (scrollContainer.value) {
+    const savedPosition = scrollPositionMap.get(channelId);
+    if (savedPosition !== undefined) {
+      scrollContainer.value.scrollTop = savedPosition;
+    } else {
+      scrollToBottom();
+    }
+  }
+};
 
 const messagesList = computed(() => {
   if (!channelStore.currentChannelID.value) return [];
@@ -57,13 +76,15 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 };
 
-watch(() => channelStore.currentChannelID.value, (id) => {
-  if (id) loadMessages(id);
+watch(() => channelStore.currentChannelID.value, async (newId, oldId) => {
+  if (oldId) saveScrollPosition(oldId);
+  if (newId) {
+    await loadMessages(newId);
+    restoreScrollPosition(newId);
+  }
 });
 
 onMounted(async () => {
-  if (channelStore.currentChannelID.value) await loadMessages(channelStore.currentChannelID.value);
-  scrollToBottom();
   window.addEventListener("keydown", handleKeyDown);
 });
 

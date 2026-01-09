@@ -109,27 +109,36 @@ onUnmounted(() => {
     ref="scrollContainer"
     class="flex-1 overflow-auto h-full pb-4 bg-bg2"
   >
-    <div
-      v-if="loading"
-      class="flex flex-col items-center h-full"
-    >
-      <LoadingCircle class="w-12 h-12 text-accent" />
-    </div>
-    <div v-else>
-      <ul
-        v-if="messagesList.length"
-      >
-        <MessageItem
-          v-for="id in messagesList"
-          :id="id"
-          :key="id"
-        />
-      </ul>
+    <div class="flex flex-col min-h-full">
+      <div class="flex-grow" />
+      <div class="flex flex-col gap-4 items-center justify-center mt-20 text-center text-text2 px-4">
+        <div class="flex items-center justify-center bg-bg3 rounded-full h-16 w-16">
+          <Hash
+            class="w-10 h-10"
+            color="white"
+          />
+        </div>
+        <h1 class="text-2xl font-semibold">
+          Welcome to #{{ currentChannel?.name ?? '' }}!
+        </h1>
+        <h2 class="text-text2">
+          This is the beginning of the #{{ currentChannel?.name ?? '' }} channel.
+        </h2>
+      </div>
       <div
-        v-else
-        class="px-3 text-sm text-text-secondary"
+        v-if="loading"
+        class="flex flex-col items-center h-full"
       >
-        No messages yet.
+        <LoadingCircle class="w-12 h-12 text-accent" />
+      </div>
+      <div v-else>
+        <ul>
+          <MessageItem
+            v-for="id in messagesList"
+            :id="id"
+            :key="id"
+          />
+        </ul>
       </div>
     </div>
   </div>

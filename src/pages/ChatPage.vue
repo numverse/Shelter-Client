@@ -131,7 +131,7 @@ onUnmounted(() => {
       <div class="ml-18 flex-1 flex min-h-0">
         <ChannelList />
         <CurrentUser />
-        <div class="flex-1 flex flex-col bg-bg2 min-h-0">
+        <div class="flex-1 flex flex-col bg-bg2 min-h-0 border-l border-r border-bg3">
           <MessageList ref="messageListRef" />
           <MessageInput
             :scroll-to-bottom="messageListRef?.scrollToBottom!"

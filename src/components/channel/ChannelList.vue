@@ -7,7 +7,7 @@ import CategoryChannel from "./CategoryChannel.vue";
 
 <template>
   <nav class="w-64 border-l border-t border-bg3 rounded-tl">
-    <header class="px-4 py-3 bg-bg2 flex items-center border-b border-bg3">
+    <header class="px-4 py-3 bg-bg1 flex items-center border-b border-bg3">
       <div class="text-lg">
         Shelter
       </div>

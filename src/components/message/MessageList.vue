@@ -1,5 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, watch, onMounted, nextTick, onUnmounted } from "vue";
+import { Hash } from "lucide-vue-next";
+
 import MessageItem from "./MessageItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
@@ -15,6 +17,10 @@ const messagesList = computed(() => {
     return [];
   }
   return messageStore.messageListByChannel.get(channelStore.currentChannelID.value) || [];
+});
+
+const currentChannel = computed(() => {
+  return channelStore.channelDataMap.get(channelStore.currentChannelID.value || "");
 });
 
 const scrollToBottom = async () => {
@@ -67,6 +73,17 @@ onUnmounted(() => {
 </script>
 
 <template>
+  <header class="px-4 py-3 bg-bg2 flex items-center border-t border-b border-bg3">
+    <div class="flex items-center mr-1">
+      <Hash
+        class="w-5 h-5"
+        color="grey"
+      />
+    </div>
+    <div class="text-lg">
+      {{ currentChannel?.name ?? '' }}
+    </div>
+  </header>
   <div
     ref="scrollContainer"
     class="flex-1 overflow-auto h-full pb-4 bg-bg2"

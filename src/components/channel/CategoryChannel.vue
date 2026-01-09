@@ -11,12 +11,15 @@ const channel = computed(() => channelStore.channelDataMap.get(props.id));
 </script>
 
 <template>
-  <div class="cursor-pointer flex pt-2 ">
-    <div class="flex items-center mr-1">
+  <div class="cursor-pointer flex pt-2 group">
+    <div class="flex items-center mr-1 text-[#808080] group-hover:text-white transition-colors">
       {{ channel?.name }}
     </div>
     <div class="flex items-center">
-      <ChevronDown class="w-4 h-4" />
+      <ChevronDown
+        class="w-3 h-3 text-[#808080] group-hover:text-white transition-colors"
+        :stroke-width="2.5"
+      />
     </div>
   </div>
 </template>

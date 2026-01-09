@@ -6,7 +6,7 @@ import { stateStore } from "../../stores/state";
 </script>
 
 <template>
-  <aside class="bg-bg1 p-3 h-full fixed left-0 top-7">
+  <aside class="bg-bg1 px-3 h-full fixed left-0 top-7">
     <ul class="flex flex-col gap-3">
       <WidgetItem
         :icon="stateStore.chatMode.value === 'chat' ? MessagesSquareIcon : MessageCircleIcon"

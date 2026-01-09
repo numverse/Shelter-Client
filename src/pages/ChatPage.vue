@@ -17,7 +17,6 @@ import { stateStore } from "../stores/state";
 
 import { i18n } from "../utils/i18n/i18n";
 import { resend } from "../utils/api/auth/resend";
-import { refreshTokens } from "../utils/api/auth/refreshTokens";
 import { BaseWebSocket } from "../utils/ws/base";
 
 import { useRouter } from "vue-router";
@@ -26,10 +25,6 @@ const router = useRouter();
 const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 
 let ws: BaseWebSocket;
-
-const currentChannel = computed(() => {
-  return channelStore.channelDataMap.get(channelStore.currentChannelID.value || "");
-});
 
 onMounted(async () => {
   await channelStore.fetchAll();
@@ -137,12 +132,6 @@ onUnmounted(() => {
         <ChannelList />
         <CurrentUser />
         <div class="flex-1 flex flex-col bg-bg2 min-h-0">
-          <header class="px-4 py-3 bg-bg2 flex items-center justify-between border-t border-b border-bg3">
-            <div class="text-lg font-semibold">
-              # {{ currentChannel?.name ?? '' }}
-            </div>
-          </header>
-
           <MessageList ref="messageListRef" />
           <MessageInput
             :scroll-to-bottom="messageListRef?.scrollToBottom!"

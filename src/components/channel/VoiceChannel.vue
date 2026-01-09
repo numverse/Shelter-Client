@@ -24,14 +24,20 @@ const selectChannel = () => {
 
 <template>
   <div
-    class="cursor-pointer px-2 py-1 rounded flex"
-    :class="isSelected ? 'bg-bg3' : 'hover:bg-bg3/60'"
+    class="cursor-pointer px-2 py-1 rounded flex group"
+    :class="isSelected ? 'bg-bg3' : ''"
     @click="selectChannel"
   >
     <div class="flex items-center mr-1">
-      <Volume2 class="w-5 h-5" />
+      <Volume2
+        class="w-5 h-5"
+        :class="isSelected ? 'white' : 'text-[#808080] group-hover:text-white transition-colors'"
+      />
     </div>
-    <div class="flex items-center">
+    <div
+      class="flex items-center"
+      :class="isSelected ? 'white' : 'text-[#808080] group-hover:text-white transition-colors'"
+    >
       {{ channel?.name }}
     </div>
   </div>

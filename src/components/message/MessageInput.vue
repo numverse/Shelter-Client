@@ -91,9 +91,20 @@ function onKey(e: KeyboardEvent) {
   <div
     v-if="replyTo"
     class="flex items-center mx-3 bg-bg3 rounded-t-lg px-3 py-2 text-lg relative border-t border-x border-bg4"
+    @click="() => {`클릭시 해당 메시지로 스크롤`}"
   >
     <div class="text-sm">
       Replying to {{ replyToUser?.displayName ?? replyToUser?.username }}
+    </div>
+    <div
+      class="absolute right-3 text-sm text-bg3 bg-[#808080] hover:bg-white rounded-full h-4 w-4 flex items-center justify-center"
+      @click="() => {
+        if (currentChannel?.id) {
+          stateStore.replyToMessageIdByChannel.delete(currentChannel.id);
+        }
+      }"
+    >
+      ✕
     </div>
   </div>
   <div

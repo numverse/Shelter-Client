@@ -15,6 +15,9 @@ const messageStore = {
     }
   },
   fetchChannelMessages: async function (data: GetMessagesRequestData) {
+    if (!data.messageId && messageStore.messageListByChannel.has(data.channelId)) {
+      return;
+    }
     const res = await getMessages({
       ...data,
       messageId: data.messageId?.split("-")[1],

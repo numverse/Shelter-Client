@@ -75,6 +75,7 @@ async function send() {
       status: "FAILED",
     });
   }
+  messageStore.messageListByChannel.delete(currentChannel.value.id);
 }
 
 function onKey(e: KeyboardEvent) {

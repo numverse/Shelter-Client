@@ -42,7 +42,7 @@ const showAuthor = computed(() => {
 </script>
 
 <template>
-  <div class="pr-8 pl-4 group relative text-lg font-light">
+  <div class="pr-8 pl-4 group relative text-lg font-light hover:bg-bg3/60">
     <div
       class="flex gap-3"
       :class="showAuthor ? 'mt-4' : ''"

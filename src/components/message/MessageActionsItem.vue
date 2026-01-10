@@ -12,7 +12,7 @@ defineProps<{
 <template>
   <component
     :is="icon"
-    class="my-1 p-1 w-8 h-8 hover:bg-bg2 hover:text-white rounded cursor-pointer"
+    class="my-1 p-1 w-8 h-8 hover:bg-bg4 hover:text-white rounded cursor-pointer"
     :class="iconClass"
     :title="title"
     @click="onClick"

@@ -40,7 +40,7 @@ const editMessage = () => {
 </script>
 
 <template>
-  <div class="px-1 absolute right-3 -top-4 opacity-0 group-hover:opacity-100 bg-bg3 border border-bg2 rounded flex">
+  <div class="px-1 absolute right-3 -top-4 opacity-0 group-hover:opacity-100 bg-bg3 border border-bg4 rounded flex">
     <MessageActionsItem
       :icon="SmilePlus"
       title="Emoji"

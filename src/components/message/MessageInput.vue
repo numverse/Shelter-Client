@@ -39,6 +39,8 @@ function onInput(e: Event) {
 
 async function send() {
   if (!currentChannel.value?.id || !text.value.trim()) return;
+  const replyToId = replyTo.value;
+  stateStore.replyToMessageIdByChannel.delete(currentChannel.value.id);
   const currentChannelMessageList = messageStore.messageListByChannel.get(currentChannel.value.id);
   const messageContent = text.value.trim();
   const tempId = `temp-${Date.now()}`;
@@ -49,7 +51,7 @@ async function send() {
     channelId: currentChannel.value.id,
     authorId: userStore.currentUser.value?.id || "0",
     content: messageContent,
-    replyTo: replyTo.value || undefined,
+    replyTo: replyToId || undefined,
     createdAt: new Date().toISOString(),
     status: "SENDING",
   });
@@ -59,7 +61,7 @@ async function send() {
   }
   const res = await createMessage(currentChannel.value.id, {
     content: messageContent,
-    replyTo: replyTo.value || undefined,
+    replyTo: replyToId || undefined,
   });
   if (res.ok) {
     const list = messageStore.messageListByChannel.get(currentChannel.value.id);
@@ -75,7 +77,6 @@ async function send() {
       status: "FAILED",
     });
   }
-  messageStore.messageListByChannel.delete(currentChannel.value.id);
 }
 
 function onKey(e: KeyboardEvent) {

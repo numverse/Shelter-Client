@@ -3,12 +3,13 @@ import { computed, ref, watch, onMounted, nextTick, onUnmounted } from "vue";
 import { Hash } from "lucide-vue-next";
 
 import MessageItem from "./MessageItem.vue";
-import LoadingCircle from "../common/LoadingCircle.vue";
+import LoadingMessages from "./LoadingMessages.vue";
 
 import { channelStore } from "../../stores/channel";
 import { messageStore } from "../../stores/message";
 
 const loading = ref(true);
+const loadingMore = ref(false);
 const scrollContainer = ref<HTMLElement | null>(null);
 const scrollPositionMap = new Map<string, number>();
 
@@ -61,13 +62,23 @@ defineExpose({
   isAtBottom,
 });
 
-const loadMessages = async (channelId: string) => {
-  loading.value = true;
+const loadMessages = async (channelId: string, messageId?: string) => {
+  const isLoadingMore = Boolean(messageId);
+  if (isLoadingMore) {
+    loadingMore.value = true;
+  } else {
+    loading.value = true;
+  }
   await messageStore.fetchChannelMessages({
     channelId,
+    messageId,
     limit: "50",
   });
-  loading.value = false;
+  if (isLoadingMore) {
+    loadingMore.value = false;
+  } else {
+    loading.value = false;
+  }
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -91,6 +102,14 @@ onMounted(async () => {
 onUnmounted(() => {
   window.removeEventListener("keydown", handleKeyDown);
 });
+
+const hasMoreMessagesOnTop = computed(() => {
+  const channelId = channelStore.currentChannelID.value;
+  if (!channelId) return false;
+  const messages = messageStore.messageListByChannel.get(channelId);
+  if (!messages) return false;
+  return messages[0]?.startsWith("HAS_MORE_TOP-") ?? false;
+});
 </script>
 
 <template>
@@ -111,7 +130,10 @@ onUnmounted(() => {
   >
     <div class="flex flex-col min-h-full">
       <div class="flex-grow" />
-      <div class="flex flex-col gap-4 items-center justify-center mt-20 text-center text-text2 px-4">
+      <div
+        v-if="!hasMoreMessagesOnTop && !loading"
+        class="flex flex-col gap-4 items-center justify-center mt-20 text-center text-text2 px-4"
+      >
         <div class="flex items-center justify-center bg-bg3 rounded-full h-16 w-16">
           <Hash
             class="w-10 h-10"
@@ -125,19 +147,24 @@ onUnmounted(() => {
           This is the beginning of the #{{ currentChannel?.name ?? '' }} channel.
         </h2>
       </div>
-      <div
-        v-if="loading"
-        class="flex flex-col items-center h-full"
-      >
-        <LoadingCircle class="w-12 h-12 text-accent" />
-      </div>
-      <div v-else>
+      <div>
         <ul>
-          <MessageItem
+          <li
             v-for="id in messagesList"
             :id="id"
             :key="id"
-          />
+          >
+            <LoadingMessages
+              v-if="id.startsWith('HAS_MORE')"
+              :id="id"
+              :scroll-root="scrollContainer"
+              @show="loadMessages(currentChannel!.id, id)"
+            />
+            <MessageItem
+              v-else
+              :id="id"
+            />
+          </li>
         </ul>
       </div>
     </div>

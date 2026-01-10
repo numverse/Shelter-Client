@@ -67,6 +67,7 @@ onMounted(async () => {
     }
     wsConnectedOnce = true;
     authStore.authed.value = true;
+    // todo 어디까지 읽었음 표시하기 (새로운 메시지가 있으면)
     if (channelStore.currentChannelID.value) {
       messageStore.fetchChannelMessages({
         channelId: channelStore.currentChannelID.value,

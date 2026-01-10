@@ -22,6 +22,17 @@ const currentChannel = computed(() => {
   return channelStore.channelDataMap.get(channelStore.currentChannelID?.value ?? "") || null;
 });
 
+const replyTo = computed(() => {
+  return stateStore.replyToMessageIdByChannel.get(currentChannel.value?.id || "");
+});
+const replyToUser = computed(() => {
+  const messageId = replyTo.value;
+  if (!messageId) return null;
+  const message = messageStore.messageDataMap.get(messageId);
+  if (!message) return null;
+  return userStore.userDataMap.get(message.authorId) || null;
+});
+
 function onInput(e: Event) {
   text.value = (e.target as HTMLDivElement).innerText;
 }
@@ -38,6 +49,7 @@ async function send() {
     channelId: currentChannel.value.id,
     authorId: userStore.currentUser.value?.id || "0",
     content: messageContent,
+    replyTo: replyTo.value || undefined,
     createdAt: new Date().toISOString(),
     status: "SENDING",
   });
@@ -47,6 +59,7 @@ async function send() {
   }
   const res = await createMessage(currentChannel.value.id, {
     content: messageContent,
+    replyTo: replyTo.value || undefined,
   });
   if (res.ok) {
     const list = messageStore.messageListByChannel.get(currentChannel.value.id);
@@ -70,17 +83,6 @@ function onKey(e: KeyboardEvent) {
     send();
   }
 }
-
-const replyTo = computed(() => {
-  return stateStore.replyToMessageIdByChannel.get(currentChannel.value?.id || "");
-});
-const replyToUser = computed(() => {
-  const messageId = replyTo.value;
-  if (!messageId) return null;
-  const message = messageStore.messageDataMap.get(messageId);
-  if (!message) return null;
-  return userStore.userDataMap.get(message.authorId) || null;
-});
 </script>
 
 <template>

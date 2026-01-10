@@ -6,6 +6,7 @@ import VerifyPage from "./pages/VerifyPage.vue";
 import ResetPage from "./pages/ResetPage.vue";
 import NotFoundPage from "./pages/NotFoundPage.vue";
 import { authStore } from "./stores/auth";
+import { stateStore } from "./stores/state";
 
 const routes = [
   {
@@ -55,6 +56,25 @@ router.beforeEach(async (to) => {
   return {
     path: "/login",
   };
+});
+
+const handleKeyDown = (event: KeyboardEvent) => {
+  if (event.key === "Shift") {
+    console.log("shift down");
+    stateStore.shiftHeld.value = true;
+  }
+};
+
+const handleKeyUp = (event: KeyboardEvent) => {
+  if (event.key === "Shift") {
+    stateStore.shiftHeld.value = false;
+  }
+};
+
+window.addEventListener("keydown", handleKeyDown);
+window.addEventListener("keyup", handleKeyUp);
+window.addEventListener("blur", () => {
+  stateStore.shiftHeld.value = false;
 });
 
 export { router };

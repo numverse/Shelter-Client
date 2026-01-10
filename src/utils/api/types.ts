@@ -68,10 +68,18 @@ interface User {
   createdAt: string;
 }
 
+enum UserFlags {
+  NONE = 0,
+  EARLY_MEMBER = 1,
+  MEMBER = 2,
+  MODERATOR = 4,
+  DEVELOPER = 8,
+}
+
 interface CurrentUser extends User {
   email: string;
   emojiPacks: string[];
   updatedAt: string;
 }
 
-export { Attachment, Message, EmojiPack, Channel, ChannelType, User, CurrentUser };
+export { Attachment, Message, EmojiPack, Channel, ChannelType, User, UserFlags, CurrentUser };

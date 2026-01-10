@@ -6,6 +6,7 @@ import { messageStore } from "../../stores/message";
 import { userStore } from "../../stores/users";
 
 import { i18nFormatTime } from "../../utils/i18n/i18n";
+import { UserFlags } from "../../utils/api/types";
 
 const props = defineProps<{
   id: string;
@@ -100,6 +101,7 @@ const showAuthor = computed(() => {
         :key="props.id"
         :channel-id="messageData?.channelId!"
         :is-owner="isAuthor"
+        :is-admin="((userStore.currentUser.value?.flags ?? 0) & UserFlags.MODERATOR) !== 0"
       />
     </div>
   </div>

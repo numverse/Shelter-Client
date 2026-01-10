@@ -13,6 +13,8 @@ interface NotificationHeader {
 const stateStore = {
   chatMode: ref<"chat" | "dm">("chat"),
   locale: ref<string>("en-US"),
+  shiftHeld: ref<boolean>(false),
+  replyToMessageIdByChannel: new Map<string, string | null>(),
   notificationHeader: ref<NotificationHeader>({
     text: "",
     type: "info",

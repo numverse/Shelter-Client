@@ -43,8 +43,8 @@ onMounted(async () => {
 
 <template>
   <aside class="w-64 bg-bg2 p-3 border-t border-l border-bg3">
-    <h4 class="text-sm font-semibold">
-      Members
+    <h4 class="text-sm font-semibold text-[#808080]">
+      Members — {{ userList.onlineUsers.length }}
     </h4>
     <div class="text-sm text-text2 mt-2">
       <div
@@ -75,8 +75,8 @@ onMounted(async () => {
         </div>
       </div>
     </div>
-    <h4 class="text-sm font-semibold">
-      Offline
+    <h4 class="text-sm font-semibold text-[#808080]">
+      Offline — {{ userList.offlineUsers.length }}
     </h4>
     <div class="text-sm text-text2 mt-2">
       <div

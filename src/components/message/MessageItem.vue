@@ -96,7 +96,7 @@ const showAuthor = computed(() => {
             {{ messageAuthor?.username || "Unknown User" }}
           </span>
           <span class="text-xs mt-0.5 text-text2">
-            {{ i18nFormatTime(messageData?.createdAt || "") }}
+            {{ i18nFormatTime(messageData?.createdAt || "", undefined, true, true) }}
           </span>
         </div>
 

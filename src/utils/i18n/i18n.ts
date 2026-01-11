@@ -18,12 +18,39 @@ function i18n<C extends keyof typeof strings>(category: C, key: keyof typeof str
   return entry[locale] ?? entry[defaultLocale];
 }
 
-function i18nFormatTime(date: string | Date, locale: keyof typeof locales = defaultLocale, hour12: boolean = true): string {
-  return new Date(date).toLocaleTimeString(locale, {
+function i18nFormatTime(date: string | Date, locale: keyof typeof locales = defaultLocale, hour12: boolean = true, withDate: boolean = false): string {
+  const target = new Date(date);
+  const now = new Date();
+
+  const targetMidnight = new Date(target);
+  targetMidnight.setHours(0, 0, 0, 0);
+  const todayMidnight = new Date(now);
+  todayMidnight.setHours(0, 0, 0, 0);
+
+  const yesterdayMidnight = new Date(todayMidnight);
+  yesterdayMidnight.setDate(yesterdayMidnight.getDate() - 1);
+
+  const timeString = target.toLocaleTimeString(locale, {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: hour12,
+    hour12,
   });
+
+  if (+targetMidnight === +todayMidnight || !withDate) {
+    return timeString;
+  }
+
+  if (+targetMidnight === +yesterdayMidnight) {
+    return `Yesterday at ${timeString}`;
+  }
+
+  const dateString = target.toLocaleDateString(locale, {
+    month: "numeric",
+    day: "numeric",
+    year: "numeric",
+  });
+
+  return `${dateString} ${timeString}`;
 }
 
 export { i18n, i18nFormatTime, locales, strings };

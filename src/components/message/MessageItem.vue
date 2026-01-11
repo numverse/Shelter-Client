@@ -52,6 +52,22 @@ const showAuthor = computed(() => {
   }
   return previousMessage.authorId !== messageData.value.authorId || replyToMessage.value;
 });
+
+const scrollToRepliedMessage = () => {
+  if (replyToMessage.value) {
+    const el = document.getElementById(replyToMessage.value.id);
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+      el.classList.add("bg-flash");
+      setTimeout(() => {
+        el.classList.remove("bg-flash");
+      }, 2000);
+    }
+  }
+};
 </script>
 
 <template>
@@ -71,7 +87,10 @@ const showAuthor = computed(() => {
         <span class="text-sm text-text2 py-1">
           {{ replyToMessageAuthor?.username || "Unknown User" }}
         </span>
-        <span class="text-sm text-text2 py-1 ml-1">
+        <span
+          class="text-sm text-text2 py-1 ml-1"
+          @click="scrollToRepliedMessage()"
+        >
           {{ replyToMessage?.content }}
         </span>
       </div>

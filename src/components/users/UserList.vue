@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from "vue";
+import { ref, onMounted, nextTick, computed } from "vue";
 import UserItem from "./UserItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
@@ -8,11 +8,29 @@ import { userStore } from "../../stores/users";
 import type { User } from "../../utils/api/types";
 
 const loading = ref(true);
-const users = ref<Array<User>>([]);
-const offlineUsers = ref<Array<User>>([]);
+const userList = computed(() => {
+  const users = Array.from(userStore.userDataMap.values());
+  users.sort((a, b) => a.username.localeCompare(b.username));
+
+  const onlineUsers: User[] = [];
+  const offlineUsers: User[] = [];
+
+  users.forEach((user) => {
+    if (user.presence.status === "offline") {
+      offlineUsers.push(user);
+    } else {
+      onlineUsers.push(user);
+    }
+  });
+
+  return {
+    onlineUsers,
+    offlineUsers,
+  };
+});
 
 onMounted(async () => {
-  if (userStore.userList.value.length === 0) {
+  if (userStore.userDataMap.size === 0) {
     loading.value = true;
     await userStore.fetchAll();
     loading.value = false;
@@ -20,16 +38,6 @@ onMounted(async () => {
     loading.value = false;
   }
   await nextTick();
-
-  for (const id of userStore.userList.value) {
-    const user = userStore.userDataMap.get(id);
-    if (!user) continue;
-    if (user.presence && user.presence.status !== "offline") {
-      users.value.push(user);
-    } else {
-      offlineUsers.value.push(user);
-    }
-  }
 });
 </script>
 
@@ -52,7 +60,7 @@ onMounted(async () => {
         <div v-else>
           <ul>
             <li
-              v-for="m in users"
+              v-for="m in userList.onlineUsers"
               :key="m.id"
             >
               <UserItem
@@ -60,6 +68,7 @@ onMounted(async () => {
                 :username="m.username"
                 :display-name="m.displayName"
                 :avatar-id="m.avatarId"
+                :presence="m.presence"
               />
             </li>
           </ul>
@@ -76,7 +85,7 @@ onMounted(async () => {
       >
         <ul>
           <li
-            v-for="m in offlineUsers"
+            v-for="m in userList.offlineUsers"
             :key="m.id"
           >
             <UserItem
@@ -84,6 +93,7 @@ onMounted(async () => {
               :username="m.username"
               :display-name="m.displayName"
               :avatar-id="m.avatarId"
+              :presence="m.presence"
             />
           </li>
         </ul>

@@ -121,6 +121,16 @@ onMounted(async () => {
       messageStore.deleteMessage(data.messageId);
     }
   });
+
+  ws.on("PRESENCE_UPDATE", (data) => {
+    const user = userStore.userDataMap.get(data.userId);
+    if (user) {
+      user.presence = {
+        status: data.status,
+      };
+      userStore.userDataMap.set(data.userId, user);
+    }
+  });
 });
 
 onUnmounted(() => {

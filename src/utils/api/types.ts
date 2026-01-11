@@ -56,12 +56,14 @@ interface Channel {
   updatedAt?: string;
 }
 
+type PresenceStatus = "online" | "offline" | "away" | "dnd";
+
 interface User {
   id: string;
   username: string;
   displayName?: string;
   presence: {
-    status: "online" | "offline" | "idle" | "dnd";
+    status: PresenceStatus;
   };
   flags: number;
   avatarId?: string;
@@ -82,4 +84,4 @@ interface CurrentUser extends User {
   updatedAt: string;
 }
 
-export { Attachment, Message, EmojiPack, Channel, ChannelType, User, UserFlags, CurrentUser };
+export { Attachment, Message, EmojiPack, Channel, ChannelType, User, UserFlags, CurrentUser, PresenceStatus };

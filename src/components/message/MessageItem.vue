@@ -15,6 +15,18 @@ const props = defineProps<{
 const messageData = computed(() => {
   return messageStore.messageDataMap.get(props.id);
 });
+const replyToMessage = computed(() => {
+  if (!messageData.value?.replyTo) {
+    return null;
+  }
+  return messageStore.messageDataMap.get(messageData.value.replyTo) || null;
+});
+const replyToMessageAuthor = computed(() => {
+  if (!replyToMessage.value) {
+    return null;
+  }
+  return userStore.userDataMap.get(replyToMessage.value.authorId) || null;
+});
 
 const isAuthor = computed(() => {
   return messageData.value?.authorId === userStore.currentUser.value?.id;
@@ -38,15 +50,35 @@ const showAuthor = computed(() => {
   if (!previousMessage) {
     return true;
   }
-  return previousMessage.authorId !== messageData.value.authorId;
+  return previousMessage.authorId !== messageData.value.authorId || replyToMessage.value;
 });
 </script>
 
 <template>
   <div class="pr-8 pl-4 group relative text-lg font-light hover:bg-bg3/60">
     <div
+      v-if="messageData?.replyTo"
+      class="flex items-center ml-6 mt-4"
+    >
+      <div class="border-l-3 border-t-3 rounded-tl-lg border-bg4 w-9 h-4 self-end" />
+
+      <img
+        :src="replyToMessageAuthor?.avatarId ? `https://shelter.zero624.dev/cdn/avatars/${replyToMessageAuthor?.id}/${replyToMessageAuthor?.avatarId}.png` : `/avatars/${(BigInt(replyToMessageAuthor?.id ?? 0) >> 22n) % 6n}.png`"
+        :alt="replyToMessageAuthor?.username"
+        class="w-5 h-5 rounded-full mx-1"
+      >
+      <div class="flex items-center h-full">
+        <span class="text-sm text-text2 py-1">
+          {{ replyToMessageAuthor?.username || "Unknown User" }}
+        </span>
+        <span class="text-sm text-text2 py-1 ml-1">
+          {{ replyToMessage?.content }}
+        </span>
+      </div>
+    </div>
+    <div
       class="flex gap-3"
-      :class="showAuthor ? 'mt-4' : ''"
+      :class="showAuthor ? replyToMessage ? '' : 'mt-4' : ''"
     >
       <img
         v-if="showAuthor"

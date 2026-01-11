@@ -3,19 +3,22 @@ import { Message } from "../types";
 
 interface GetMessagesRequestData {
   channelId: string;
-  messageId?: string;
+  around?: string;
+  after?: string;
+  before?: string;
   limit?: string;
 }
 
 interface GetMessagesResponse {
   messages: Message[];
-  hasMore: boolean;
 }
 
 function getMessages(data: GetMessagesRequestData) {
   const params = new URLSearchParams();
   if (data.limit) params.append("limit", data.limit);
-  if (data.messageId) params.append("messageId", data.messageId);
+  if (data.before) params.append("before", data.before);
+  if (data.after) params.append("after", data.after);
+  if (data.around) params.append("around", data.around);
 
   return request<GetMessagesResponse>({
     method: "GET",

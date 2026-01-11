@@ -71,7 +71,7 @@ const loadMessages = async (channelId: string, messageId?: string) => {
   }
   await messageStore.fetchChannelMessages({
     channelId,
-    messageId,
+    before: messageId,
     limit: "50",
   });
   if (isLoadingMore) {
@@ -108,7 +108,7 @@ const hasMoreMessagesOnTop = computed(() => {
   if (!channelId) return false;
   const messages = messageStore.messageListByChannel.get(channelId);
   if (!messages) return false;
-  return messages[0]?.startsWith("HAS_MORE_TOP-") ?? false;
+  return messages[0] === "load-more";
 });
 </script>
 
@@ -150,15 +150,19 @@ const hasMoreMessagesOnTop = computed(() => {
       <div>
         <ul>
           <li
-            v-for="id in messagesList"
+            v-for="(id, index) in messagesList"
             :id="id"
             :key="id"
           >
             <LoadingMessages
-              v-if="id.startsWith('HAS_MORE')"
-              :id="id"
+              v-if="id.startsWith('load-more-before-')"
               :scroll-root="scrollContainer"
-              @show="loadMessages(currentChannel!.id, id)"
+              @show="loadMessages(currentChannel!.id, messagesList[index + 1])"
+            />
+            <LoadingMessages
+              v-else-if="id.startsWith('load-more-after-')"
+              :scroll-root="scrollContainer"
+              @show="loadMessages(currentChannel!.id, messagesList[index - 1])"
             />
             <MessageItem
               v-else

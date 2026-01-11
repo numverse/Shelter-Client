@@ -15,39 +15,50 @@ const messageStore = {
     }
   },
   fetchChannelMessages: async function (data: GetMessagesRequestData) {
-    if (!data.messageId && messageStore.messageListByChannel.has(data.channelId)) {
+    if (!data.before && messageStore.messageListByChannel.has(data.channelId)) {
       return;
     }
     const res = await getMessages({
       ...data,
-      messageId: data.messageId?.split("-")[1],
     });
     if (res.ok) {
-      if (data.messageId) {
-        const channel = messageStore.messageListByChannel.get(data.channelId) || [];
-        if (channel.length > 0 && channel[0].startsWith("HAS_MORE_TOP")) {
-          this.messageDataMap.delete(data.messageId);
-          channel.shift();
-        }
-        messageStore.messageListByChannel.set(data.channelId, channel);
-      }
       const channel = messageStore.messageListByChannel.get(data.channelId) || [];
+
+      const messages = [];
       for (const msg of res.messages) {
         if (!messageStore.messageDataMap.has(msg.id)) {
           messageStore.messageDataMap.set(msg.id, msg);
-          if (data.messageId) {
-            channel.unshift(msg.id);
-          } else {
-            channel.push(msg.id);
-          }
+          messages.push(msg.id);
         }
       }
-      if (res.hasMore) {
-        if (!messageStore.messageDataMap.has(`HAS_MORE_TOP-${res.messages[0].id}`)) {
-          messageStore.messageDataMap.set(`HAS_MORE_TOP-${res.messages[0].id}`, {} as Message);
-          channel.unshift(`HAS_MORE_TOP-${res.messages[0].id}`);
+
+      if (data.before) {
+        if (res.messages.length >= 50) {
+          messages.unshift(`load-more-before-${messages[0]}`);
         }
+        const index = channel.indexOf(data.before);
+        if (index !== -1) {
+          channel.splice(index - 1, 1, ...messages);
+        } else {
+          channel.splice(0, 1, ...messages);
+        }
+      } else if (data.after) {
+        if (res.messages.length >= 50) {
+          messages.push(`load-more-after-${messages[messages.length - 1]}`);
+        }
+        const index = channel.indexOf(data.after);
+        if (index !== -1) {
+          channel.splice(index + 1, 1, ...messages);
+        } else {
+          channel.splice(channel.length - 1, 1, ...messages);
+        }
+      } else {
+        if (res.messages.length >= 50) {
+          messages.unshift(`load-more-before-${messages[0]}`);
+        }
+        channel.push(...messages);
       }
+
       messageStore.messageListByChannel.set(data.channelId, channel);
     }
   },

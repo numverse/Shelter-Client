@@ -4,6 +4,7 @@ import MessageActions from "./MessageActions.vue";
 
 import { messageStore } from "../../stores/message";
 import { userStore } from "../../stores/users";
+import { stateStore } from "../../stores/state";
 
 import { i18nFormatTime } from "../../utils/i18n/i18n";
 import { UserFlags } from "../../utils/api/types";
@@ -68,10 +69,18 @@ const scrollToRepliedMessage = () => {
     }
   }
 };
+
+const replying = computed(() => {
+  const channel = stateStore.replyToMessageIdByChannel.get(messageData.value?.channelId || "");
+  return channel === props.id;
+});
 </script>
 
 <template>
-  <div class="pr-8 pl-4 group relative text-lg font-light hover:bg-bg3/60">
+  <div
+    class="pr-8 group relative text-lg font-light"
+    :class="replying ? 'bg-flash border-l-3 border-accent pl-[calc(var(--spacing)*4-3px)]' : 'pl-4 hover:bg-bg3/60'"
+  >
     <div
       v-if="messageData?.replyTo"
       class="flex items-center ml-6 mt-4"

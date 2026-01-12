@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { Component } from "vue";
+import AppTooltip from "../common/AppTooltip.vue";
 
 defineProps<{
   icon: Component;
@@ -10,11 +11,16 @@ defineProps<{
 </script>
 
 <template>
-  <component
-    :is="icon"
-    class="my-1 p-1 w-8 h-8 hover:bg-bg4 hover:text-white rounded cursor-pointer"
-    :class="iconClass"
-    :title="title"
-    @click="onClick"
-  />
+  <AppTooltip
+    :text="title"
+    :position="'top'"
+  >
+    <component
+      :is="icon"
+      class="my-1 p-1 w-7 h-7 hover:bg-bg4 hover:text-white rounded cursor-pointer"
+      :class="iconClass"
+      :title="title"
+      @click="onClick"
+    />
+  </AppTooltip>
 </template>

@@ -85,13 +85,25 @@ function onKey(e: KeyboardEvent) {
     send();
   }
 }
+
+function scrollToReply() {
+  if (replyTo.value) {
+    const el = document.getElementById(replyTo.value);
+    if (el) {
+      el.scrollIntoView({
+        behavior: "smooth",
+        block: "center",
+      });
+    }
+  }
+}
 </script>
 
 <template>
   <div
     v-if="replyTo"
     class="flex items-center mx-3 bg-bg3 rounded-t-lg px-3 py-2 text-lg relative border-t border-x border-bg4"
-    @click="() => {`클릭시 해당 메시지로 스크롤`}"
+    @click="scrollToReply()"
   >
     <div class="text-sm">
       Replying to {{ replyToUser?.displayName ?? replyToUser?.username }}

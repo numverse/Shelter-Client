@@ -1,4 +1,4 @@
-import { shallowReactive } from "vue";
+import { shallowReactive, reactive } from "vue";
 import { Message } from "../utils/api/types";
 import { getMessages, GetMessagesRequestData } from "../utils/api/messages/getMessages";
 
@@ -29,7 +29,7 @@ function indexOf(arr: string[], target: string): number {
 
 const messageStore = {
   messageDataMap: shallowReactive(new Map<string, Message>()),
-  messageListByChannel: shallowReactive(new Map<string, Array<string>>()),
+  messageListByChannel: reactive(new Map<string, Array<string>>()),
   deleteMessage: function (messageId: string) {
     this.messageDataMap.delete(messageId);
     for (const [_channelId, messageList] of this.messageListByChannel) {

@@ -25,12 +25,12 @@ const isOffline = computed(() => {
     <div class="relative">
       <img
         :src="avatarId ? `https://shelter.zero624.dev/cdn/avatars/${userId}/${avatarId}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
-        :class="['w-10 h-10 bg-cover bg-center rounded-full']"
+        :class="['w-8 h-8 bg-cover bg-center rounded-full']"
       >
       <span
         v-if="presence?.status && presence?.status !== 'offline' || userId === userStore.currentUser.value?.id"
         :class="[
-          'absolute top-6 left-6 right-0 w-4.5 h-4.5 rounded-full border-3 border-bg2',
+          'absolute top-5 left-5 right-0 w-4 h-4 rounded-full border-3 border-bg2',
           {
             'online': 'bg-green',
             'away': 'bg-yellow',
@@ -53,7 +53,7 @@ const isOffline = computed(() => {
 
 <style scoped>
 .offline {
-  filter: brightness(0.6);
+  filter: brightness(0.35);
 }
 .offline:hover {
   filter: brightness(1);

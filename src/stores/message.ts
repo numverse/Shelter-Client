@@ -85,7 +85,6 @@ const messageStore = {
       }
 
       messageStore.messageListByChannel.set(data.channelId, channel);
-      console.log(channel);
     }
   },
   fetchDMMessages: async function () {

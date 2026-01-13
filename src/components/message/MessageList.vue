@@ -110,9 +110,6 @@ const handleScroll = () => {
 const enforceLoaderLimit = () => {
   const el = scrollContainer.value;
   const id = scrollThresholdID.value;
-  console.log("enforceLoaderLimit", {
-    id,
-  });
   if (!el || !id) return;
   if (id.startsWith("load-more-before-")) {
     const threshold = el.querySelector<HTMLElement>(`#${id}`)?.offsetTop || null;

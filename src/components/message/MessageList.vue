@@ -110,16 +110,19 @@ const handleScroll = () => {
 const enforceLoaderLimit = () => {
   const el = scrollContainer.value;
   const id = scrollThresholdID.value;
+  console.log("enforceLoaderLimit", {
+    id,
+  });
   if (!el || !id) return;
   if (id.startsWith("load-more-before-")) {
     const threshold = el.querySelector<HTMLElement>(`#${id}`)?.offsetTop || null;
-    if (!threshold) return;
+    if (!threshold) return scrollThresholdID.value = null;
     if (el.scrollTop < threshold) {
       el.scrollTop = threshold;
     }
   } else if (id.startsWith("load-more-after-")) {
     const loaderEl = el.querySelector<HTMLElement>(`#${id}`);
-    if (!loaderEl) return;
+    if (!loaderEl) return scrollThresholdID.value = null;
     const threshold = el.scrollHeight - (loaderEl.offsetTop + loaderEl.clientHeight);
     if (el.scrollTop > threshold) {
       el.scrollTop = threshold;

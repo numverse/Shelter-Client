@@ -27,8 +27,8 @@ export default {
       skeletonMessages,
       observer: null as IntersectionObserver | null,
       observerOptions: {
-        rootMargin: "0px",
-        threshold: 0.5,
+        rootMargin: "200px 0px",
+        threshold: 0.15,
       },
     };
   },

@@ -36,9 +36,9 @@ const messageStore = {
         if (res.messages.length >= 50) {
           messages.unshift(`load-more-before-${messages[0]}`);
         }
-        const index = channel.indexOf(data.before);
+        const index = channel.indexOf(`load-more-before-${data.before}`);
         if (index !== -1) {
-          channel.splice(index - 1, 1, ...messages);
+          channel.splice(index, 1, ...messages);
         } else {
           channel.splice(0, 1, ...messages);
         }

@@ -60,7 +60,6 @@ router.beforeEach(async (to) => {
 
 const handleKeyDown = (event: KeyboardEvent) => {
   if (event.key === "Shift") {
-    console.log("shift down");
     stateStore.shiftHeld.value = true;
   }
 };

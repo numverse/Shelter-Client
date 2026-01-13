@@ -9,8 +9,9 @@ import { channelStore } from "../../stores/channel";
 import { messageStore } from "../../stores/message";
 
 const loading = ref(true);
-const loadingMore = ref(false);
 const scrollContainer = ref<HTMLElement | null>(null);
+const scrollThresholdID = ref<string | null>(null);
+
 const scrollPositionMap = new Map<string, number>();
 
 const saveScrollPosition = (channelId: string) => {
@@ -63,22 +64,13 @@ defineExpose({
 });
 
 const loadMessages = async (channelId: string, messageId?: string) => {
-  const isLoadingMore = Boolean(messageId);
-  if (isLoadingMore) {
-    loadingMore.value = true;
-  } else {
-    loading.value = true;
-  }
+  loading.value = true;
   await messageStore.fetchChannelMessages({
     channelId,
     before: messageId,
     limit: "50",
   });
-  if (isLoadingMore) {
-    loadingMore.value = false;
-  } else {
-    loading.value = false;
-  }
+  loading.value = false;
 };
 
 const handleKeyDown = (e: KeyboardEvent) => {
@@ -110,6 +102,30 @@ const hasMoreMessagesOnTop = computed(() => {
   if (!messages) return false;
   return messages[0] === "load-more";
 });
+
+const handleScroll = () => {
+  enforceLoaderLimit();
+};
+
+const enforceLoaderLimit = () => {
+  const el = scrollContainer.value;
+  const id = scrollThresholdID.value;
+  if (!el || !id) return;
+  if (id.startsWith("load-more-before-")) {
+    const threshold = el.querySelector<HTMLElement>(`#${id}`)?.offsetTop || null;
+    if (!threshold) return;
+    if (el.scrollTop < threshold) {
+      el.scrollTop = threshold;
+    }
+  } else if (id.startsWith("load-more-after-")) {
+    const loaderEl = el.querySelector<HTMLElement>(`#${id}`);
+    if (!loaderEl) return;
+    const threshold = el.scrollHeight - (loaderEl.offsetTop + loaderEl.clientHeight);
+    if (el.scrollTop > threshold) {
+      el.scrollTop = threshold;
+    }
+  }
+};
 </script>
 
 <template>
@@ -127,6 +143,7 @@ const hasMoreMessagesOnTop = computed(() => {
   <div
     ref="scrollContainer"
     class="flex-1 overflow-auto h-full pb-4 bg-bg2"
+    @scroll="handleScroll()"
   >
     <div class="flex flex-col min-h-full">
       <div class="flex-grow" />
@@ -157,12 +174,14 @@ const hasMoreMessagesOnTop = computed(() => {
             <LoadingMessages
               v-if="id.startsWith('load-more-before-')"
               :scroll-root="scrollContainer"
-              @show="loadMessages(currentChannel!.id, messagesList[index + 1])"
+              @show="loadMessages(currentChannel!.id, messagesList[index + 1]); scrollThresholdID = id"
+              @hidden="scrollThresholdID = null"
             />
             <LoadingMessages
               v-else-if="id.startsWith('load-more-after-')"
               :scroll-root="scrollContainer"
-              @show="loadMessages(currentChannel!.id, messagesList[index - 1])"
+              @show="loadMessages(currentChannel!.id, messagesList[index - 1]); scrollThresholdID = id"
+              @hidden="scrollThresholdID = null"
             />
             <MessageItem
               v-else

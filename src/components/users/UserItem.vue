@@ -22,7 +22,7 @@ const isOffline = computed(() => {
     class="flex items-center justify-between hover:bg-bg3 p-1 rounded cursor-pointer"
     :class="{ offline: isOffline }"
   >
-    <div class="relative">
+    <div class="relative mr-1">
       <img
         :src="avatarId ? `https://shelter.zero624.dev/cdn/avatars/${userId}/${avatarId}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
         :class="['w-8 h-8 bg-cover bg-center rounded-full']"

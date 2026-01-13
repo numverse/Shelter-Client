@@ -58,7 +58,7 @@ const messageStore = {
       }
 
       if (data.before) {
-        if (res.messages.length >= 50 && messages.length > 0) {
+        if (res.messages.length >= (data.limit || 50) && messages.length > 0) {
           messages.unshift(`load-more-before-${messages[0]}`);
         }
         const index = indexOf(channel, data.before);
@@ -68,7 +68,7 @@ const messageStore = {
           channel.splice(0, 1, ...messages);
         }
       } else if (data.after) {
-        if (res.messages.length >= 50 && messages.length > 0) {
+        if (res.messages.length >= (data.limit || 50) && messages.length > 0) {
           messages.push(`load-more-after-${messages[messages.length - 1]}`);
         }
         const index = indexOf(channel, data.after);
@@ -78,7 +78,7 @@ const messageStore = {
           channel.splice(channel.length - 1, 1, ...messages);
         }
       } else {
-        if (res.messages.length >= 50 && messages.length > 0) {
+        if (res.messages.length >= (data.limit || 50) && messages.length > 0) {
           messages.unshift(`load-more-before-${messages[0]}`);
         }
         channel.push(...messages);

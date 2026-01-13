@@ -6,7 +6,7 @@ interface GetMessagesRequestData {
   around?: string;
   after?: string;
   before?: string;
-  limit?: string;
+  limit?: number;
 }
 
 interface GetMessagesResponse {
@@ -15,7 +15,7 @@ interface GetMessagesResponse {
 
 function getMessages(data: GetMessagesRequestData) {
   const params = new URLSearchParams();
-  if (data.limit) params.append("limit", data.limit);
+  if (data.limit) params.append("limit", data.limit.toString());
   if (data.before) params.append("before", data.before);
   if (data.after) params.append("after", data.after);
   if (data.around) params.append("around", data.around);

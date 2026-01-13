@@ -68,7 +68,7 @@ const loadMessages = async (channelId: string, messageId?: string) => {
   await messageStore.fetchChannelMessages({
     channelId,
     before: messageId,
-    limit: "50",
+    limit: 50,
   });
   loading.value = false;
 };
@@ -126,6 +126,25 @@ const enforceLoaderLimit = () => {
     }
   }
 };
+
+const loadMoreBefore = async (channelId: string, loaderId: string) => {
+  // if (loaderId !== "load-more-before-285344522181939200") return;
+  scrollThresholdID.value = loaderId;
+  const messageId = loaderId.replace("load-more-before-", "");
+  await loadMessages(channelId, messageId);
+  const el = scrollContainer.value;
+  if (!el) return;
+  const messageEl = document.getElementById(messageId);
+  if (messageEl) {
+    await nextTick();
+    el.scrollTop = messageEl.offsetTop;
+  }
+};
+
+const loadMoreAfter = (channelId: string, loaderId: string) => {
+  scrollThresholdID.value = loaderId;
+  loadMessages(channelId, loaderId.replace("load-more-after-", ""));
+};
 </script>
 
 <template>
@@ -167,20 +186,21 @@ const enforceLoaderLimit = () => {
       <div>
         <ul>
           <li
-            v-for="(id, index) in messagesList"
+            v-for="id in messagesList"
             :id="id"
             :key="id"
           >
             <LoadingMessages
               v-if="id.startsWith('load-more-before-')"
+              class="mt-10"
               :scroll-root="scrollContainer"
-              @show="loadMessages(currentChannel!.id, messagesList[index + 1]); scrollThresholdID = id"
+              @show="loadMoreBefore(currentChannel!.id, id);"
               @hidden="scrollThresholdID = null"
             />
             <LoadingMessages
               v-else-if="id.startsWith('load-more-after-')"
               :scroll-root="scrollContainer"
-              @show="loadMessages(currentChannel!.id, messagesList[index - 1]); scrollThresholdID = id"
+              @show="loadMoreAfter(currentChannel!.id, id);"
               @hidden="scrollThresholdID = null"
             />
             <MessageItem

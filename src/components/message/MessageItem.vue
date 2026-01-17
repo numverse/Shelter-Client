@@ -74,6 +74,38 @@ const replying = computed(() => {
   const channel = stateStore.replyToMessageIdByChannel.get(messageData.value?.channelId || "");
   return channel === props.id;
 });
+
+const handleCopy = (event: ClipboardEvent) => {
+  const selection = document.getSelection();
+  if (selection) {
+    const walker = document.createTreeWalker(
+      selection.getRangeAt(0).cloneContents(),
+      NodeFilter.SHOW_TEXT,
+      {
+        acceptNode: (node) => {
+          if (node.parentElement?.classList.contains("select-none")) return NodeFilter.FILTER_REJECT;
+          return NodeFilter.FILTER_ACCEPT;
+        },
+      },
+    );
+
+    let result = [];
+
+    while (walker.nextNode()) {
+      const node = walker.currentNode;
+      const text = node.textContent;
+      if (text) {
+        if (node.parentElement?.hasAttribute("datetime")) {
+          result.push(` — ${text}`);
+        } else {
+          result.push(text);
+        }
+      }
+    }
+
+    event.clipboardData?.setData("text/plain", result.join("\n"));
+  }
+};
 </script>
 
 <template>
@@ -115,7 +147,10 @@ const replying = computed(() => {
         class="w-12 h-12 mt-0.5 absolute rounded-full"
       >
 
-      <div class="flex flex-col flex-1 ml-16 select-text">
+      <div
+        class="flex flex-col flex-1 ml-16 select-text"
+        @copy.prevent="handleCopy"
+      >
         <div
           v-if="showAuthor"
           class="flex items-center gap-2"
@@ -123,7 +158,10 @@ const replying = computed(() => {
           <span class="font-semibold text-text1">
             {{ messageAuthor?.username || "Unknown User" }}
           </span>
-          <span class="text-xs mt-0.5 text-text2">
+          <span
+            class="text-xs mt-0.5 text-text2"
+            :datetime="messageData?.createdAt"
+          >
             {{ i18nFormatTime(messageData?.createdAt || "", undefined, true, true) }}
           </span>
         </div>
@@ -136,7 +174,9 @@ const replying = computed(() => {
         </p>
         <span
           v-if="!showAuthor"
-          class="text-xs mt-1 opacity-0 absolute -ml-16 group-hover:opacity-100 text-text2"
+          class="text-xs mt-1 opacity-0 absolute -ml-16 group-hover:opacity-100 text-text2 select-none"
+          style="-webkit-user-drag: none;"
+          @dragstart.prevent
         >
           {{ i18nFormatTime(messageData?.createdAt || "") }}
         </span>

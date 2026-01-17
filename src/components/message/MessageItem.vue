@@ -106,7 +106,7 @@ const replying = computed(() => {
     </div>
     <div
       class="flex gap-3"
-      :class="showAuthor ? replyToMessage ? '' : 'mt-4' : ''"
+      :class="showAuthor ? (messageData?.replyTo ? '' : 'mt-4') : ''"
     >
       <img
         v-if="showAuthor"

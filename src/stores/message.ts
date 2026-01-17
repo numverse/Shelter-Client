@@ -17,7 +17,7 @@ function indexOf(arr: string[], target: string): number {
         return mid - 1;
       }
       return mid;
-    } else if (Number(val) > Number(target)) {
+    } else if (BigInt(val) > BigInt(target)) {
       left = mid + 1;
     } else {
       right = mid - 1;

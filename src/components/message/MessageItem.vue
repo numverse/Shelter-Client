@@ -95,7 +95,7 @@ const handleCopy = (event: ClipboardEvent) => {
       const node = walker.currentNode;
       const text = node.textContent;
       if (text) {
-        if (node.parentElement?.hasAttribute("datetime")) {
+        if (node.parentElement?.nodeName === "TIME") {
           result.push(` — ${text}`);
         } else {
           result.push(text);
@@ -158,12 +158,12 @@ const handleCopy = (event: ClipboardEvent) => {
           <span class="font-semibold text-text1">
             {{ messageAuthor?.username || "Unknown User" }}
           </span>
-          <span
+          <time
             class="text-xs mt-0.5 text-text2"
             :datetime="messageData?.createdAt"
           >
             {{ i18nFormatTime(messageData?.createdAt || "", undefined, true, true) }}
-          </span>
+          </time>
         </div>
 
         <p
@@ -172,14 +172,14 @@ const handleCopy = (event: ClipboardEvent) => {
         >
           {{ messageData?.content }}
         </p>
-        <span
+        <time
           v-if="!showAuthor"
           class="text-xs mt-1 opacity-0 absolute -ml-16 group-hover:opacity-100 text-text2 select-none"
           style="-webkit-user-drag: none;"
           @dragstart.prevent
         >
           {{ i18nFormatTime(messageData?.createdAt || "") }}
-        </span>
+        </time>
 
         <div
           v-if="messageData?.reactions?.length"

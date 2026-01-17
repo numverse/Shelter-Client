@@ -30,11 +30,17 @@ const stateStore = {
   closeNotificationHeader: function () {
     stateStore.notificationHeader.value.text = "";
   },
-  toggleChatMode: function () {
-    stateStore.chatMode.value = stateStore.chatMode.value === "chat" ? "dm" : "chat";
-    router.push(
-      stateStore.chatMode.value === "chat" ? `/channels/${channelStore.currentChannelID.value}` : `/channels/@me/${channelStore.currentDMID.value}`,
-    );
+  setChatMode: function (mode: "chat" | "dm") {
+    stateStore.chatMode.value = mode;
+    if (mode === "chat") {
+      router.push(`/channels/${channelStore.currentChannelID.value}`);
+    } else {
+      if (channelStore.currentDMID.value) {
+        router.push(`/channels/@me/${channelStore.currentDMID.value}`);
+      } else {
+        router.push("/channels/@me");
+      }
+    }
   },
 };
 

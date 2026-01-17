@@ -71,7 +71,7 @@ onMounted(async () => {
     if (channelStore.currentChannelID.value) {
       messageStore.fetchChannelMessages({
         channelId: channelStore.currentChannelID.value,
-        limit: "50",
+        limit: 50,
       });
     }
   });

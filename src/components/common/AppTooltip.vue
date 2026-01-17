@@ -2,6 +2,10 @@
 import { ref, computed, nextTick, onMounted, onBeforeUnmount } from "vue";
 
 const props = defineProps({
+  bold: {
+    type: Boolean,
+    default: false,
+  },
   text: {
     type: String,
     required: true,
@@ -26,8 +30,8 @@ const bubbleClass = computed(() => [
   "whitespace-nowrap",
   "bg-bg3",
   "text-white",
-  "text-sm",
-  "font-normal",
+  props.bold ? "text-s" : "text-sm",
+  props.bold ? "font-semibold" : "font-normal",
   "rounded-md",
   "border",
   "border-bg4",

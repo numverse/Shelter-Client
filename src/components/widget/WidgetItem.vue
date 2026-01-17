@@ -1,24 +1,24 @@
 <script setup lang="ts">
+import AppTooltip from "../common/AppTooltip.vue";
 import type { Component } from "vue";
 
 defineProps<{
   label: string;
-  shortName: string;
   icon: Component;
 }>();
 </script>
 
 <template>
-  <li
-    class="w-12 h-14 flex gap-0.5 flex-col items-center justify-center rounded-md cursor-pointer bg-bg3 hover:bg-accent transition-colors duration-200"
-    :title="label"
+  <AppTooltip
+    :bold="true"
+    :text="label"
+    :position="'right'"
   >
-    <component
-      :is="icon"
-      class="text-text1 w-8 h-8"
-    />
-    <p class="text-xs">
-      {{ shortName }}
-    </p>
-  </li>
+    <div class="w-10 h-10 mx-1 flex flex-col items-center justify-center rounded-md cursor-pointer bg-bg3 hover:bg-accent transition-colors duration-200">
+      <component
+        :is="icon"
+        class="text-text1 w-6 h-6"
+      />
+    </div>
+  </AppTooltip>
 </template>

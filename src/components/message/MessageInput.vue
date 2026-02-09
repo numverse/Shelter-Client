@@ -3,9 +3,10 @@ import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
 
 import { channelStore } from "../../stores/channel";
-import { userStore } from "../../stores/users";
 import { messageStore } from "../../stores/message";
 import { stateStore } from "../../stores/state";
+
+import { userDataMap, currentUser } from "../../stores/users";
 
 const props = defineProps<{
   scrollToBottom?: () => void;
@@ -30,7 +31,7 @@ const replyToUser = computed(() => {
   if (!messageId) return null;
   const message = messageStore.messageDataMap.get(messageId);
   if (!message) return null;
-  return userStore.userDataMap.get(message.authorId) || null;
+  return userDataMap.get(message.authorId) || null;
 });
 
 function onInput(e: Event) {
@@ -49,7 +50,7 @@ async function send() {
   messageStore.messageDataMap.set(tempId, {
     id: tempId,
     channelId: currentChannel.value.id,
-    authorId: userStore.currentUser.value?.id || "0",
+    authorId: currentUser.value?.id || "0",
     content: messageContent,
     replyTo: replyToId || undefined,
     createdAt: new Date().toISOString(),

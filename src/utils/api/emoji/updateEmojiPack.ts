@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { EmojiPack } from "../types";
+import { EmojiPackInterface } from "../types";
 
 interface UpdateEmojiPackRequestData {
   name?: string;
@@ -34,7 +34,7 @@ function updateEmojiPack(emojiPackId: string, data: UpdateEmojiPackRequestData) 
       formData.append("existingEmojiNames", emoji.name);
     }
   });
-  return request<EmojiPack>({
+  return request<EmojiPackInterface>({
     method: "PUT",
     url: `/api/emoji-packs/${emojiPackId}`,
     data: formData,

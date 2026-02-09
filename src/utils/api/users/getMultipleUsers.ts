@@ -1,12 +1,12 @@
 import { request } from "../base";
-import { User } from "../types";
+import { BaseUserInterface } from "../../../structures/interfaces/BaseUserInterface";
 
 interface GetMultipleUsersRequestData {
   userIds: string[];
 }
 
 interface GetMultipleUsersResponse {
-  users: User[];
+  users: BaseUserInterface[];
 }
 
 function getMultipleUsers(data: GetMultipleUsersRequestData) {

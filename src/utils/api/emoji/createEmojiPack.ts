@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { EmojiPack } from "../types";
+import { EmojiPackInterface } from "../types";
 
 interface CreateEmojiPackRequestData {
   name: string;
@@ -16,7 +16,7 @@ function createEmojiPack(data: CreateEmojiPackRequestData) {
     formData.append("emojiNames", emoji.name);
     formData.append("files", emoji.image);
   });
-  return request<EmojiPack>({
+  return request<EmojiPackInterface>({
     method: "POST",
     url: "/api/emoji-packs",
     data: formData,

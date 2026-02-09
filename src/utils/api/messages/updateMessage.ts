@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { Message } from "../types";
+import { MessageInterface } from "../types";
 
 interface UpdateMessageRequestData {
 
@@ -7,7 +7,7 @@ interface UpdateMessageRequestData {
 }
 
 function updateMessage(channelId: string, messageId: string, data: UpdateMessageRequestData) {
-  return request<Message>({
+  return request<MessageInterface>({
     method: "PATCH",
     url: `/api/channels/${channelId}/messages/${messageId}`,
     data: data,

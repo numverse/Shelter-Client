@@ -1,12 +1,12 @@
 import { request } from "../base";
-import { User } from "../types";
+import { BaseUserInterface } from "../../../structures/interfaces/BaseUserInterface";
 
 interface GetUserByIdRequestData {
   userId: string;
 }
 
 function getUserById(data: GetUserByIdRequestData) {
-  return request<User>({
+  return request<BaseUserInterface>({
     method: "GET",
     url: `/api/users/${data.userId}`,
   });

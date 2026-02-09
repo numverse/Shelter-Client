@@ -1,19 +1,15 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { userStore } from "../../stores/users";
+
+import { currentUser } from "../../stores/users";
+import type { BaseUser } from "../../structures/BaseUser";
 
 const props = defineProps<{
-  userId: string;
-  username: string;
-  displayName?: string;
-  avatarId?: string;
-  presence?: {
-    status: "online" | "offline" | "away" | "dnd";
-  };
+  user: BaseUser;
 }>();
 
 const isOffline = computed(() => {
-  return !props.presence || props.presence.status === "offline";
+  return !props.user.presence || props.user.presence.status === "offline";
 });
 </script>
 
@@ -24,11 +20,11 @@ const isOffline = computed(() => {
   >
     <div class="relative mr-1">
       <img
-        :src="avatarId ? `https://shelter.zero624.dev/cdn/avatars/${userId}/${avatarId}.png` : `/avatars/${(BigInt(userId ?? 0) >> 22n) % 6n}.png`"
+        :src="user.avatarUrl"
         :class="['w-8 h-8 bg-cover bg-center rounded-full']"
       >
       <span
-        v-if="presence?.status && presence?.status !== 'offline' || userId === userStore.currentUser.value?.id"
+        v-if="user.presence?.status && user.presence.status !== 'offline' || user.id === currentUser?.id"
         :class="[
           'absolute top-5 left-5 right-0 w-4 h-4 rounded-full border-3 border-bg2',
           {
@@ -36,7 +32,7 @@ const isOffline = computed(() => {
             'away': 'bg-yellow',
             'offline': 'bg-gray',
             'dnd': 'bg-red',
-          }[presence?.status ?? 'offline']
+          }[user.presence?.status ?? 'offline']
         ]"
         aria-hidden="true"
       />
@@ -45,7 +41,7 @@ const isOffline = computed(() => {
       <p
         :class="['font-medium text-text1']"
       >
-        {{ displayName || username }}
+        {{ user.displayName }}
       </p>
     </div>
   </div>

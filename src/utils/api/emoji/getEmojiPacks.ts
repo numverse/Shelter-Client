@@ -1,8 +1,8 @@
 import { request } from "../base";
-import { EmojiPack } from "../types";
+import { EmojiPackInterface } from "../types";
 
 function getEmojiPacks() {
-  return request<EmojiPack[]>({
+  return request<EmojiPackInterface[]>({
     method: "GET",
     url: "/api/emoji",
   });

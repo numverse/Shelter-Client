@@ -1,8 +1,8 @@
 import { request } from "../base";
-import { CurrentUser } from "../types";
+import { CurrentUserInterface } from "../../../structures/interfaces/CurrentUserInterface";
 
 function getCurrentUser() {
-  return request<CurrentUser>({
+  return request<CurrentUserInterface>({
     method: "GET",
     url: "/api/users/@me",
   });

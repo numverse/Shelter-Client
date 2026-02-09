@@ -3,11 +3,12 @@ import { computed } from "vue";
 import MessageActions from "./MessageActions.vue";
 
 import { messageStore } from "../../stores/message";
-import { userStore } from "../../stores/users";
 import { stateStore } from "../../stores/state";
 
+import { userDataMap, currentUser } from "../../stores/users";
+
 import { i18nFormatTime } from "../../utils/i18n/i18n";
-import { UserFlags } from "../../utils/api/types";
+import { UserFlags } from "../../structures/interfaces/BaseUserInterface";
 
 const props = defineProps<{
   id: string;
@@ -26,15 +27,15 @@ const replyToMessageAuthor = computed(() => {
   if (!replyToMessage.value) {
     return null;
   }
-  return userStore.userDataMap.get(replyToMessage.value.authorId) || null;
+  return userDataMap.get(replyToMessage.value.authorId) || null;
 });
 
 const isAuthor = computed(() => {
-  return messageData.value?.authorId === userStore.currentUser.value?.id;
+  return messageData.value?.authorId === currentUser.value?.id;
 });
 
 const messageAuthor = computed(() => {
-  return userStore.userDataMap.get(messageData.value?.authorId || "");
+  return userDataMap.get(messageData.value?.authorId || "");
 });
 
 const showAuthor = computed(() => {
@@ -201,7 +202,7 @@ const handleCopy = (event: ClipboardEvent) => {
         :key="props.id"
         :channel-id="messageData?.channelId!"
         :is-owner="isAuthor"
-        :is-admin="((userStore.currentUser.value?.flags ?? 0) & UserFlags.MODERATOR) !== 0"
+        :is-admin="((currentUser?.flags ?? 0) & UserFlags.MODERATOR) !== 0"
       />
     </div>
   </div>

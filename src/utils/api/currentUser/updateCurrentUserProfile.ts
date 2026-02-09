@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { CurrentUser } from "../types";
+import { CurrentUserInterface } from "../../../structures/interfaces/CurrentUserInterface";
 
 interface UpdateCurrentUserRequestData {
   username?: string;
@@ -7,7 +7,7 @@ interface UpdateCurrentUserRequestData {
 }
 
 function updateCurrentUserProfile(data: UpdateCurrentUserRequestData) {
-  return request<CurrentUser>({
+  return request<CurrentUserInterface>({
     method: "PATCH",
     url: "/api/users/@me/profile",
     data: data,

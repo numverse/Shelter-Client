@@ -1,7 +1,8 @@
 <script setup lang="ts">
 import { SettingsIcon } from "lucide-vue-next";
 import { i18n } from "../../utils/i18n/i18n";
-import { userStore } from "../../stores/users";
+
+import { currentUser } from "../../stores/users";
 </script>
 
 <template>
@@ -9,7 +10,7 @@ import { userStore } from "../../stores/users";
     <div class="flex items-center justify-between">
       <div class="relative">
         <img
-          :src="userStore.currentUser.value?.avatarId ? `/cdn/avatars/${userStore.currentUser.value?.id}/${userStore.currentUser.value?.avatarId}.png` : `/avatars/${(BigInt(userStore.currentUser.value?.id ?? 0) >> 22n) % 6n}.png`"
+          :src="currentUser?.avatarUrl"
           class="w-10 h-10 bg-cover bg-center rounded-full"
         >
         <span
@@ -17,17 +18,17 @@ import { userStore } from "../../stores/users";
             'absolute top-6 left-6 right-0 w-4.5 h-4.5 rounded-full border-3 border-bg2',
             {
               'online': 'bg-green',
-              'idle': 'bg-yellow',
+              'away': 'bg-yellow',
               'offline': 'bg-gray',
               'dnd': 'bg-red',
-            }[userStore.currentUser.value?.presence?.status ?? 'online']
+            }[currentUser?.presence?.status ?? 'online']
           ]"
           aria-hidden="true"
         />
       </div>
       <div class="flex-1 flex flex-col ml-1">
         <p class="font-medium text-text1">
-          {{ userStore.currentUser.value?.username || i18n("ui", "username") }}
+          {{ currentUser?.displayName || i18n("ui", "username") }}
         </p>
         <p class="text-sm text-text2">
           Online

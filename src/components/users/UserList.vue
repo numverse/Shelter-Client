@@ -3,17 +3,17 @@ import { ref, onMounted, nextTick, computed } from "vue";
 import UserItem from "./UserItem.vue";
 import LoadingCircle from "../common/LoadingCircle.vue";
 
-import { userStore } from "../../stores/users";
+import { userDataMap, fetchAllUsers } from "../../stores/users";
 
-import type { User } from "../../utils/api/types";
+import type { BaseUser } from "../../structures/BaseUser";
 
 const loading = ref(true);
 const userList = computed(() => {
-  const users = Array.from(userStore.userDataMap.values());
-  users.sort((a, b) => a.username.localeCompare(b.username));
+  const users = Array.from(userDataMap.values());
+  users.sort((a, b) => a.displayName.localeCompare(b.displayName));
 
-  const onlineUsers: User[] = [];
-  const offlineUsers: User[] = [];
+  const onlineUsers: BaseUser[] = [];
+  const offlineUsers: BaseUser[] = [];
 
   users.forEach((user) => {
     if (user.presence.status === "offline") {
@@ -30,9 +30,9 @@ const userList = computed(() => {
 });
 
 onMounted(async () => {
-  if (userStore.userDataMap.size === 0) {
+  if (userDataMap.size === 0) {
     loading.value = true;
-    await userStore.fetchAll();
+    await fetchAllUsers();
     loading.value = false;
   } else {
     loading.value = false;
@@ -64,11 +64,7 @@ onMounted(async () => {
               :key="m.id"
             >
               <UserItem
-                :user-id="m.id"
-                :username="m.username"
-                :display-name="m.displayName"
-                :avatar-id="m.avatarId"
-                :presence="m.presence"
+                :user="m"
               />
             </li>
           </ul>
@@ -89,11 +85,7 @@ onMounted(async () => {
             :key="m.id"
           >
             <UserItem
-              :user-id="m.id"
-              :username="m.username"
-              :display-name="m.displayName"
-              :avatar-id="m.avatarId"
-              :presence="m.presence"
+              :user="m"
             />
           </li>
         </ul>

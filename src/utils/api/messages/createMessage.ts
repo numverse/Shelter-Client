@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { Message } from "../types";
+import { MessageInterface } from "../types";
 
 interface CreateMessageRequestData {
   content: string;
@@ -8,7 +8,7 @@ interface CreateMessageRequestData {
 }
 
 function createMessage(channelId: string, data: CreateMessageRequestData) {
-  return request<Message>({
+  return request<MessageInterface>({
     method: "POST",
     url: `/api/channels/${channelId}/messages`,
     data: data,

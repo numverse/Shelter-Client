@@ -10,10 +10,11 @@ import CurrentUser from "../components/layout/CurrentUser.vue";
 import UserList from "../components/users/UserList.vue";
 
 import { channelStore } from "../stores/channel";
-import { userStore } from "../stores/users";
 import { authStore } from "../stores/auth";
 import { messageStore } from "../stores/message";
 import { stateStore } from "../stores/state";
+
+import { fetchCurrentUser, fetchAllUsers, currentUser, userDataMap } from "../stores/users";
 
 import { i18n } from "../utils/i18n/i18n";
 import { resend } from "../utils/api/auth/resend";
@@ -28,8 +29,8 @@ let ws: BaseWebSocket;
 
 onMounted(async () => {
   await channelStore.fetchAll();
-  await userStore.fetchAll();
-  await userStore.fetchCurrentUser();
+  await fetchAllUsers();
+  await fetchCurrentUser();
 
   const channelId = router.currentRoute.value.params.channelId as string | undefined;
   if (channelId && channelStore.channelList.value.includes(channelId)) {
@@ -39,7 +40,7 @@ onMounted(async () => {
     router.replace(`/channels/${channelStore.currentChannelID.value}`);
   }
 
-  if (((userStore.currentUser.value?.flags || 0) & 2) === 0) {
+  if (((currentUser.value?.flags || 0) & 2) === 0) {
     stateStore.setNotificationHeader({
       text: i18n("notifications", "verify_email"),
       type: "info",
@@ -102,7 +103,7 @@ onMounted(async () => {
   ws.on("MESSAGE_CREATE", async (message) => {
     const isCurrentChannel = message.channelId === channelStore.currentChannelID.value;
     const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
-    const isMine = message.authorId === userStore.currentUser.value?.id;
+    const isMine = message.authorId === currentUser.value?.id;
     if (isMine) return;
 
     const channel = channelStore.channelDataMap.get(message.channelId);
@@ -123,12 +124,12 @@ onMounted(async () => {
   });
 
   ws.on("PRESENCE_UPDATE", (data) => {
-    const user = userStore.userDataMap.get(data.userId);
+    const user = userDataMap.get(data.userId);
     if (user) {
       user.presence = {
         status: data.status,
       };
-      userStore.userDataMap.set(data.userId, user);
+      userDataMap.set(data.userId, user);
     }
   });
 });

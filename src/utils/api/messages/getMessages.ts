@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { Message } from "../types";
+import { MessageInterface } from "../types";
 
 interface GetMessagesRequestData {
   channelId: string;
@@ -10,7 +10,7 @@ interface GetMessagesRequestData {
 }
 
 interface GetMessagesResponse {
-  messages: Message[];
+  messages: MessageInterface[];
 }
 
 function getMessages(data: GetMessagesRequestData) {

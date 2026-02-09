@@ -1,7 +1,7 @@
 import type { BaseUser } from "./BaseUser";
 import type { MessageInterface, AttachmentInterface } from "./interfaces/MessageInterface";
 
-import { userDataMap } from "src/stores/users";
+import { userDataMap } from "../stores/users";
 
 export class Message implements MessageInterface {
   id: string;

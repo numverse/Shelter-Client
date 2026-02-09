@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelStore } from "../../stores/channel";
+import { channelDataMap } from "../../stores/channel";
 import { computed } from "vue";
 import { ChevronDown } from "lucide-vue-next";
 
@@ -7,7 +7,7 @@ const props = defineProps<{
   id: string;
 }>();
 
-const channel = computed(() => channelStore.channelDataMap.get(props.id));
+const channel = computed(() => channelDataMap.get(props.id));
 </script>
 
 <template>

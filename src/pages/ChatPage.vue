@@ -9,7 +9,9 @@ import TitleHeader from "../components/layout/TitleHeader.vue";
 import CurrentUser from "../components/layout/CurrentUser.vue";
 import UserList from "../components/users/UserList.vue";
 
-import { channelStore } from "../stores/channel";
+import { Message } from "../structures/Message";
+
+import { channelList, currentChannelID, channelDataMap, fetchAllChannels } from "../stores/channel";
 import { authStore } from "../stores/auth";
 import { messageStore } from "../stores/message";
 import { stateStore } from "../stores/state";
@@ -28,16 +30,16 @@ const messageListRef = ref<InstanceType<typeof MessageList> | null>(null);
 let ws: BaseWebSocket;
 
 onMounted(async () => {
-  await channelStore.fetchAll();
+  await fetchAllChannels();
   await fetchAllUsers();
   await fetchCurrentUser();
 
   const channelId = router.currentRoute.value.params.channelId as string | undefined;
-  if (channelId && channelStore.channelList.value.includes(channelId)) {
-    channelStore.currentChannelID.value = channelId;
+  if (channelId && channelList.value.includes(channelId)) {
+    currentChannelID.value = channelId;
   } else {
-    channelStore.currentChannelID.value = channelStore.channelList.value[0] || null;
-    router.replace(`/channels/${channelStore.currentChannelID.value}`);
+    currentChannelID.value = channelList.value[0] || null;
+    router.replace(`/channels/${currentChannelID.value}`);
   }
 
   if (((currentUser.value?.flags || 0) & 2) === 0) {
@@ -69,9 +71,9 @@ onMounted(async () => {
     wsConnectedOnce = true;
     authStore.authed.value = true;
     // todo 어디까지 읽었음 표시하기 (새로운 메시지가 있으면)
-    if (channelStore.currentChannelID.value) {
+    if (currentChannelID.value) {
       messageStore.fetchChannelMessages({
-        channelId: channelStore.currentChannelID.value,
+        channelId: currentChannelID.value,
         limit: 50,
       });
     }
@@ -101,14 +103,14 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_CREATE", async (message) => {
-    const isCurrentChannel = message.channelId === channelStore.currentChannelID.value;
+    const isCurrentChannel = message.channelId === currentChannelID.value;
     const shouldStick = isCurrentChannel ? (messageListRef.value?.isAtBottom?.() ?? false) : false;
     const isMine = message.authorId === currentUser.value?.id;
     if (isMine) return;
 
-    const channel = channelStore.channelDataMap.get(message.channelId);
+    const channel = channelDataMap.get(message.channelId);
     if (channel) {
-      messageStore.messageDataMap.set(message.id, message);
+      messageStore.messageDataMap.set(message.id, new Message(message));
       messageStore.messageListByChannel.get(message.channelId)?.push(message.id);
     }
     if (isCurrentChannel && shouldStick) {
@@ -117,7 +119,7 @@ onMounted(async () => {
   });
 
   ws.on("MESSAGE_DELETE", (data) => {
-    const channel = channelStore.channelDataMap.get(data.channelId);
+    const channel = channelDataMap.get(data.channelId);
     if (channel) {
       messageStore.deleteMessage(data.messageId);
     }

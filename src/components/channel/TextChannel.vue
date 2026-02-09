@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelStore } from "../../stores/channel";
+import { currentChannelID, channelDataMap } from "../../stores/channel";
 import { computed } from "vue";
 import { useRouter } from "vue-router";
 import { Hash } from "lucide-vue-next";
@@ -11,13 +11,13 @@ const props = defineProps<{
 }>();
 
 const isSelected = computed(() =>
-  channelStore.currentChannelID.value === props.id,
+  currentChannelID.value === props.id,
 );
 
-const channel = computed(() => channelStore.channelDataMap.get(props.id));
+const channel = computed(() => channelDataMap.get(props.id));
 
 const selectChannel = () => {
-  channelStore.currentChannelID.value = props.id;
+  currentChannelID.value = props.id;
   router.push(`/channels/${props.id}`);
 };
 </script>

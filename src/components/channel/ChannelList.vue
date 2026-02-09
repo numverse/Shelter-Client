@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { channelStore } from "../../stores/channel";
+import { channelList, channelDataMap } from "../../stores/channel";
 import TextChannel from "./TextChannel.vue";
 import VoiceChannel from "./VoiceChannel.vue";
 import CategoryChannel from "./CategoryChannel.vue";
@@ -17,20 +17,20 @@ import CategoryChannel from "./CategoryChannel.vue";
         class="space-y-1"
       >
         <li
-          v-for="id in channelStore.channelList.value"
+          v-for="id in channelList.values"
           :id="id"
           :key="id"
         >
           <CategoryChannel
-            v-if="channelStore.channelDataMap.get(id)?.type === 4"
+            v-if="channelDataMap.get(id)?.type === 4"
             :id="id"
           />
           <TextChannel
-            v-else-if="channelStore.channelDataMap.get(id)?.type === 0"
+            v-else-if="channelDataMap.get(id)?.type === 0"
             :id="id"
           />
           <VoiceChannel
-            v-else-if="channelStore.channelDataMap.get(id)?.type === 2"
+            v-else-if="channelDataMap.get(id)?.type === 2"
             :id="id"
           />
         </li>

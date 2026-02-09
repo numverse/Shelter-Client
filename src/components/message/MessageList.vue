@@ -5,7 +5,7 @@ import { Hash } from "lucide-vue-next";
 import MessageItem from "./MessageItem.vue";
 import LoadingMessages from "./LoadingMessages.vue";
 
-import { channelStore } from "../../stores/channel";
+import { currentChannelID, channelDataMap } from "../../stores/channel";
 import { messageStore } from "../../stores/message";
 
 const loading = ref(true);
@@ -33,15 +33,15 @@ const restoreScrollPosition = async (channelId: string) => {
 };
 
 const messagesList = computed(() => {
-  if (!channelStore.currentChannelID.value) return [];
-  if (!channelStore.channelDataMap.get(channelStore.currentChannelID.value || "")) {
+  if (!currentChannelID.value) return [];
+  if (!channelDataMap.get(currentChannelID.value || "")) {
     return [];
   }
-  return messageStore.messageListByChannel.get(channelStore.currentChannelID.value) || [];
+  return messageStore.messageListByChannel.get(currentChannelID.value) || [];
 });
 
 const currentChannel = computed(() => {
-  return channelStore.channelDataMap.get(channelStore.currentChannelID.value || "");
+  return channelDataMap.get(currentChannelID.value || "");
 });
 
 const scrollToBottom = async () => {
@@ -79,7 +79,7 @@ const handleKeyDown = (e: KeyboardEvent) => {
   }
 };
 
-watch(() => channelStore.currentChannelID.value, async (newId, oldId) => {
+watch(() => currentChannelID.value, async (newId, oldId) => {
   if (oldId) saveScrollPosition(oldId);
   if (newId) {
     await loadMessages(newId);
@@ -96,7 +96,7 @@ onUnmounted(() => {
 });
 
 const hasMoreMessagesOnTop = computed(() => {
-  const channelId = channelStore.currentChannelID.value;
+  const channelId = currentChannelID.value;
   if (!channelId) return false;
   const messages = messageStore.messageListByChannel.get(channelId);
   if (!messages) return false;

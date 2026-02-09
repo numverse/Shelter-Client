@@ -2,11 +2,12 @@
 import { computed, ref } from "vue";
 import { createMessage } from "../../utils/api/messages/createMessage";
 
-import { channelStore } from "../../stores/channel";
+import { channelDataMap, currentChannelID } from "../../stores/channel";
 import { messageStore } from "../../stores/message";
 import { stateStore } from "../../stores/state";
 
 import { userDataMap, currentUser } from "../../stores/users";
+import { Message } from "../../structures/Message";
 
 const props = defineProps<{
   scrollToBottom?: () => void;
@@ -20,7 +21,7 @@ const placeholder = computed(() => {
 });
 
 const currentChannel = computed(() => {
-  return channelStore.channelDataMap.get(channelStore.currentChannelID?.value ?? "") || null;
+  return channelDataMap.get(currentChannelID?.value ?? "") || null;
 });
 
 const replyTo = computed(() => {
@@ -47,7 +48,7 @@ async function send() {
   const tempId = `temp-${Date.now()}`;
   text.value = "";
   if (editor.value) editor.value.innerText = "";
-  messageStore.messageDataMap.set(tempId, {
+  messageStore.messageDataMap.set(tempId, new Message({
     id: tempId,
     channelId: currentChannel.value.id,
     authorId: currentUser.value?.id || "0",
@@ -55,7 +56,7 @@ async function send() {
     replyTo: replyToId || undefined,
     createdAt: new Date().toISOString(),
     status: "SENDING",
-  });
+  }));
   currentChannelMessageList?.push(tempId);
   if (props.scrollToBottom) {
     props.scrollToBottom();
@@ -71,12 +72,12 @@ async function send() {
       list[index] = res.id;
     }
     messageStore.messageDataMap.delete(tempId);
-    messageStore.messageDataMap.set(res.id, res);
+    messageStore.messageDataMap.set(res.id, new Message(res));
   } else {
-    messageStore.messageDataMap.set(tempId, {
+    messageStore.messageDataMap.set(tempId, new Message({
       ...messageStore.messageDataMap.get(tempId)!,
       status: "FAILED",
-    });
+    }));
   }
 }
 

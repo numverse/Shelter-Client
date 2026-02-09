@@ -1,5 +1,5 @@
 import { shallowReactive, reactive } from "vue";
-import { Message } from "../utils/api/types";
+import { Message } from "../structures/Message";
 import { getMessages, GetMessagesRequestData } from "../utils/api/messages/getMessages";
 
 function indexOf(arr: string[], target: string): number {
@@ -52,7 +52,7 @@ const messageStore = {
       const messages = [];
       for (const msg of res.messages) {
         if (!messageStore.messageDataMap.has(msg.id)) {
-          messageStore.messageDataMap.set(msg.id, msg);
+          messageStore.messageDataMap.set(msg.id, new Message(msg));
           messages.push(msg.id);
         }
       }

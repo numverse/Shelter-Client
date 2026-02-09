@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { Channel } from "../types";
+import { ChannelInterface } from "../../../structures/interfaces/ChannelInterface";
 
 interface CreateChannelRequestData {
   name: string;
@@ -7,7 +7,7 @@ interface CreateChannelRequestData {
 }
 
 function createChannel(data: CreateChannelRequestData) {
-  return request<Channel>({
+  return request<ChannelInterface>({
     method: "POST",
     url: "/api/channels",
     data: data,

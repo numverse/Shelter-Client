@@ -1,6 +1,6 @@
 import { reactive, ref } from "vue";
 import { router } from "../router";
-import { channelStore } from "./channel";
+import { currentChannelID, currentDMID } from "./channel";
 
 interface NotificationHeader {
   text: string;
@@ -33,10 +33,10 @@ const stateStore = {
   setChatMode: function (mode: "chat" | "dm") {
     stateStore.chatMode.value = mode;
     if (mode === "chat") {
-      router.push(`/channels/${channelStore.currentChannelID.value}`);
+      router.push(`/channels/${currentChannelID.value}`);
     } else {
-      if (channelStore.currentDMID.value) {
-        router.push(`/channels/@me/${channelStore.currentDMID.value}`);
+      if (currentDMID.value) {
+        router.push(`/channels/@me/${currentDMID.value}`);
       } else {
         router.push("/channels/@me");
       }

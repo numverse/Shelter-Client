@@ -1,4 +1,5 @@
-import { Channel, Message } from "../api/types";
+import { ChannelInterface } from "src/structures/interfaces/ChannelInterface";
+import { MessageInterface } from "src/structures/interfaces/MessageInterface";
 
 interface ReactionPayload {
   messageId: string;
@@ -30,8 +31,8 @@ interface EventMap {
   open: Event;
   error: Event;
   close: CloseEvent;
-  MESSAGE_CREATE: Message;
-  MESSAGE_UPDATE: Message;
+  MESSAGE_CREATE: MessageInterface;
+  MESSAGE_UPDATE: MessageInterface;
   MESSAGE_DELETE: {
     messageId: string;
     channelId: string;
@@ -39,8 +40,8 @@ interface EventMap {
   REACTION_ADD: ReactionPayload;
   REACTION_REMOVE: ReactionPayload;
   PRESENCE_UPDATE: PresenceUpdatePayload;
-  CHANNEL_CREATE: Channel;
-  CHANNEL_UPDATE: Channel;
+  CHANNEL_CREATE: ChannelInterface;
+  CHANNEL_UPDATE: ChannelInterface;
   CHANNEL_DELETE: {
     channelId: string;
   };

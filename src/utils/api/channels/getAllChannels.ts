@@ -1,8 +1,8 @@
 import { request } from "../base";
-import { Channel } from "../types";
+import { ChannelInterface } from "../../../structures/interfaces/ChannelInterface";
 
 interface GetAllChannelsResponse {
-  channels: Channel[];
+  channels: ChannelInterface[];
 }
 
 function getAllChannels() {

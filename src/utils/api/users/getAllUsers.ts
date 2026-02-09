@@ -1,8 +1,8 @@
 import { request } from "../base";
-import { User } from "../types";
+import { BaseUserInterface } from "../../../structures/interfaces/BaseUserInterface";
 
 interface GetAllUsersResponse {
-  users: User[];
+  users: BaseUserInterface[];
 }
 
 function getAllUsers() {

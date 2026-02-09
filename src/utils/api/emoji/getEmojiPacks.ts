@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { EmojiPackInterface } from "../types";
+import { EmojiPackInterface } from "../../../structures/interfaces/EmojiPackInterface";
 
 function getEmojiPacks() {
   return request<EmojiPackInterface[]>({

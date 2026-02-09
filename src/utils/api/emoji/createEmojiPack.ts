@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { EmojiPackInterface } from "../types";
+import { EmojiPackInterface } from "../../../structures/interfaces/EmojiPackInterface";
 
 interface CreateEmojiPackRequestData {
   name: string;

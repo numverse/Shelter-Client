@@ -1,5 +1,5 @@
 import { request } from "../base";
-import { MessageInterface } from "../types";
+import { MessageInterface } from "../../../structures/interfaces/MessageInterface";
 
 interface CreateMessageRequestData {
   content: string;
